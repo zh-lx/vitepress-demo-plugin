@@ -16,8 +16,7 @@
   "files": [
     "dist",
     "README.md",
-    "package.json",
-    "types.d.ts"
+    "package.json"
   ],
   "scripts": {
     "dev": "vite build --watch",
