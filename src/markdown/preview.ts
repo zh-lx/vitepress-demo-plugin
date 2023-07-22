@@ -24,10 +24,16 @@ export interface DefaultProps {
  * 编译预览组件
  * @param md
  * @param token
- * @param env
+ * @param mdFile
+ * @param demoRoot
  * @returns
  */
-export const transformPreview = (md: MarkdownIt, token: Token, mdFile: any) => {
+export const transformPreview = (
+  md: MarkdownIt,
+  token: Token,
+  mdFile: any,
+  demoRoot?: string
+) => {
   const componentProps: DefaultProps = {
     path: '',
     title: '',
@@ -52,7 +58,7 @@ export const transformPreview = (md: MarkdownIt, token: Token, mdFile: any) => {
 
   // 组件绝对路径
   const componentPath = path.resolve(
-    path.dirname(mdFile.path),
+    demoRoot || path.dirname(mdFile.path),
     componentProps.path || '.'
   );
 

@@ -4,7 +4,10 @@ import Token from 'markdown-it/lib/token';
 import { demoReg } from './utils';
 import { transformPreview } from './preview';
 
-export const markdownDemo = (md: MarkdownIt) => {
+export const markdownDemo = (
+  md: MarkdownIt,
+  params?: { demoRoot?: string }
+) => {
   const defaultHtmlInlineRender = md.renderer.rules.html_inline!;
   md.renderer.rules.html_inline = (
     tokens: Token[],
@@ -15,7 +18,7 @@ export const markdownDemo = (md: MarkdownIt) => {
   ) => {
     const token = tokens[idx];
     if (demoReg.some((reg) => reg.test(token.content))) {
-      return transformPreview(md, token, mdFile);
+      return transformPreview(md, token, mdFile, params?.demoRoot);
     }
     return defaultHtmlInlineRender(tokens, idx, options, mdFile, self);
   };
