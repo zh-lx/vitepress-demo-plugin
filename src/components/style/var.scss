@@ -1,0 +1,15 @@
+:root {
+  --coot-demo-box-border: rgb(240, 240, 240);
+  --coot-demo-box-code-block-bg: #343030;
+  --coot-demo-box-primary-color: var(--vp-c-brand);
+  --coot-demo-box-code-bg: #f7f8fa;
+}
+
+.dark:root {
+  --coot-demo-box-border: rgb(240, 240, 240, 0.1);
+  --coot-demo-box-code-block-bg: #282626;
+  --coot-demo-box-primary-color: var(--vp-c-brand);
+  --coot-demo-box-code-bg: #161618;
+}
+
+$defaultPrefix: 'vitepress-demo-box';
