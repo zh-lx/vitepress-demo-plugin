@@ -50,7 +50,14 @@ export const transformPreview = (
       'vitepress-demo-box: path is a required parameter in <demo />'
     );
   // eslint-disable-next-line prefer-destructuring
-  componentProps.path = isCheckingRelativePath(pathRegexValue[1]);
+  const absolutePath = path.resolve(
+    demoRoot || path.dirname(mdFile.path),
+    componentProps.path || '.'
+  );
+  const relativePath = path.relative(path.dirname(mdFile.path), absolutePath);
+  componentProps.path = path
+    .join(relativePath, pathRegexValue[1])
+    .replace(/\\/g, '/');
   componentProps.title = titleValue ? titleValue[1] : '';
   componentProps.description = descriptionRegexValue
     ? descriptionRegexValue[1]
