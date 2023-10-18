@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, inject } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -10,7 +10,13 @@ import { useCodeCopy } from './hooks/copy';
 
 interface VitepressDemoBoxProps {
   code: string;
+  html?: string;
+  lit?: string;
+  react?: string;
   showCode?: string;
+  showHtmlCode?: string;
+  showLitCode?: string;
+  showReactCode?: string;
   title?: string;
   description?: string;
 }
@@ -20,39 +26,35 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   description: '描述内容',
 });
 
+const codeType = inject('coot-code-type');
+const setCodeType = inject<(type: string) => void>('set-coot-code-type');
+
 const ns = useNameSpace();
 const { isCodeFold, setCodeFold } = useCodeFold();
 const { clickCopy } = useCodeCopy();
 
 const sourceCode = ref(decodeURIComponent(props.code));
 const showSourceCode = ref(decodeURIComponent(props.showCode || ''));
-const sourceCodeArea = ref<any>(null);
+const htmlCode = ref(decodeURIComponent(props.html || ''));
+const showHtmlSourceCode = ref(decodeURIComponent(props.showHtmlCode || ''));
+const litCode = ref(decodeURIComponent(props.lit || ''));
+const showLitSourceCode = ref(decodeURIComponent(props.showLitCode || ''));
+const reactCode = ref(decodeURIComponent(props.react || ''));
+const showReactSourceCode = ref(decodeURIComponent(props.showReactCode || ''));
 
 const clickCodeCopy = () => {
-  clickCopy(sourceCode.value);
+  if (codeType === 'html') {
+    clickCopy(htmlCode.value);
+  } else if (codeType === 'vue') {
+    clickCopy(sourceCode.value);
+  } else if (codeType === 'lit') {
+    clickCopy(litCode.value);
+  } else if (codeType === 'react') {
+    clickCopy(reactCode.value);
+  }
+
   MessageService.open();
 };
-
-const sourceCodeContainerHeight = computed(() => {
-  if (sourceCodeArea.value) return sourceCodeArea.value?.clientHeight;
-  return 0;
-});
-
-const setContainerHeight = (value: number) => {
-  if (isCodeFold.value) sourceCodeArea.value.style.height = '0px';
-  else sourceCodeArea.value.style.height = `${value}px`;
-};
-
-onMounted(() => {
-  // 组件挂载时，先获取代码块容器为折叠前的容器高度
-  const currentContainerHeight = sourceCodeContainerHeight.value;
-  setContainerHeight(currentContainerHeight);
-});
-
-watch(isCodeFold, () => {
-  const container = sourceCodeContainerHeight.value;
-  setContainerHeight(container);
-});
 </script>
 
 <template>
@@ -80,8 +82,61 @@ watch(isCodeFold, () => {
       </div>
     </section>
 
-    <section :class="[ns.bem('source')]" ref="sourceCodeArea">
-      <div v-html="showSourceCode" class="language-vue"></div>
+    <section
+      :class="[ns.bem('source')]"
+      ref="sourceCodeArea"
+      v-show="!isCodeFold"
+    >
+      <div :class="[ns.bem('lang-tabs')]">
+        <div
+          :class="['tab', codeType === 'html' && 'active-tab']"
+          v-show="html"
+          @click="setCodeType?.('html')"
+        >
+          html
+        </div>
+        <div
+          :class="['tab', codeType === 'lit' && 'active-tab']"
+          v-show="lit"
+          @click="setCodeType?.('lit')"
+        >
+          lit
+        </div>
+        <div
+          :class="['tab', codeType === 'vue' && 'active-tab']"
+          v-show="code"
+          @click="setCodeType?.('vue')"
+        >
+          vue
+        </div>
+        <div
+          :class="['tab', codeType === 'react' && 'active-tab']"
+          v-show="react"
+          @click="setCodeType?.('react')"
+        >
+          react
+        </div>
+      </div>
+      <div
+        v-show="codeType === 'html'"
+        v-html="showHtmlSourceCode"
+        class="language-html"
+      ></div>
+      <div
+        v-show="codeType === 'lit'"
+        v-html="showLitSourceCode"
+        class="language-typescript"
+      ></div>
+      <div
+        v-show="codeType === 'vue'"
+        v-html="showSourceCode"
+        class="language-vue"
+      ></div>
+      <div
+        v-show="codeType === 'react'"
+        v-html="showReactSourceCode"
+        class="language-tsx"
+      ></div>
     </section>
   </div>
 </template>
@@ -186,6 +241,26 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
 
 .#{$containerPrefix}__container > .#{$defaultPrefix}-source {
   overflow: hidden;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s ease-in-out;
+
+  .#{$defaultPrefix}-lang-tabs {
+    border-top: 1px dashed var(--coot-demo-box-border);
+    line-height: 36px;
+    display: flex;
+    justify-content: center;
+    column-gap: 16px;
+    .tab {
+      cursor: pointer;
+    }
+
+    .active-tab {
+      color: #1677ff;
+      font-weight: 500;
+    }
+  }
+
+  div[class*='language-'] {
+    margin-top: 0 !important;
+  }
 }
 </style>

@@ -18,6 +18,8 @@ export default defineConfig({
         },
       },
     },
+    emptyOutDir: false,
   },
+
   plugins: [vue(), dts({ insertTypesEntry: true })],
 });
