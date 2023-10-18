@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, inject } from 'vue';
+import { ref, inject, watch } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -28,6 +28,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
 
 const codeType = inject('coot-code-type');
 const setCodeType = inject<(type: string) => void>('set-coot-code-type');
+const type = ref('');
 
 const ns = useNameSpace();
 const { isCodeFold, setCodeFold } = useCodeFold();
@@ -42,14 +43,39 @@ const showLitSourceCode = ref(decodeURIComponent(props.showLitCode || ''));
 const reactCode = ref(decodeURIComponent(props.react || ''));
 const showReactSourceCode = ref(decodeURIComponent(props.showReactCode || ''));
 
+watch(
+  () => (codeType as any).value,
+  (val: any) => {
+    // @ts-ignore
+    if (props[val === 'vue' ? 'code' : val]) {
+      type.value = val;
+    } else {
+      if (type.value) {
+        return;
+      } else if (props.html) {
+        type.value = 'html';
+      } else if (props.lit) {
+        type.value = 'lit';
+      } else if (props.code) {
+        type.value = 'vue';
+      } else if (props.react) {
+        type.value = 'react';
+      }
+    }
+  },
+  {
+    immediate: true,
+  }
+);
+
 const clickCodeCopy = () => {
-  if (codeType === 'html') {
+  if (type.value === 'html') {
     clickCopy(htmlCode.value);
-  } else if (codeType === 'vue') {
-    clickCopy(sourceCode.value);
-  } else if (codeType === 'lit') {
+  } else if (type.value === 'lit') {
     clickCopy(litCode.value);
-  } else if (codeType === 'react') {
+  } else if (type.value === 'vue') {
+    clickCopy(sourceCode.value);
+  } else if (type.value === 'react') {
     clickCopy(reactCode.value);
   }
 
@@ -89,28 +115,28 @@ const clickCodeCopy = () => {
     >
       <div :class="[ns.bem('lang-tabs')]">
         <div
-          :class="['tab', codeType === 'html' && 'active-tab']"
+          :class="['tab', type === 'html' && 'active-tab']"
           v-show="html"
           @click="setCodeType?.('html')"
         >
           html
         </div>
         <div
-          :class="['tab', codeType === 'lit' && 'active-tab']"
+          :class="['tab', type === 'lit' && 'active-tab']"
           v-show="lit"
           @click="setCodeType?.('lit')"
         >
           lit
         </div>
         <div
-          :class="['tab', codeType === 'vue' && 'active-tab']"
+          :class="['tab', type === 'vue' && 'active-tab']"
           v-show="code"
           @click="setCodeType?.('vue')"
         >
           vue
         </div>
         <div
-          :class="['tab', codeType === 'react' && 'active-tab']"
+          :class="['tab', type === 'react' && 'active-tab']"
           v-show="react"
           @click="setCodeType?.('react')"
         >
@@ -118,22 +144,22 @@ const clickCodeCopy = () => {
         </div>
       </div>
       <div
-        v-show="codeType === 'html'"
+        v-show="type === 'html'"
         v-html="showHtmlSourceCode"
         class="language-html"
       ></div>
       <div
-        v-show="codeType === 'lit'"
+        v-show="type === 'lit'"
         v-html="showLitSourceCode"
         class="language-typescript"
       ></div>
       <div
-        v-show="codeType === 'vue'"
+        v-show="type === 'vue'"
         v-html="showSourceCode"
         class="language-vue"
       ></div>
       <div
-        v-show="codeType === 'react'"
+        v-show="type === 'react'"
         v-html="showReactSourceCode"
         class="language-tsx"
       ></div>
