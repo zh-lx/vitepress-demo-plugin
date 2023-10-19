@@ -11,14 +11,14 @@ import {
 } from './utils';
 
 const titleRegex = /title="(.*?)"/;
-const pathRegex = /path="(.*?)"/;
-const htmlPathRegex = /html="(.*?)"/;
+const vuePathRegex = /vue="(.*?)"/;
+const htmlPathRegex = /vanilla="(.*?)"/;
 const litPathRegex = /lit="(.*?)"/;
 const reactPathRegex = /react="(.*?)"/;
 const descriptionRegex = /description="(.*?)"/;
 
 export interface DefaultProps {
-  path: string;
+  vue: string;
   title: string;
   description: string;
   html?: string;
@@ -41,7 +41,7 @@ export const transformPreview = (
   demoRoot?: string
 ) => {
   const componentProps: DefaultProps = {
-    path: '',
+    vue: '',
     title: '',
     description: '',
     html: '',
@@ -51,24 +51,24 @@ export const transformPreview = (
 
   // 获取Props相关参数
   const titleValue = token.content.match(titleRegex);
-  const pathRegexValue = token.content.match(pathRegex);
+  const vuePathRegexValue = token.content.match(vuePathRegex);
   const htmlPathRegexValue = token.content.match(htmlPathRegex);
   const litPathRegexValue = token.content.match(litPathRegex);
   const reactPathRegexValue = token.content.match(reactPathRegex);
   const descriptionRegexValue = token.content.match(descriptionRegex);
 
-  if (!pathRegexValue)
+  if (!vuePathRegexValue)
     throw new Error(
       'vitepress-demo-box: path is a required parameter in <demo />'
     );
   // eslint-disable-next-line prefer-destructuring
   const absolutePath = path.resolve(
     demoRoot || path.dirname(mdFile.path),
-    componentProps.path || '.'
+    componentProps.vue || '.'
   );
   const relativePath = path.relative(path.dirname(mdFile.path), absolutePath);
-  componentProps.path = path
-    .join(relativePath, pathRegexValue[1])
+  componentProps.vue = path
+    .join(relativePath, vuePathRegexValue[1])
     .replace(/\\/g, '/');
 
   if (htmlPathRegexValue?.[1]) {
@@ -92,8 +92,8 @@ export const transformPreview = (
     ? descriptionRegexValue[1]
     : '';
 
-  const componentPath = componentProps.path
-    ? path.resolve(demoRoot || path.dirname(mdFile.path), pathRegexValue[1])
+  const componentVuePath = componentProps.vue
+    ? path.resolve(demoRoot || path.dirname(mdFile.path), vuePathRegexValue[1])
     : '';
   const componentHtmlPath = componentProps.html
     ? path.resolve(
@@ -115,17 +115,17 @@ export const transformPreview = (
     : '';
 
   // 组件名
-  const componentName = composeComponentName(componentProps.path);
+  const componentName = composeComponentName(componentProps.vue);
   // 后缀名
-  const suffixName = componentPath.substring(
-    componentPath.lastIndexOf('.') + 1
+  const suffixName = componentVuePath.substring(
+    componentVuePath.lastIndexOf('.') + 1
   );
 
   // 注入组件导入语句
-  injectComponentImportScript(mdFile, componentProps.path, componentName);
+  injectComponentImportScript(mdFile, componentProps.vue, componentName);
 
   // 组件源码
-  const componentSourceCode = fs.readFileSync(componentPath, {
+  const componentVueCode = fs.readFileSync(componentVuePath, {
     encoding: 'utf-8',
   });
   const componentHtmlCode = componentHtmlPath
@@ -146,12 +146,11 @@ export const transformPreview = (
   // 源码代码块（经过处理）
   const compileHighlightCode = transformHighlightCode(
     md,
-    componentSourceCode,
+    componentVueCode,
     suffixName
   );
 
-  const code = encodeURI(componentSourceCode);
-  const showCode = encodeURIComponent(compileHighlightCode);
+  const showVueCode = encodeURIComponent(compileHighlightCode);
   const showHtmlCode = encodeURIComponent(
     transformHighlightCode(md, componentHtmlCode, 'html')
   );
@@ -165,18 +164,20 @@ export const transformPreview = (
   const sourceCode = `<demo-box 
     title="${componentProps.title}"
     description="${componentProps.description}" 
-    code="${code}" 
+    vue="${encodeURIComponent(componentVueCode)}" 
     html="${encodeURIComponent(componentHtmlCode)}"
     lit="${encodeURIComponent(componentLitCode)}"
     react="${encodeURIComponent(componentReactCode)}"
     showHtmlCode="${showHtmlCode}"
     showLitCode="${showLitCode}"
     showReactCode="${showReactCode}"
-    showCode="${showCode}"
+    showVueCode="${showVueCode}"
     suffixName="${suffixName}" 
-    absolutePath="${componentPath}" 
-    relativePath="${componentProps.path}">
-    <${componentName}></${componentName}>
+    absolutePath="${componentVuePath}" 
+    relativePath="${componentProps.vue}">
+    <template #vue>
+      <${componentName}></${componentName}>
+    </template>
   </demo-box>`;
 
   return sourceCode;

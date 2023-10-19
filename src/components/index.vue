@@ -9,11 +9,11 @@ import { useCodeFold } from './hooks/fold';
 import { useCodeCopy } from './hooks/copy';
 
 interface VitepressDemoBoxProps {
-  code: string;
+  vue: string;
   html?: string;
   lit?: string;
   react?: string;
-  showCode?: string;
+  showVueCode?: string;
   showHtmlCode?: string;
   showLitCode?: string;
   showReactCode?: string;
@@ -34,8 +34,8 @@ const ns = useNameSpace();
 const { isCodeFold, setCodeFold } = useCodeFold();
 const { clickCopy } = useCodeCopy();
 
-const sourceCode = ref(decodeURIComponent(props.code));
-const showSourceCode = ref(decodeURIComponent(props.showCode || ''));
+const vueCode = ref(decodeURIComponent(props.vue));
+const showVueCode = ref(decodeURIComponent(props.showVueCode || ''));
 const htmlCode = ref(decodeURIComponent(props.html || ''));
 const showHtmlSourceCode = ref(decodeURIComponent(props.showHtmlCode || ''));
 const litCode = ref(decodeURIComponent(props.lit || ''));
@@ -47,7 +47,7 @@ watch(
   () => (codeType as any).value,
   (val: any) => {
     // @ts-ignore
-    if (props[val === 'vue' ? 'code' : val]) {
+    if (props[val]) {
       type.value = val;
     } else {
       if (type.value) {
@@ -56,7 +56,7 @@ watch(
         type.value = 'html';
       } else if (props.lit) {
         type.value = 'lit';
-      } else if (props.code) {
+      } else if (props.vue) {
         type.value = 'vue';
       } else if (props.react) {
         type.value = 'react';
@@ -74,7 +74,7 @@ const clickCodeCopy = () => {
   } else if (type.value === 'lit') {
     clickCopy(litCode.value);
   } else if (type.value === 'vue') {
-    clickCopy(sourceCode.value);
+    clickCopy(vueCode.value);
   } else if (type.value === 'react') {
     clickCopy(reactCode.value);
   }
@@ -86,7 +86,10 @@ const clickCodeCopy = () => {
 <template>
   <div :class="[ns.e('ant-design__container')]">
     <section :class="[ns.bem('preview')]">
-      <slot> </slot>
+      <slot name="vue" v-if="type === 'vue'"></slot>
+      <div v-html="htmlCode" v-else-if="type === 'html'"></div>
+      <slot name="lit" v-else-if="type === 'lit'"></slot>
+      <slot name="react" v-else-if="type === 'react'"></slot>
     </section>
     <section :class="[ns.bem('description')]">
       <div v-if="props.title" :class="[ns.bem('description', 'title')]">
@@ -113,7 +116,7 @@ const clickCodeCopy = () => {
       ref="sourceCodeArea"
       v-show="!isCodeFold"
     >
-      <div :class="[ns.bem('lang-tabs')]">
+      <!-- <div :class="[ns.bem('lang-tabs')]">
         <div
           :class="['tab', type === 'html' && 'active-tab']"
           v-show="html"
@@ -130,7 +133,7 @@ const clickCodeCopy = () => {
         </div>
         <div
           :class="['tab', type === 'vue' && 'active-tab']"
-          v-show="code"
+          v-show="vue"
           @click="setCodeType?.('vue')"
         >
           vue
@@ -142,7 +145,7 @@ const clickCodeCopy = () => {
         >
           react
         </div>
-      </div>
+      </div> -->
       <div
         v-show="type === 'html'"
         v-html="showHtmlSourceCode"
@@ -155,7 +158,7 @@ const clickCodeCopy = () => {
       ></div>
       <div
         v-show="type === 'vue'"
-        v-html="showSourceCode"
+        v-html="showVueCode"
         class="language-vue"
       ></div>
       <div
