@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, inject, watch } from 'vue';
+import { ref, inject, watch, nextTick } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -49,11 +49,19 @@ watch(
     // @ts-ignore
     if (props[val]) {
       type.value = val;
+      if (val === 'html') {
+        nextTick(() => {
+          setHTMLWithScript(htmlContainerRef.value, htmlCode.value);
+        });
+      }
     } else {
       if (type.value) {
         return;
       } else if (props.html) {
         type.value = 'html';
+        nextTick(() => {
+          setHTMLWithScript(htmlContainerRef.value, htmlCode.value);
+        });
       } else if (props.lit) {
         type.value = 'lit';
       } else if (props.vue) {
@@ -81,13 +89,54 @@ const clickCodeCopy = () => {
 
   MessageService.open();
 };
+
+function runScript(target: HTMLElement, script: HTMLScriptElement) {
+  return new Promise((reslove, rejected) => {
+    // 直接 document.head.appendChild(script) 是不会生效的，需要重新创建一个
+    const newScript = document.createElement('script');
+    // 获取 inline script
+    newScript.innerHTML = script.innerHTML.replace(/import\s+'([^']+)'/g, '');
+    // 存在 src 属性的话
+    const src = script.getAttribute('src');
+    if (src) newScript.setAttribute('src', src);
+    // script 加载完成和错误处理
+    newScript.onload = () => reslove(1);
+    newScript.onerror = (err) => rejected();
+    target.appendChild(newScript);
+    target.removeChild(newScript);
+    if (!src) {
+      reslove(1);
+    }
+  });
+}
+
+function setHTMLWithScript(container: HTMLElement, rawHTML: string) {
+  container.innerHTML = rawHTML;
+  const scripts = container.querySelectorAll('script');
+  return Array.prototype.slice.apply(scripts).reduce((chain, script) => {
+    return chain.then(() => runScript(container, script));
+  }, Promise.resolve());
+}
+
+const htmlContainerRef = ref();
+watch(
+  () => htmlCode.value,
+  (val: string) => {
+    if (val) {
+      nextTick(() => {
+        setHTMLWithScript(htmlContainerRef.value, val);
+      });
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <div :class="[ns.e('ant-design__container')]">
     <section :class="[ns.bem('preview')]">
       <slot name="vue" v-if="type === 'vue'"></slot>
-      <div v-html="htmlCode" v-else-if="type === 'html'"></div>
+      <div ref="htmlContainerRef" v-else-if="type === 'html'"></div>
       <slot name="lit" v-else-if="type === 'lit'"></slot>
       <slot name="react" v-else-if="type === 'react'"></slot>
     </section>
