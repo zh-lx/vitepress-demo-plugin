@@ -1,0 +1,63 @@
+{
+  "name": "vitepress-demo-box",
+  "version": "0.2.0-beta.4",
+  "description": "A vitepress plugin to preview component and display code",
+  "type": "module",
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build"
+  },
+  "homepage": "https://github.com/coot-ui/vitepress-demo-box#README",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:coot-ui/vitepress-demo-box.git"
+  },
+  "bugs": "https://github.com/coot-ui/vitepress-demo-box/issues",
+  "keywords": [
+    "vitepress",
+    "plugin",
+    "code",
+    "demo",
+    "block",
+    "preview",
+    "component",
+    "display"
+  ],
+  "author": "coot-ui",
+  "license": "MIT",
+  "peerDependencies": {
+    "vitepress": "*",
+    "vue": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^12.2.3",
+    "@types/node": "^20.4.2",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sass": "^1.54.8",
+    "vite": "^3.0.9",
+    "vite-plugin-dts": "^1.4.1",
+    "vue": "^3.2.38"
+  },
+  "dependencies": {
+    "markdown-it": "^13.0.1"
+  }
+}

@@ -112,7 +112,7 @@ export const composeComponentName = (path: string) => {
     } else {
       const name = path.substring(lastIndex + 1);
       componentList.unshift(name);
-      path = path.substring(0, lastIndex - 1);
+      path = path.substring(0, lastIndex);
     }
   }
   return componentList.join('-').split('.')[0];

@@ -5,15 +5,14 @@ import fs from 'fs';
 import path from 'path';
 import {
   composeComponentName,
+  handleComponentName,
   injectComponentImportScript,
-  isCheckingRelativePath,
   transformHighlightCode,
 } from './utils';
 
 const titleRegex = /title="(.*?)"/;
 const vuePathRegex = /vue="(.*?)"/;
-const htmlPathRegex = /vanilla="(.*?)"/;
-const litPathRegex = /lit="(.*?)"/;
+const htmlPathRegex = /html="(.*?)"/;
 const reactPathRegex = /react="(.*?)"/;
 const descriptionRegex = /description="(.*?)"/;
 
@@ -23,7 +22,6 @@ export interface DefaultProps {
   description: string;
   html?: string;
   react?: string;
-  lit?: string;
 }
 
 /**
@@ -45,7 +43,6 @@ export const transformPreview = (
     title: '',
     description: '',
     html: '',
-    lit: '',
     react: '',
   };
 
@@ -53,37 +50,25 @@ export const transformPreview = (
   const titleValue = token.content.match(titleRegex);
   const vuePathRegexValue = token.content.match(vuePathRegex);
   const htmlPathRegexValue = token.content.match(htmlPathRegex);
-  const litPathRegexValue = token.content.match(litPathRegex);
   const reactPathRegexValue = token.content.match(reactPathRegex);
   const descriptionRegexValue = token.content.match(descriptionRegex);
 
-  if (!vuePathRegexValue)
-    throw new Error(
-      'vitepress-demo-box: path is a required parameter in <demo />'
-    );
-  // eslint-disable-next-line prefer-destructuring
-  const absolutePath = path.resolve(
-    demoRoot || path.dirname(mdFile.path),
-    componentProps.vue || '.'
-  );
-  const relativePath = path.relative(path.dirname(mdFile.path), absolutePath);
-  componentProps.vue = path
-    .join(relativePath, vuePathRegexValue[1])
-    .replace(/\\/g, '/');
+  const dirPath = demoRoot || path.dirname(mdFile.path);
+
+  if (vuePathRegexValue?.[1]) {
+    componentProps.vue = path
+      .join(dirPath, vuePathRegexValue[1])
+      .replace(/\\/g, '/');
+  }
 
   if (htmlPathRegexValue?.[1]) {
     componentProps.html = path
-      .join(relativePath, htmlPathRegexValue[1])
-      .replace(/\\/g, '/');
-  }
-  if (litPathRegexValue?.[1]) {
-    componentProps.lit = path
-      .join(relativePath, litPathRegexValue[1])
+      .join(dirPath, htmlPathRegexValue[1])
       .replace(/\\/g, '/');
   }
   if (reactPathRegexValue?.[1]) {
     componentProps.react = path
-      .join(relativePath, reactPathRegexValue[1])
+      .join(dirPath, reactPathRegexValue[1])
       .replace(/\\/g, '/');
   }
 
@@ -93,18 +78,15 @@ export const transformPreview = (
     : '';
 
   const componentVuePath = componentProps.vue
-    ? path.resolve(demoRoot || path.dirname(mdFile.path), vuePathRegexValue[1])
+    ? path.resolve(
+        demoRoot || path.dirname(mdFile.path),
+        vuePathRegexValue?.[1] || '.'
+      )
     : '';
   const componentHtmlPath = componentProps.html
     ? path.resolve(
         demoRoot || path.dirname(mdFile.path),
         htmlPathRegexValue?.[1] || '.'
-      )
-    : '';
-  const componentLitPath = componentProps.lit
-    ? path.resolve(
-        demoRoot || path.dirname(mdFile.path),
-        litPathRegexValue?.[1] || '.'
       )
     : '';
   const componentReactPath = componentProps.react
@@ -115,26 +97,30 @@ export const transformPreview = (
     : '';
 
   // 组件名
-  const componentName = composeComponentName(componentProps.vue);
-  // 后缀名
-  const suffixName = componentVuePath.substring(
-    componentVuePath.lastIndexOf('.') + 1
+  // eslint-disable-next-line prefer-destructuring
+  const absolutePath = path.resolve(
+    dirPath,
+    componentProps.vue || componentProps.react || componentProps.html || '.'
   );
+  const componentName = composeComponentName(absolutePath);
+  const reactComponentName = handleComponentName(`react-${componentName}`);
 
   // 注入组件导入语句
-  injectComponentImportScript(mdFile, componentProps.vue, componentName);
+  if (componentProps.vue) {
+    injectComponentImportScript(mdFile, componentVuePath, componentName);
+  }
+  if (componentProps.react) {
+    injectComponentImportScript(mdFile, componentReactPath, reactComponentName);
+  }
 
   // 组件源码
-  const componentVueCode = fs.readFileSync(componentVuePath, {
-    encoding: 'utf-8',
-  });
-  const componentHtmlCode = componentHtmlPath
-    ? fs.readFileSync(componentHtmlPath, {
+  const componentVueCode = componentVuePath
+    ? fs.readFileSync(componentVuePath, {
         encoding: 'utf-8',
       })
     : '';
-  const componentLitCode = componentLitPath
-    ? fs.readFileSync(componentLitPath, {
+  const componentHtmlCode = componentHtmlPath
+    ? fs.readFileSync(componentHtmlPath, {
         encoding: 'utf-8',
       })
     : '';
@@ -143,19 +129,13 @@ export const transformPreview = (
         encoding: 'utf-8',
       })
     : '';
-  // 源码代码块（经过处理）
-  const compileHighlightCode = transformHighlightCode(
-    md,
-    componentVueCode,
-    suffixName
-  );
 
-  const showVueCode = encodeURIComponent(compileHighlightCode);
+  // 源码代码块（经过处理）
+  const showVueCode = encodeURIComponent(
+    transformHighlightCode(md, componentVueCode, 'vue')
+  );
   const showHtmlCode = encodeURIComponent(
     transformHighlightCode(md, componentHtmlCode, 'html')
-  );
-  const showLitCode = encodeURIComponent(
-    transformHighlightCode(md, componentLitCode, 'typescript')
   );
   const showReactCode = encodeURIComponent(
     transformHighlightCode(md, componentReactCode, 'tsx')
@@ -166,15 +146,12 @@ export const transformPreview = (
     description="${componentProps.description}" 
     vue="${encodeURIComponent(componentVueCode)}" 
     html="${encodeURIComponent(componentHtmlCode)}"
-    lit="${encodeURIComponent(componentLitCode)}"
     react="${encodeURIComponent(componentReactCode)}"
     showHtmlCode="${showHtmlCode}"
-    showLitCode="${showLitCode}"
     showReactCode="${showReactCode}"
     showVueCode="${showVueCode}"
-    suffixName="${suffixName}" 
-    absolutePath="${componentVuePath}" 
-    relativePath="${componentProps.vue}">
+    :reactComponent="${reactComponentName}"
+    >
     <template #vue>
       <${componentName}></${componentName}>
     </template>

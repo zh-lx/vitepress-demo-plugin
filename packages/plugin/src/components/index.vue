@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { ref, inject, watch, nextTick } from 'vue';
+import { ref, inject, watch, nextTick, onMounted } from 'vue';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -11,14 +13,13 @@ import { useCodeCopy } from './hooks/copy';
 interface VitepressDemoBoxProps {
   vue: string;
   html?: string;
-  lit?: string;
   react?: string;
   showVueCode?: string;
   showHtmlCode?: string;
-  showLitCode?: string;
   showReactCode?: string;
   title?: string;
   description?: string;
+  reactComponent?: any;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -38,8 +39,6 @@ const vueCode = ref(decodeURIComponent(props.vue));
 const showVueCode = ref(decodeURIComponent(props.showVueCode || ''));
 const htmlCode = ref(decodeURIComponent(props.html || ''));
 const showHtmlSourceCode = ref(decodeURIComponent(props.showHtmlCode || ''));
-const litCode = ref(decodeURIComponent(props.lit || ''));
-const showLitSourceCode = ref(decodeURIComponent(props.showLitCode || ''));
 const reactCode = ref(decodeURIComponent(props.react || ''));
 const showReactSourceCode = ref(decodeURIComponent(props.showReactCode || ''));
 
@@ -50,24 +49,21 @@ watch(
     if (props[val]) {
       type.value = val;
       if (val === 'html') {
-        nextTick(() => {
-          setHTMLWithScript(htmlContainerRef.value, htmlCode.value);
-        });
+        setHTMLWithScript();
+      } else if (val === 'react') {
+        renderReactComponent();
       }
     } else {
       if (type.value) {
         return;
       } else if (props.html) {
         type.value = 'html';
-        nextTick(() => {
-          setHTMLWithScript(htmlContainerRef.value, htmlCode.value);
-        });
-      } else if (props.lit) {
-        type.value = 'lit';
+        setHTMLWithScript();
       } else if (props.vue) {
         type.value = 'vue';
       } else if (props.react) {
         type.value = 'react';
+        renderReactComponent();
       }
     }
   },
@@ -79,8 +75,6 @@ watch(
 const clickCodeCopy = () => {
   if (type.value === 'html') {
     clickCopy(htmlCode.value);
-  } else if (type.value === 'lit') {
-    clickCopy(litCode.value);
   } else if (type.value === 'vue') {
     clickCopy(vueCode.value);
   } else if (type.value === 'react') {
@@ -110,25 +104,62 @@ function runScript(target: HTMLElement, script: HTMLScriptElement) {
   });
 }
 
-function setHTMLWithScript(container: HTMLElement, rawHTML: string) {
-  container.innerHTML = rawHTML;
-  const scripts = container.querySelectorAll('script');
-  return Array.prototype.slice.apply(scripts).reduce((chain, script) => {
-    return chain.then(() => runScript(container, script));
-  }, Promise.resolve());
-}
-
 const htmlContainerRef = ref();
+function setHTMLWithScript() {
+  nextTick(() => {
+    if (!htmlContainerRef.value) {
+      return;
+    }
+    htmlContainerRef.value.innerHTML = htmlCode.value;
+    const scripts = htmlContainerRef.value.querySelectorAll('script');
+    return Array.prototype.slice.apply(scripts).reduce((chain, script) => {
+      return chain.then(() => runScript(htmlContainerRef.value, script));
+    }, Promise.resolve());
+  });
+}
 watch(
   () => htmlCode.value,
   (val: string) => {
     if (val) {
-      nextTick(() => {
-        setHTMLWithScript(htmlContainerRef.value, val);
-      });
+      setHTMLWithScript();
     }
   },
   { immediate: true }
+);
+
+const reactContainerRef = ref();
+let root: any = null;
+function renderReactComponent() {
+  nextTick(() => {
+    if (props.reactComponent && type.value === 'react') {
+      if (!root) {
+        root = createRoot(reactContainerRef.value);
+      }
+      root.render(createElement(props.reactComponent, {}, null));
+    }
+  });
+}
+watch(
+  () => reactContainerRef.value,
+  (val) => {
+    if (reactContainerRef.value) {
+      renderReactComponent();
+    } else if (root) {
+      root.unmount();
+      root = null;
+    }
+  },
+  { immediate: true, deep: true }
+);
+
+watch(
+  () => reactCode,
+  (val) => {
+    if (val && root) {
+      root.render(createElement(props.reactComponent, {}, null));
+    }
+  },
+  { immediate: true, deep: true }
 );
 </script>
 
@@ -138,7 +169,7 @@ watch(
       <slot name="vue" v-if="type === 'vue'"></slot>
       <div ref="htmlContainerRef" v-else-if="type === 'html'"></div>
       <slot name="lit" v-else-if="type === 'lit'"></slot>
-      <slot name="react" v-else-if="type === 'react'"></slot>
+      <div ref="reactContainerRef" v-else-if="type === 'react'"></div>
     </section>
     <section :class="[ns.bem('description')]">
       <div v-if="props.title" :class="[ns.bem('description', 'title')]">
@@ -153,32 +184,13 @@ watch(
         v-if="props.description || (!props.title && !props.description)"
         :class="[ns.bem('description', 'split-line')]"
       ></div>
-      <div :class="[ns.bem('description', 'handle-btn')]">
-        <CodeCloseIcon v-if="!isCodeFold" @click="setCodeFold(true)" />
-        <CodeOpenIcon v-else @click="setCodeFold(false)" />
-        <CopyIcon @click="clickCodeCopy" />
-      </div>
-    </section>
-
-    <section
-      :class="[ns.bem('source')]"
-      ref="sourceCodeArea"
-      v-show="!isCodeFold"
-    >
-      <!-- <div :class="[ns.bem('lang-tabs')]">
+      <div :class="[ns.bem('lang-tabs')]">
         <div
           :class="['tab', type === 'html' && 'active-tab']"
           v-show="html"
           @click="setCodeType?.('html')"
         >
           html
-        </div>
-        <div
-          :class="['tab', type === 'lit' && 'active-tab']"
-          v-show="lit"
-          @click="setCodeType?.('lit')"
-        >
-          lit
         </div>
         <div
           :class="['tab', type === 'vue' && 'active-tab']"
@@ -194,16 +206,23 @@ watch(
         >
           react
         </div>
-      </div> -->
+      </div>
+      <div :class="[ns.bem('description', 'handle-btn')]">
+        <CodeCloseIcon v-if="!isCodeFold" @click="setCodeFold(true)" />
+        <CodeOpenIcon v-else @click="setCodeFold(false)" />
+        <CopyIcon @click="clickCodeCopy" />
+      </div>
+    </section>
+
+    <section
+      :class="[ns.bem('source')]"
+      ref="sourceCodeArea"
+      v-show="!isCodeFold"
+    >
       <div
         v-show="type === 'html'"
         v-html="showHtmlSourceCode"
         class="language-html"
-      ></div>
-      <div
-        v-show="type === 'lit'"
-        v-html="showLitSourceCode"
-        class="language-typescript"
       ></div>
       <div
         v-show="type === 'vue'"
@@ -321,24 +340,24 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   overflow: hidden;
   transition: all 0.4s ease-in-out;
 
-  .#{$defaultPrefix}-lang-tabs {
-    border-top: 1px dashed var(--coot-demo-box-border);
-    line-height: 36px;
-    display: flex;
-    justify-content: center;
-    column-gap: 16px;
-    .tab {
-      cursor: pointer;
-    }
-
-    .active-tab {
-      color: #1677ff;
-      font-weight: 500;
-    }
-  }
-
   div[class*='language-'] {
     margin-top: 0 !important;
+  }
+}
+
+.#{$defaultPrefix}-lang-tabs {
+  border-bottom: 1px dashed var(--coot-demo-box-border);
+  line-height: 36px;
+  display: flex;
+  justify-content: center;
+  column-gap: 16px;
+  .tab {
+    cursor: pointer;
+  }
+
+  .active-tab {
+    color: #1677ff;
+    font-weight: 500;
   }
 }
 </style>
