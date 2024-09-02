@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, inject, watch, nextTick, onMounted } from 'vue';
+import { ref, inject, watch, nextTick, onMounted, computed, Ref } from 'vue';
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import CodeOpenIcon from './icons/code-open.vue';
@@ -9,62 +9,83 @@ import { MessageService } from './message';
 import { useNameSpace } from './hooks/namespace';
 import { useCodeFold } from './hooks/fold';
 import { useCodeCopy } from './hooks/copy';
+import { useHighlightCode } from './hooks/highlight';
+import 'highlight.js/styles/atom-one-dark.css';
 
 interface VitepressDemoBoxProps {
-  vue: string;
-  html?: string;
-  react?: string;
-  showVueCode?: string;
-  showHtmlCode?: string;
-  showReactCode?: string;
   title?: string;
   description?: string;
   reactComponent?: any;
+  vueCode?: string;
+  reactCode?: string;
+  htmlCode?: string;
+  tabOrders: string;
+  showTabs?: boolean;
+  defaultTab?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   title: '默认标题',
   description: '描述内容',
+  showTabs: true,
+  defaultTab: 'vue',
 });
 
-const codeType = inject('coot-code-type');
-const setCodeType = inject<(type: string) => void>('set-coot-code-type');
-const type = ref('');
+const injectType = inject('coot-code-type');
+const setInjectType = inject<(type: string) => void>('set-coot-code-type');
+
+const type = ref('vue');
+function setCodeType(_type: string) {
+  type.value = _type;
+  if (typeof setInjectType === 'function') {
+    setInjectType(_type);
+  }
+}
 
 const ns = useNameSpace();
 const { isCodeFold, setCodeFold } = useCodeFold();
 const { clickCopy } = useCodeCopy();
 
-const vueCode = ref(decodeURIComponent(props.vue));
-const showVueCode = ref(decodeURIComponent(props.showVueCode || ''));
-const htmlCode = ref(decodeURIComponent(props.html || ''));
-const showHtmlSourceCode = ref(decodeURIComponent(props.showHtmlCode || ''));
-const reactCode = ref(decodeURIComponent(props.react || ''));
-const showReactSourceCode = ref(decodeURIComponent(props.showReactCode || ''));
+const currentCode = computed(() => {
+  return props[`${type.value}Code` as keyof VitepressDemoBoxProps];
+});
+// 要展示的高亮代码
+const displayCode = computed(() => {
+  let code = useHighlightCode(currentCode.value);
+  return code;
+});
+
+const tabs = computed(() => {
+  const tabOrders = JSON.parse(decodeURIComponent(props.tabOrders));
+  return ['vue', 'react', 'html']
+    .filter((item) => props[`${item}Code` as keyof VitepressDemoBoxProps])
+    .sort((a: string, b: string) => {
+      return tabOrders.indexOf(a) - tabOrders.indexOf(b);
+    });
+});
 
 watch(
-  () => (codeType as any).value,
-  (val: any) => {
-    // @ts-ignore
-    if (props[val]) {
+  () => (injectType as Ref<string>)?.value,
+  (val) => {
+    if (val && props[`${val}Code` as keyof VitepressDemoBoxProps]) {
       type.value = val;
-      if (val === 'html') {
-        setHTMLWithScript();
-      } else if (val === 'react') {
-        renderReactComponent();
-      }
-    } else {
-      if (type.value) {
-        return;
-      } else if (props.html) {
-        type.value = 'html';
-        setHTMLWithScript();
-      } else if (props.vue) {
-        type.value = 'vue';
-      } else if (props.react) {
-        type.value = 'react';
-        renderReactComponent();
-      }
+    }
+  },
+  { immediate: true }
+);
+
+watch(
+  () => (type as any).value,
+  (val: any) => {
+    if (!val) {
+      return;
+    }
+
+    // 副作用
+    if (val === 'html') {
+      setHTMLWithScript();
+    } else if (val === 'react') {
+      renderReactComponent();
     }
   },
   {
@@ -73,14 +94,7 @@ watch(
 );
 
 const clickCodeCopy = () => {
-  if (type.value === 'html') {
-    clickCopy(htmlCode.value);
-  } else if (type.value === 'vue') {
-    clickCopy(vueCode.value);
-  } else if (type.value === 'react') {
-    clickCopy(reactCode.value);
-  }
-
+  clickCopy(currentCode.value || '');
   MessageService.open();
 };
 
@@ -110,16 +124,17 @@ function setHTMLWithScript() {
     if (!htmlContainerRef.value) {
       return;
     }
-    htmlContainerRef.value.innerHTML = htmlCode.value;
+    htmlContainerRef.value.innerHTML = props.htmlCode;
     const scripts = htmlContainerRef.value.querySelectorAll('script');
     return Array.prototype.slice.apply(scripts).reduce((chain, script) => {
       return chain.then(() => runScript(htmlContainerRef.value, script));
     }, Promise.resolve());
   });
 }
+
 watch(
-  () => htmlCode.value,
-  (val: string) => {
+  () => props.htmlCode,
+  (val?: string) => {
     if (val) {
       setHTMLWithScript();
     }
@@ -131,7 +146,7 @@ const reactContainerRef = ref();
 let root: any = null;
 function renderReactComponent() {
   nextTick(() => {
-    if (props.reactComponent && type.value === 'react') {
+    if (props.reactComponent && type.value === 'react' && props.reactCode) {
       if (!root) {
         root = createRoot(reactContainerRef.value);
       }
@@ -153,7 +168,7 @@ watch(
 );
 
 watch(
-  () => reactCode,
+  () => props.reactCode,
   (val) => {
     if (val && root) {
       root.render(createElement(props.reactComponent, {}, null));
@@ -161,16 +176,30 @@ watch(
   },
   { immediate: true, deep: true }
 );
+
+watch(
+  () => props.defaultTab,
+  (val) => {
+    console.log(val);
+    if (val) {
+      type.value = val;
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 
 <template>
   <div :class="[ns.e('ant-design__container')]">
+    <!-- 预览区 -->
     <section :class="[ns.bem('preview')]">
       <slot name="vue" v-if="type === 'vue'"></slot>
       <div ref="htmlContainerRef" v-else-if="type === 'html'"></div>
-      <slot name="lit" v-else-if="type === 'lit'"></slot>
       <div ref="reactContainerRef" v-else-if="type === 'react'"></div>
     </section>
+    <!-- 描述及切换 -->
     <section :class="[ns.bem('description')]">
       <div v-if="props.title" :class="[ns.bem('description', 'title')]">
         {{ title }}
@@ -184,27 +213,14 @@ watch(
         v-if="props.description || (!props.title && !props.description)"
         :class="[ns.bem('description', 'split-line')]"
       ></div>
-      <div :class="[ns.bem('lang-tabs')]">
+      <div :class="[ns.bem('lang-tabs')]" v-if="tabs.length > 1 && showTabs">
         <div
-          :class="['tab', type === 'html' && 'active-tab']"
-          v-show="html"
-          @click="setCodeType?.('html')"
+          v-for="tab in tabs"
+          :key="tab"
+          :class="['tab', type === tab && 'active-tab']"
+          @click="setCodeType?.(tab)"
         >
-          html
-        </div>
-        <div
-          :class="['tab', type === 'vue' && 'active-tab']"
-          v-show="vue"
-          @click="setCodeType?.('vue')"
-        >
-          vue
-        </div>
-        <div
-          :class="['tab', type === 'react' && 'active-tab']"
-          v-show="react"
-          @click="setCodeType?.('react')"
-        >
-          react
+          {{ tab }}
         </div>
       </div>
       <div :class="[ns.bem('description', 'handle-btn')]">
@@ -214,26 +230,9 @@ watch(
       </div>
     </section>
 
-    <section
-      :class="[ns.bem('source')]"
-      ref="sourceCodeArea"
-      v-show="!isCodeFold"
-    >
-      <div
-        v-show="type === 'html'"
-        v-html="showHtmlSourceCode"
-        class="language-html"
-      ></div>
-      <div
-        v-show="type === 'vue'"
-        v-html="showVueCode"
-        class="language-vue"
-      ></div>
-      <div
-        v-show="type === 'react'"
-        v-html="showReactSourceCode"
-        class="language-tsx"
-      ></div>
+    <!-- 代码展示区 -->
+    <section :class="[ns.bem('source')]" v-show="!isCodeFold">
+      <pre class="language-html"><code v-html="displayCode"></code></pre>
     </section>
   </div>
 </template>
@@ -343,6 +342,18 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   div[class*='language-'] {
     margin-top: 0 !important;
   }
+
+  .language-html {
+    background-color: rgb(40, 44, 52);
+    margin: 0;
+
+    code {
+      color: white;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        Liberation Mono, Courier New, monospace;
+      padding: 20px 24px;
+    }
+  }
 }
 
 .#{$defaultPrefix}-lang-tabs {
@@ -351,6 +362,7 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   display: flex;
   justify-content: center;
   column-gap: 16px;
+
   .tab {
     cursor: pointer;
   }

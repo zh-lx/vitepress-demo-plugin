@@ -85,19 +85,6 @@ export const injectComponentImportScript = (
 };
 
 /**
- * 源码 => 代码块
- * @param mdInstance
- * @param sourceCode
- * @param suffix
- * @returns
- */
-export const transformHighlightCode = (
-  mdInstance: MarkdownIt,
-  sourceCode: string,
-  suffix: string
-) => mdInstance.options.highlight!(sourceCode, suffix, '');
-
-/**
  * 根据组件路径组合组件引用名称
  * @param path
  * @returns

@@ -7,7 +7,6 @@ import {
   composeComponentName,
   handleComponentName,
   injectComponentImportScript,
-  transformHighlightCode,
 } from './utils';
 
 const titleRegex = /title="(.*?)"/;
@@ -17,11 +16,30 @@ const reactPathRegex = /react="(.*?)"/;
 const descriptionRegex = /description="(.*?)"/;
 
 export interface DefaultProps {
-  vue: string;
-  title: string;
-  description: string;
+  vue?: string;
+  title?: string;
+  description?: string;
   html?: string;
   react?: string;
+}
+
+export interface VitepressDemoBoxConfig {
+  /**
+   * @description demo所在目录
+   */
+  demoRoot?: string;
+  /**
+   * @description 代码切换 tab 的展示顺序
+   */
+  tabOrders?: ('vue' | 'react' | 'html')[];
+  /**
+   * @description 是否显示代码切换 tab
+   */
+  showTabs?: boolean;
+  /**
+   * @description 默认选中的 tab
+   */
+  defaultTab?: boolean;
 }
 
 /**
@@ -36,8 +54,11 @@ export const transformPreview = (
   md: MarkdownIt,
   token: Token,
   mdFile: any,
-  demoRoot?: string
+  config?: VitepressDemoBoxConfig
 ) => {
+
+  const { demoRoot, tabOrders = ['vue', 'react', 'html'], showTabs = true, defaultTab = config?.tabOrders?.[0] || 'vue' } = config || {};
+
   const componentProps: DefaultProps = {
     vue: '',
     title: '',
@@ -113,43 +134,30 @@ export const transformPreview = (
     injectComponentImportScript(mdFile, componentReactPath, reactComponentName);
   }
 
-  // 组件源码
-  const componentVueCode = componentVuePath
-    ? fs.readFileSync(componentVuePath, {
-        encoding: 'utf-8',
-      })
-    : '';
-  const componentHtmlCode = componentHtmlPath
-    ? fs.readFileSync(componentHtmlPath, {
-        encoding: 'utf-8',
-      })
-    : '';
-  const componentReactCode = componentReactPath
-    ? fs.readFileSync(componentReactPath, {
-        encoding: 'utf-8',
-      })
-    : '';
 
-  // 源码代码块（经过处理）
-  const showVueCode = encodeURIComponent(
-    transformHighlightCode(md, componentVueCode, 'vue')
-  );
-  const showHtmlCode = encodeURIComponent(
-    transformHighlightCode(md, componentHtmlCode, 'html')
-  );
-  const showReactCode = encodeURIComponent(
-    transformHighlightCode(md, componentReactCode, 'tsx')
-  );
+  // 组件代码，动态引入以便实时更新
+  const htmlCode = componentProps.html ? handleComponentName(`code-html-${componentName}`) : `''`;
+  const reactCode = componentProps.react ? handleComponentName(`code-react-${componentName}`) : `''`;
+  const vueCode = componentProps.vue ? handleComponentName(`code-vue-${componentName}`) : `''`;
+  if (componentProps.html) {
+    injectComponentImportScript(mdFile, `${componentHtmlPath}?raw`, htmlCode);
+  }
+  if (componentProps.react) {
+    injectComponentImportScript(mdFile, `${componentReactPath}?raw`, reactCode);
+  }
+  if (componentProps.vue) {
+    injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCode);
+  }
 
   const sourceCode = `<demo-box 
     title="${componentProps.title}"
-    description="${componentProps.description}" 
-    vue="${encodeURIComponent(componentVueCode)}" 
-    html="${encodeURIComponent(componentHtmlCode)}"
-    react="${encodeURIComponent(componentReactCode)}"
-    showHtmlCode="${showHtmlCode}"
-    showReactCode="${showReactCode}"
-    showVueCode="${showVueCode}"
+    description="${componentProps.description}"
+    defaultTab="${defaultTab}"
+    tabOrders="${encodeURIComponent(JSON.stringify(tabOrders))}"
+    :showTabs="!!${showTabs}"
+    :htmlCode="${encodeURIComponent(htmlCode)}"
+    :vueCode="${encodeURIComponent(vueCode)}"
+    :reactCode="${encodeURIComponent(reactCode)}"
     :reactComponent="${reactComponentName}"
     >
     <template #vue>

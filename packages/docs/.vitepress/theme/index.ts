@@ -7,15 +7,7 @@ import 'vitepress-demo-box/dist/style.css';
 
 export default {
   ...Theme,
-
   enhanceApp({ app }) {
-    const codeType = ref('vue');
-    const setCodeType = (type: string) => {
-      codeType.value = type;
-    };
-    app.provide('coot-code-type', codeType);
-    app.provide('set-coot-code-type', setCodeType);
-    // ...
     app.component('demo-box', VitepressDemoBox);
   },
 };
