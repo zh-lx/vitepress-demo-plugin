@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { markdownDemo } from 'vitepress-demo-box';
 import path, { dirname } from 'path';
+import raw from 'vite-plugin-raw';
 
 function fileURLToPath(fileURL: string) {
   let filePath = fileURL;
@@ -46,5 +47,9 @@ export default defineConfig({
         demoRoot: path.resolve(dirname(fileURLToPath(import.meta.url)), '../demos'),
       });
     },
+  },
+  vite: {
+    plugins: [
+    ]
   }
 })

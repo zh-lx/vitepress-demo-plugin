@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['vue', 'markdown-it', 'fs', 'path'],
+      external: ['vue', 'markdown-it', 'fs', 'path', 'react', 'react-dom'],
       output: {
         globals: {
           vue: 'Vue',
@@ -20,6 +20,5 @@ export default defineConfig({
     },
     emptyOutDir: false,
   },
-
   plugins: [vue(), dts({ insertTypesEntry: true })],
 });
