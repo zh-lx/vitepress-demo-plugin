@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
+import FoldIcon from './icons/fold.vue';
 import { MessageService } from './message';
 import { useNameSpace } from './hooks/namespace';
 import { useCodeFold } from './hooks/fold';
@@ -189,6 +190,22 @@ watch(
     immediate: true,
   }
 );
+
+const sourceRef = ref();
+watch(
+  () => isCodeFold.value,
+  (val) => {
+    nextTick(() => {
+      if (sourceRef.value) {
+        if (val) {
+          sourceRef.value.style.height = 0;
+        } else {
+          sourceRef.value.style.height = sourceRef.value.scrollHeight + 'px';
+        }
+      }
+    });
+  }
+);
 </script>
 
 <template>
@@ -201,11 +218,11 @@ watch(
     </section>
     <!-- 描述及切换 -->
     <section :class="[ns.bem('description')]">
-      <div v-if="props.title" :class="[ns.bem('description', 'title')]">
-        {{ title }}
+      <div v-if="title" :class="[ns.bem('description', 'title')]">
+        <div style="flex-shrink: 0">{{ title }}</div>
       </div>
       <div
-        v-if="props.description"
+        v-if="description"
         :class="[ns.bem('description', 'content')]"
         v-html="description"
       ></div>
@@ -231,9 +248,13 @@ watch(
     </section>
 
     <!-- 代码展示区 -->
-    <section :class="[ns.bem('source')]" v-show="!isCodeFold">
+    <section :class="[ns.bem('source')]" ref="sourceRef">
       <pre class="language-html"><code v-html="displayCode"></code></pre>
     </section>
+
+    <div :class="ns.bem('fold')" v-if="!isCodeFold" @click="setCodeFold(true)">
+      <FoldIcon />收起代码
+    </div>
   </div>
 </template>
 
@@ -262,7 +283,6 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   border: 1px solid var(--coot-demo-box-border);
   box-shadow: 0px 0px 10px var(--coot-demo-box-border);
   margin: 10px 0;
-  overflow: hidden;
 
   .#{$defaultPrefix}-preview,
   .#{$defaultPrefix}-description,
@@ -283,30 +303,26 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
 .#{$containerPrefix}__container > .#{$defaultPrefix}-description {
   .#{$defaultPrefix}-description__title {
     width: 100%;
-    position: relative;
-    padding-left: 25px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    font-weight: 500;
 
     &::before {
       content: '';
-      position: absolute;
-      width: 3%;
+      width: 12px;
       border-top: 1px solid var(--coot-demo-box-border);
-      top: 12px;
-      left: 0;
     }
 
     &::after {
       content: '';
-      position: absolute;
-      width: 100%;
+      flex: 1;
       border-top: 1px solid var(--coot-demo-box-border);
-      top: 12px;
-      margin-left: 5px;
     }
   }
 
   .#{$defaultPrefix}-description__content {
-    padding: 20px;
+    padding: 8px 20px;
   }
 
   .#{$defaultPrefix}-description__split-line {
@@ -336,24 +352,46 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
 }
 
 .#{$containerPrefix}__container > .#{$defaultPrefix}-source {
-  overflow: hidden;
   transition: all 0.4s ease-in-out;
+  overflow: hidden;
+  height: 0;
 
   div[class*='language-'] {
     margin-top: 0 !important;
   }
 
   .language-html {
-    background-color: rgb(40, 44, 52);
+    background-color: #f5f7fa;
     margin: 0;
 
     code {
-      color: white;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         Liberation Mono, Courier New, monospace;
       padding: 20px 24px;
     }
   }
+}
+
+.dark .#{$containerPrefix}__container > .#{$defaultPrefix}-source {
+  .language-html {
+    background-color: rgb(40, 44, 52);
+  }
+}
+
+.#{$containerPrefix}__container > .#{$defaultPrefix}-fold {
+  position: sticky;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  background-color: var(--vp-c-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 48px;
+  font-size: 13px;
+  column-gap: 4px;
+  cursor: pointer;
 }
 
 .#{$defaultPrefix}-lang-tabs {

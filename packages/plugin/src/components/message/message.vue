@@ -71,6 +71,8 @@ defineExpose({
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
+  background-color: var(--vp-c-bg);
+  font-weight: 500;
 
   svg {
     display: inline-block;

@@ -56,8 +56,12 @@ export const transformPreview = (
   mdFile: any,
   config?: VitepressDemoBoxConfig
 ) => {
-
-  const { demoRoot, tabOrders = ['vue', 'react', 'html'], showTabs = true, defaultTab = config?.tabOrders?.[0] || 'vue' } = config || {};
+  const {
+    demoRoot,
+    tabOrders = ['vue', 'react', 'html'],
+    showTabs = true,
+    defaultTab = config?.tabOrders?.[0] || 'vue',
+  } = config || {};
 
   const componentProps: DefaultProps = {
     vue: '',
@@ -99,30 +103,39 @@ export const transformPreview = (
     : '';
 
   const componentVuePath = componentProps.vue
-    ? path.resolve(
-        demoRoot || path.dirname(mdFile.path),
-        vuePathRegexValue?.[1] || '.'
-      )
+    ? path
+        .resolve(
+          demoRoot || path.dirname(mdFile.path),
+          vuePathRegexValue?.[1] || '.'
+        )
+        .replace(/\\/g, '/')
     : '';
   const componentHtmlPath = componentProps.html
-    ? path.resolve(
-        demoRoot || path.dirname(mdFile.path),
-        htmlPathRegexValue?.[1] || '.'
-      )
+    ? path
+        .resolve(
+          demoRoot || path.dirname(mdFile.path),
+          htmlPathRegexValue?.[1] || '.'
+        )
+        .replace(/\\/g, '/')
     : '';
   const componentReactPath = componentProps.react
-    ? path.resolve(
-        demoRoot || path.dirname(mdFile.path),
-        reactPathRegexValue?.[1] || '.'
-      )
+    ? path
+        .resolve(
+          demoRoot || path.dirname(mdFile.path),
+          reactPathRegexValue?.[1] || '.'
+        )
+        .replace(/\\/g, '/')
     : '';
 
   // 组件名
   // eslint-disable-next-line prefer-destructuring
-  const absolutePath = path.resolve(
-    dirPath,
-    componentProps.vue || componentProps.react || componentProps.html || '.'
-  );
+  const absolutePath = path
+    .resolve(
+      dirPath,
+      componentProps.vue || componentProps.react || componentProps.html || '.'
+    )
+    .replace(/\\/g, '/');
+
   const componentName = composeComponentName(absolutePath);
   const reactComponentName = handleComponentName(`react-${componentName}`);
 
@@ -134,11 +147,16 @@ export const transformPreview = (
     injectComponentImportScript(mdFile, componentReactPath, reactComponentName);
   }
 
-
   // 组件代码，动态引入以便实时更新
-  const htmlCode = componentProps.html ? handleComponentName(`code-html-${componentName}`) : `''`;
-  const reactCode = componentProps.react ? handleComponentName(`code-react-${componentName}`) : `''`;
-  const vueCode = componentProps.vue ? handleComponentName(`code-vue-${componentName}`) : `''`;
+  const htmlCode = componentProps.html
+    ? handleComponentName(`code-html-${componentName}`)
+    : `''`;
+  const reactCode = componentProps.react
+    ? handleComponentName(`code-react-${componentName}`)
+    : `''`;
+  const vueCode = componentProps.vue
+    ? handleComponentName(`code-vue-${componentName}`)
+    : `''`;
   if (componentProps.html) {
     injectComponentImportScript(mdFile, `${componentHtmlPath}?raw`, htmlCode);
   }
