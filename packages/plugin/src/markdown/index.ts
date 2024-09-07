@@ -4,7 +4,7 @@ import Token from 'markdown-it/lib/token';
 import { demoReg } from './utils';
 import { transformPreview, VitepressDemoBoxConfig } from './preview';
 
-export const markdownDemo = (
+export const demoPlugin = (
   md: MarkdownIt & any,
   params?: VitepressDemoBoxConfig
 ) => {

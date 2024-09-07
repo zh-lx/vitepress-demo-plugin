@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress';
-import { markdownDemo } from 'vitepress-demo-box';
+import { demoPlugin } from 'vitepress-demo-box';
 import path, { dirname } from 'path';
-import raw from 'vite-plugin-raw';
 
 function fileURLToPath(fileURL: string) {
   let filePath = fileURL;
@@ -18,8 +17,8 @@ function fileURLToPath(fileURL: string) {
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Vitepress Demo Box",
-  description: "The docs of vitepress-demo-box",
+  title: 'Vitepress Demo Box',
+  description: 'The docs of vitepress-demo-box',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -31,25 +30,27 @@ export default defineConfig({
       {
         text: '指南',
         items: [
-          { text: '快速开始', link: '/guide' },
+          { text: '快速开始', link: '/guide/start' },
           { text: 'DEMO 示例', link: '/example' },
-        ]
-      }
+        ],
+      },
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/coot-ui/vitepress-demo-box' }
-    ]
+      { icon: 'github', link: 'https://github.com/coot-ui/vitepress-demo-box' },
+    ],
   },
   markdown: {
     config(md) {
-      md.use(markdownDemo, {
-        demoRoot: path.resolve(dirname(fileURLToPath(import.meta.url)), '../demos'),
+      md.use(demoPlugin, {
+        demoRoot: path.resolve(
+          dirname(fileURLToPath(import.meta.url)),
+          '../demos'
+        ),
       });
     },
   },
   vite: {
-    plugins: [
-    ]
-  }
-})
+    plugins: [],
+  },
+});
