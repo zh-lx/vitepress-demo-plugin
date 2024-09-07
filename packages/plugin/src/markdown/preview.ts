@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
-import fs from 'fs';
 import path from 'path';
 import {
   composeComponentName,
@@ -139,6 +138,14 @@ export const transformPreview = (
   const componentName = composeComponentName(absolutePath);
   const reactComponentName = handleComponentName(`react-${componentName}`);
 
+  // 注入 vitepress-demo-box 组件和样式
+  injectComponentImportScript(
+    mdFile,
+    'vitepress-demo-box',
+    `{ VitepressDemoBox }`
+  );
+  injectComponentImportScript(mdFile, 'vitepress-demo-box/dist/style.css');
+
   // 注入组件导入语句
   if (componentProps.vue) {
     injectComponentImportScript(mdFile, componentVuePath, componentName);
@@ -167,7 +174,7 @@ export const transformPreview = (
     injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCode);
   }
 
-  const sourceCode = `<demo-box 
+  const sourceCode = `<vitepress-demo-box 
     title="${componentProps.title}"
     description="${componentProps.description}"
     defaultTab="${defaultTab}"
@@ -181,7 +188,7 @@ export const transformPreview = (
     <template #vue>
       <${componentName}></${componentName}>
     </template>
-  </demo-box>`;
+  </vitepress-demo-box>`;
 
   return sourceCode;
 };
