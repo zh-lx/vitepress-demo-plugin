@@ -37,7 +37,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/coot-ui/vitepress-demo-box' },
+      { icon: 'github', link: 'https://github.com/zh-lx/vitepress-demo-box' },
     ],
   },
   markdown: {
