@@ -1,4 +1,4 @@
 import VitepressDemoBox from './components/index.vue';
 
-export { demoPlugin } from './markdown';
+export { vitepressDemoPlugin } from './markdown';
 export { VitepressDemoBox };

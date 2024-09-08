@@ -4,11 +4,12 @@ import Token from 'markdown-it/lib/token';
 import { demoReg } from './utils';
 import { transformPreview, VitepressDemoBoxConfig } from './preview';
 
-export const demoPlugin = (
+export const vitepressDemoPlugin = (
   md: MarkdownIt & any,
   params?: VitepressDemoBoxConfig
 ) => {
   const defaultHtmlInlineRender = md.renderer.rules.html_inline!;
+  const defaultHtmlBlockRender = md.renderer.rules.html_block!;
   md.renderer.rules.html_inline = (
     tokens: Token[],
     idx: number,
@@ -21,5 +22,19 @@ export const demoPlugin = (
       return transformPreview(md, token, mdFile, params);
     }
     return defaultHtmlInlineRender(tokens, idx, options, mdFile, self);
+  };
+
+  md.renderer.rules.html_block = (
+    tokens: Token[],
+    idx: number,
+    options: MarkdownIt.Options,
+    mdFile: any,
+    self: Renderer
+  ) => {
+    const token = tokens[idx];
+    if (demoReg.some((reg) => reg.test(token.content))) {
+      return transformPreview(md, token, mdFile, params);
+    }
+    return defaultHtmlBlockRender(tokens, idx, options, mdFile, self);
   };
 };
