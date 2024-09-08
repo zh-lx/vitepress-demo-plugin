@@ -7,12 +7,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/coot-ui/vitepress-demo-box#README",
+  "homepage": "https://github.com/zh-lx/vitepress-demo-box#README",
   "repository": {
     "type": "git",
-    "url": "git@github.com:coot-ui/vitepress-demo-box.git"
+    "url": "git@github.com:zh-lx/vitepress-demo-box.git"
   },
-  "bugs": "https://github.com/coot-ui/vitepress-demo-box/issues",
+  "bugs": "https://github.com/zh-lx/vitepress-demo-box/issues",
   "keywords": [
     "vitepress",
     "plugin",
