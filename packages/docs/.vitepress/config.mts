@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress';
-import { demoPlugin } from 'vitepress-demo-box';
+import { vitepressDemoPlugin } from 'vitepress-demo-box';
 import path, { dirname } from 'path';
 
 function fileURLToPath(fileURL: string) {
@@ -31,10 +31,12 @@ export default defineConfig({
         text: '指南',
         items: [
           { text: '快速开始', link: '/guide/start' },
-          { text: 'DEMO 示例', link: '/example' },
+          { text: '进阶配置', link: '/guide/advance' },
         ],
       },
     ],
+
+    outline: [2, 4],
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/zh-lx/vitepress-demo-box' },
@@ -42,7 +44,7 @@ export default defineConfig({
   },
   markdown: {
     config(md) {
-      md.use(demoPlugin, {
+      md.use(vitepressDemoPlugin, {
         demoRoot: path.resolve(
           dirname(fileURLToPath(import.meta.url)),
           '../demos'

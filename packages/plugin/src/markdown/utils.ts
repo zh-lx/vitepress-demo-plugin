@@ -1,7 +1,10 @@
 import MarkdownIt from 'markdown-it';
 
 // <demo></demo> or <demo />
-export const demoReg = [/^<demo (.*)><\/demo>$/, /^<demo (.*) \/>$/];
+export const demoReg = [
+  /<demo(\s|\n)((.|\n)*)><\/demo>/,
+  /<demo(\s|\n)((.|\n)*)\/>/,
+];
 
 const scriptLangTsReg = /<\s*script[^>]*\blang=['"]ts['"][^>]*/;
 const scriptSetupReg = /<\s*script[^>]*\bsetup\b[^>]*/;

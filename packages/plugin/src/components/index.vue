@@ -181,14 +181,23 @@ watch(
 watch(
   () => props.defaultTab,
   (val) => {
-    console.log(val);
-    if (val) {
+    if (val && props[`${val}Code` as keyof VitepressDemoBoxProps]) {
       type.value = val;
     }
   },
   {
     immediate: true,
   }
+);
+
+watch(
+  () => tabs.value,
+  () => {
+    if (!props[`${type.value}Code` as keyof VitepressDemoBoxProps]) {
+      type.value = tabs.value[0];
+    }
+  },
+  { immediate: true, deep: true }
 );
 
 const sourceRef = ref();
