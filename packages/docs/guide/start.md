@@ -16,9 +16,7 @@ yarn add vitepress-demo-box -D
 pnpm add vitepress-demo-box -D
 ```
 
-## 使用
-
-### 配置插件
+## 引入插件
 
 在 `.vitepress/config.ts` 中添加如下代码以引入 `vitepressDemoPlugin` 插件：
 
@@ -37,15 +35,9 @@ export default defineConfig({
 });
 ```
 
-### 展示 Demo
+## 展示 Vue Demo
 
-在 `.md` 文件中使用 `<demo />` 来展示 demo 及代码。
-
-<hr />
-
-#### Vue Demo
-
-通过 `<demo vue="xxx/path" />` 指定一个 `.vue` 文件的路径，渲染该 vue 组件并展示其代码：
+在 `.md` 文件中通过 `<demo vue="xxx/path" />` 指定一个 `.vue` 文件的路径，渲染该 vue 组件并展示其代码：
 
 ```html
 <demo vue="../demos/demo.vue" />
@@ -55,9 +47,28 @@ export default defineConfig({
 
 <demo vue="../demos/demo.vue" />
 
-<hr />
+## 展示 Html Demo
 
-#### React Demo
+在 `.md` 文件中通过 `<demo html="xxx/path" />` 指定一个 `.html` 文件的路径，渲染该 html 组件并展示其代码：
+
+```html
+<demo html="../demos/demo.html" />
+```
+
+其对应的渲染效果如下：
+
+<demo html="../demos/demo.html" />
+
+## 展示 React Demo
+
+::: tip 提示
+如果要在你的 vitepress 站点中展示 React Demo，需要执行如下命令安装对应的依赖：
+
+```bash
+npm install react react-dom -D
+```
+
+:::
 
 通过 `<demo react="xxx/path" />` 指定一个 `.jsx/.tsx` 文件的路径，渲染该 react 组件并展示其代码：
 
@@ -71,21 +82,16 @@ export default defineConfig({
 
 <hr />
 
-#### Html Demo
+## 展示多语法混合 Demo
 
-通过 `<demo html="xxx/path" />` 指定一个 `.html` 文件的路径，渲染该 html 组件并展示其代码：
+::: tip 提示
+同上，如果要在你的 vitepress 站点中展示 React Demo，需要执行如下命令安装相应的依赖：
 
-```html
-<demo html="../demos/demo.html" />
+```bash
+npm install react react-dom -D
 ```
 
-其对应的渲染效果如下：
-
-<demo html="../demos/demo.html" />
-
-<hr />
-
-#### 多语法混合 Demo
+:::
 
 可以同时在 `<demo />` 中指定 `vue/react/html` 中的多个，以将不同语法的 Demo 展示在一个块中。
 

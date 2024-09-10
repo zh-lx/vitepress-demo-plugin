@@ -151,6 +151,16 @@ export const transformPreview = (
     injectComponentImportScript(mdFile, componentVuePath, componentName);
   }
   if (componentProps.react) {
+    injectComponentImportScript(
+      mdFile,
+      'react',
+      '{ createElement as reactCreateElement }'
+    );
+    injectComponentImportScript(
+      mdFile,
+      'react-dom/client',
+      '{ createRoot as reactCreateRoot }'
+    );
     injectComponentImportScript(mdFile, componentReactPath, reactComponentName);
   }
 
@@ -184,6 +194,8 @@ export const transformPreview = (
     :vueCode="${encodeURIComponent(vueCode)}"
     :reactCode="${encodeURIComponent(reactCode)}"
     :reactComponent="${reactComponentName}"
+    :reactCreateRoot="reactCreateRoot"
+    :reactCreateElement="reactCreateElement"
     >
     <template #vue>
       <${componentName}></${componentName}>
