@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { ref, inject, watch, nextTick, onMounted, computed, Ref } from 'vue';
-import { createElement } from 'react';
-import { createRoot } from 'react-dom/client';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -23,6 +21,8 @@ interface VitepressDemoBoxProps {
   tabOrders: string;
   showTabs?: boolean;
   defaultTab?: string;
+  reactCreateElement?: any; // import { createElement as reactCreateElement } from 'react';
+  reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -149,9 +149,9 @@ function renderReactComponent() {
   nextTick(() => {
     if (props.reactComponent && type.value === 'react' && props.reactCode) {
       if (!root) {
-        root = createRoot(reactContainerRef.value);
+        root = props.reactCreateRoot(reactContainerRef.value);
       }
-      root.render(createElement(props.reactComponent, {}, null));
+      root.render(props.reactCreateElement(props.reactComponent, {}, null));
     }
   });
 }
@@ -172,7 +172,7 @@ watch(
   () => props.reactCode,
   (val) => {
     if (val && root) {
-      root.render(createElement(props.reactComponent, {}, null));
+      root.render(props.reactCreateElement(props.reactComponent, {}, null));
     }
   },
   { immediate: true, deep: true }
