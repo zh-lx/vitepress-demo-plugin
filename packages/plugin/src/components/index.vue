@@ -20,7 +20,7 @@ interface VitepressDemoBoxProps {
   htmlCode?: string;
   tabOrders: string;
   showTabs?: boolean;
-  defaultTab?: string;
+  defaultSelect?: string;
   reactCreateElement?: any; // import { createElement as reactCreateElement } from 'react';
   reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
 }
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   title: '默认标题',
   description: '描述内容',
   showTabs: true,
-  defaultTab: 'vue',
+  defaultSelect: 'vue',
 });
 
 const injectType = inject('coot-code-type');
@@ -179,7 +179,7 @@ watch(
 );
 
 watch(
-  () => props.defaultTab,
+  () => props.defaultSelect,
   (val) => {
     if (val && props[`${val}Code` as keyof VitepressDemoBoxProps]) {
       type.value = val;
@@ -218,7 +218,7 @@ watch(
 </script>
 
 <template>
-  <div :class="[ns.e('ant-design__container')]">
+  <div :class="[ns.e('container')]">
     <!-- 预览区 -->
     <section :class="[ns.bem('preview')]">
       <slot name="vue" v-if="type === 'vue'"></slot>
@@ -270,14 +270,11 @@ watch(
 <style lang="scss">
 @import './style/var.scss';
 
-$componentPrefix: 'ant-design';
-$containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
-
-.#{$containerPrefix}__container > * {
+.#{$defaultPrefix}__container > * {
   font-size: 14px;
 }
 
-.#{$containerPrefix}__container {
+.#{$defaultPrefix}__container {
   div[class*='language-'] {
     margin-top: 0;
     margin-bottom: 0;
@@ -286,7 +283,7 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   }
 }
 
-.#{$containerPrefix}__container {
+.#{$defaultPrefix}__container {
   width: 100%;
   border-radius: 4px;
   border: 1px solid var(--coot-demo-box-border);
@@ -300,7 +297,7 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   }
 }
 
-.#{$containerPrefix}__container > .#{$defaultPrefix}-preview {
+.#{$defaultPrefix}__container > .#{$defaultPrefix}-preview {
   padding: 20px 20px 30px 20px;
 
   & > p {
@@ -309,7 +306,7 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   }
 }
 
-.#{$containerPrefix}__container > .#{$defaultPrefix}-description {
+.#{$defaultPrefix}__container > .#{$defaultPrefix}-description {
   .#{$defaultPrefix}-description__title {
     width: 100%;
     display: flex;
@@ -360,7 +357,7 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   }
 }
 
-.#{$containerPrefix}__container > .#{$defaultPrefix}-source {
+.#{$defaultPrefix}__container > .#{$defaultPrefix}-source {
   transition: all 0.4s ease-in-out;
   overflow: hidden;
   height: 0;
@@ -381,13 +378,13 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   }
 }
 
-.dark .#{$containerPrefix}__container > .#{$defaultPrefix}-source {
+.dark .#{$defaultPrefix}__container > .#{$defaultPrefix}-source {
   .language-html {
     background-color: rgb(40, 44, 52);
   }
 }
 
-.#{$containerPrefix}__container > .#{$defaultPrefix}-fold {
+.#{$defaultPrefix}__container > .#{$defaultPrefix}-fold {
   position: sticky;
   left: 0;
   bottom: 0;
@@ -398,7 +395,7 @@ $containerPrefix: #{$defaultPrefix}__#{$componentPrefix};
   justify-content: center;
   align-items: center;
   line-height: 48px;
-  font-size: 13px;
+  font-size: 14px;
   column-gap: 4px;
   cursor: pointer;
 }

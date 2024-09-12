@@ -45,7 +45,7 @@ export default defineConfig({
   markdown: {
     config(md) {
       md.use(vitepressDemoPlugin, {
-        demoRoot: path.resolve(
+        demoDir: path.resolve(
           dirname(fileURLToPath(import.meta.url)),
           '../demos'
         ),

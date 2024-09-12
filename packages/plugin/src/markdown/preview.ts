@@ -15,30 +15,37 @@ const reactPathRegex = /react="(.*?)"/;
 const descriptionRegex = /description="(.*?)"/;
 
 export interface DefaultProps {
-  vue?: string;
   title?: string;
   description?: string;
+  vue?: string;
   html?: string;
   react?: string;
+}
+
+export interface TabConfig {
+  /**
+   * @description 代码切换 tab 的展示顺序
+   */
+  order?: ('vue' | 'react' | 'html')[];
+  /**
+   * @description 是否显示 tab
+   */
+  visible?: boolean;
+  /**
+   * @description 默认选中的 tab
+   */
+  defaultSelect?: string;
 }
 
 export interface VitepressDemoBoxConfig {
   /**
    * @description demo所在目录
    */
-  demoRoot?: string;
+  demoDir?: string;
   /**
-   * @description 代码切换 tab 的展示顺序
+   * @description 代码切换 tab 的配置
    */
-  tabOrders?: ('vue' | 'react' | 'html')[];
-  /**
-   * @description 是否显示代码切换 tab
-   */
-  showTabs?: boolean;
-  /**
-   * @description 默认选中的 tab
-   */
-  defaultTab?: boolean;
+  tab?: TabConfig;
 }
 
 /**
@@ -46,7 +53,7 @@ export interface VitepressDemoBoxConfig {
  * @param md
  * @param token
  * @param mdFile
- * @param demoRoot
+ * @param demoDir
  * @returns
  */
 export const transformPreview = (
@@ -55,12 +62,12 @@ export const transformPreview = (
   mdFile: any,
   config?: VitepressDemoBoxConfig
 ) => {
+  const { demoDir, tab = {} } = config || {};
   const {
-    demoRoot,
-    tabOrders = ['vue', 'react', 'html'],
-    showTabs = true,
-    defaultTab = config?.tabOrders?.[0] || 'vue',
-  } = config || {};
+    order = ['vue', 'react', 'html'],
+    visible = true,
+    defaultSelect = tab.order?.[0] || 'vue',
+  } = tab;
 
   const componentProps: DefaultProps = {
     vue: '',
@@ -77,7 +84,7 @@ export const transformPreview = (
   const reactPathRegexValue = token.content.match(reactPathRegex);
   const descriptionRegexValue = token.content.match(descriptionRegex);
 
-  const dirPath = demoRoot || path.dirname(mdFile.path);
+  const dirPath = demoDir || path.dirname(mdFile.path);
 
   if (vuePathRegexValue?.[1]) {
     componentProps.vue = path
@@ -104,7 +111,7 @@ export const transformPreview = (
   const componentVuePath = componentProps.vue
     ? path
         .resolve(
-          demoRoot || path.dirname(mdFile.path),
+          demoDir || path.dirname(mdFile.path),
           vuePathRegexValue?.[1] || '.'
         )
         .replace(/\\/g, '/')
@@ -112,7 +119,7 @@ export const transformPreview = (
   const componentHtmlPath = componentProps.html
     ? path
         .resolve(
-          demoRoot || path.dirname(mdFile.path),
+          demoDir || path.dirname(mdFile.path),
           htmlPathRegexValue?.[1] || '.'
         )
         .replace(/\\/g, '/')
@@ -120,7 +127,7 @@ export const transformPreview = (
   const componentReactPath = componentProps.react
     ? path
         .resolve(
-          demoRoot || path.dirname(mdFile.path),
+          demoDir || path.dirname(mdFile.path),
           reactPathRegexValue?.[1] || '.'
         )
         .replace(/\\/g, '/')
@@ -187,9 +194,9 @@ export const transformPreview = (
   const sourceCode = `<vitepress-demo-box 
     title="${componentProps.title}"
     description="${componentProps.description}"
-    defaultTab="${defaultTab}"
-    tabOrders="${encodeURIComponent(JSON.stringify(tabOrders))}"
-    :showTabs="!!${showTabs}"
+    defaultSelect="${defaultSelect}"
+    tabOrders="${encodeURIComponent(JSON.stringify(order))}"
+    :showTabs="!!${visible}"
     :htmlCode="${encodeURIComponent(htmlCode)}"
     :vueCode="${encodeURIComponent(vueCode)}"
     :reactCode="${encodeURIComponent(reactCode)}"

@@ -10,7 +10,7 @@ const MessageService = {
     const messageBox = document.createElement('div');
     // 创建一个应用实例
     const messageApp = createApp(Message, {
-      content: '复制成功！',
+      content: '已将代码复制至剪切板！',
       close: () => {
         document.body.removeChild(messageBox);
         messageInstanceList.pop();
