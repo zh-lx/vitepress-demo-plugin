@@ -22,16 +22,16 @@ pnpm add vitepress-demo-box -D
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-box';
+import { vitepressDemoPlugin } from 'vitepress-demo-box'; // [!code ++]
 import path from 'path';
 
 export default defineConfig({
   // other configs...
-  markdown: {
-    config(md) {
-      md.use(vitepressDemoPlugin);
-    },
-  },
+  markdown: { // [!code ++]
+    config(md) { // [!code ++]
+      md.use(vitepressDemoPlugin); // [!code ++]
+    }, // [!code ++]
+  }, // [!code ++]
 });
 ```
 

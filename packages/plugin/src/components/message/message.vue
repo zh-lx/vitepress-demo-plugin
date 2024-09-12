@@ -63,9 +63,10 @@ defineExpose({
   display: flex;
   align-items: center;
   border: 1px solid var(--coot-demo-box-border);
+  box-shadow: 0px 0px 8px var(--coot-demo-box-border);
   padding: 8px 30px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--coot-demo-box-primary-color);
   position: fixed;
   left: 50%;
