@@ -13,6 +13,8 @@ const vuePathRegex = /vue="(.*?)"/;
 const htmlPathRegex = /html="(.*?)"/;
 const reactPathRegex = /react="(.*?)"/;
 const descriptionRegex = /description="(.*?)"/;
+const orderRegex = /order="(.*?)"/;
+const selectRegex = /select="(.*?)"/;
 
 export interface DefaultProps {
   title?: string;
@@ -26,7 +28,7 @@ export interface TabConfig {
   /**
    * @description 代码切换 tab 的展示顺序
    */
-  order?: ('vue' | 'react' | 'html')[];
+  order?: string;
   /**
    * @description 是否显示 tab
    */
@@ -34,7 +36,7 @@ export interface TabConfig {
   /**
    * @description 默认选中的 tab
    */
-  defaultSelect?: string;
+  select?: string;
 }
 
 export interface VitepressDemoBoxConfig {
@@ -63,10 +65,10 @@ export const transformPreview = (
   config?: VitepressDemoBoxConfig
 ) => {
   const { demoDir, tab = {} } = config || {};
-  const {
-    order = ['vue', 'react', 'html'],
+  let {
+    order = 'vue,react,html',
     visible = true,
-    defaultSelect = tab.order?.[0] || 'vue',
+    select = (tab.order || 'vue,react,html').split(',')[0] || 'vue',
   } = tab;
 
   const componentProps: DefaultProps = {
@@ -83,8 +85,17 @@ export const transformPreview = (
   const htmlPathRegexValue = token.content.match(htmlPathRegex);
   const reactPathRegexValue = token.content.match(reactPathRegex);
   const descriptionRegexValue = token.content.match(descriptionRegex);
+  const orderValue = token.content.match(orderRegex);
+  const selectValue = token.content.match(selectRegex);
 
   const dirPath = demoDir || path.dirname(mdFile.path);
+
+  if (orderValue?.[1]) {
+    order = orderValue[1];
+  }
+  if (selectValue?.[1]) {
+    select = selectValue[1];
+  }
 
   if (vuePathRegexValue?.[1]) {
     componentProps.vue = path
@@ -194,9 +205,9 @@ export const transformPreview = (
   const sourceCode = `<vitepress-demo-box 
     title="${componentProps.title}"
     description="${componentProps.description}"
-    defaultSelect="${defaultSelect}"
-    tabOrders="${encodeURIComponent(JSON.stringify(order))}"
-    :showTabs="!!${visible}"
+    select="${select}"
+    order="${order}"
+    :visible="!!${visible}"
     :htmlCode="${encodeURIComponent(htmlCode)}"
     :vueCode="${encodeURIComponent(vueCode)}"
     :reactCode="${encodeURIComponent(reactCode)}"

@@ -110,3 +110,51 @@ npm install react react-dom -D
   react="../demos/demo.tsx"
   html="../demos/demo.html"
 />
+
+## 标题和描述
+
+你可以通过 `title` 和 `description` 属性来指定 demo 的标题和描述：
+
+```html
+<demo
+  vue="../demos/demo.vue"
+  react="../demos/demo.tsx"
+  html="../demos/demo.html"
+  title="混合语法 DEMO"
+  description="这是一个混合 demo 的示例，你可以使用 title 和 description 来指定 demo 的标题和描述"
+/>
+```
+
+其对应的渲染效果如下：
+
+<demo
+  vue="../demos/demo.vue"
+  react="../demos/demo.tsx"
+  html="../demos/demo.html"
+  title="混合语法 DEMO"
+  description="这是一个混合 demo 的示例，你可以使用 title 和 description 来指定 demo 的标题和描述"
+/>
+
+## 展示顺序和默认选中
+
+你可以通过 `order` 属性来指定 demo 的展示顺序，以及通过 `select` 属性来指定默认选中的 demo。
+
+```html
+<demo
+  vue="../demos/demo.vue"
+  react="../demos/demo.tsx"
+  html="../demos/demo.html"
+  order="html,react,vue"
+  select="react"
+/>
+```
+
+其对应的渲染效果如下：
+
+<demo
+  vue="../demos/demo.vue"
+  react="../demos/demo.tsx"
+  html="../demos/demo.html"
+  order="html,react,vue"
+  select="react"
+/>
