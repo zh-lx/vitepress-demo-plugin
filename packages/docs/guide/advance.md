@@ -58,11 +58,13 @@ export default defineConfig({
 <demo vue="demo.vue" react="demo.tsx" html="base/demo.html" />
 ```
 
-## 多代码 Tabs 配置
+## Tabs 配置
+
+前面我们提到过，`<demo />` 组件的 Tabs 展示顺序和默认选中的 Tab 可以通过 `order` 和 `select` 属性来指定，如果你想对全局的 `<demo />` 组件生效，你可以通过 `tabs` 属性来指定。
 
 ### Tabs 顺序
 
-当在一个 `<demo />` 组件中展示多种语法的 demo 时，默认的 Tabs 展示顺序为 `vue/react/html`。你可以通过 `tab.order` 来指定代码的 tabs 顺序。
+当在一个 `<demo />` 组件中展示多种语法的 demo 时，默认的 Tabs 展示顺序为 `vue,react,html`。你可以通过 `tab.order` 来指定代码的 tabs 顺序。
 
 在 `config.ts` 中添加如下代码：
 
@@ -71,13 +73,15 @@ import { defineConfig } from 'vitepress';
 import { vitepressDemoPlugin } from 'vitepress-demo-box';
 import path from 'path';
 
+// @prettier-ignore
 export default defineConfig({
   // other configs...
   markdown: {
     config(md) {
       md.use(vitepressDemoPlugin, {
+        demoDir: path.resolve(__dirname, '../demos'),
         tabs: { // [!code ++]
-          order: ['html', 'react', 'vue'],  // [!code ++]
+           order: 'html,react,vue', // [!code ++]
         }, // [!code ++]
       });
     },
@@ -87,7 +91,7 @@ export default defineConfig({
 
 ### 默认选中的 Tab
 
-`<demo />` 组件中默认渲染并展示代码的 Tab 是第一个 Tab，你可以使用 `tab.defaultSelect` 来改变默认渲染并展示代码的 Tab。
+`<demo />` 组件中默认渲染并展示代码的 Tab 是第一个 Tab，你可以使用 `tab.select` 来改变默认渲染并展示代码的 Tab。
 
 在 `config.ts` 中添加如下代码：
 
@@ -102,8 +106,8 @@ export default defineConfig({
     config(md) {
       md.use(vitepressDemoPlugin, {
         tabs: {
-          order: ['html', 'react', 'vue'],
-          defaultSelect: 'react'  // [!code ++]
+          order: 'html,react,vue',
+          select: 'react', // [!code ++]
         },
       });
     },

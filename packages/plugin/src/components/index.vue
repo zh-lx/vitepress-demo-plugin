@@ -18,9 +18,9 @@ interface VitepressDemoBoxProps {
   vueCode?: string;
   reactCode?: string;
   htmlCode?: string;
-  tabOrders: string;
-  showTabs?: boolean;
-  defaultSelect?: string;
+  order: string;
+  visible?: boolean;
+  select?: string;
   reactCreateElement?: any; // import { createElement as reactCreateElement } from 'react';
   reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
 }
@@ -28,10 +28,14 @@ interface VitepressDemoBoxProps {
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   title: '默认标题',
   description: '描述内容',
-  showTabs: true,
-  defaultSelect: 'vue',
+  visible: true,
+  select: 'vue',
+  order: 'vue,react,html',
 });
 
+const tabOrders = computed(() => {
+  return props.order.split(',').map((item: string) => item.trim());
+});
 const injectType = inject('coot-code-type');
 const setInjectType = inject<(type: string) => void>('set-coot-code-type');
 
@@ -57,11 +61,10 @@ const displayCode = computed(() => {
 });
 
 const tabs = computed(() => {
-  const tabOrders = JSON.parse(decodeURIComponent(props.tabOrders));
   return ['vue', 'react', 'html']
     .filter((item) => props[`${item}Code` as keyof VitepressDemoBoxProps])
     .sort((a: string, b: string) => {
-      return tabOrders.indexOf(a) - tabOrders.indexOf(b);
+      return tabOrders.value.indexOf(a) - tabOrders.value.indexOf(b);
     });
 });
 
@@ -179,7 +182,7 @@ watch(
 );
 
 watch(
-  () => props.defaultSelect,
+  () => props.select,
   (val) => {
     if (val && props[`${val}Code` as keyof VitepressDemoBoxProps]) {
       type.value = val;
@@ -239,7 +242,7 @@ watch(
         v-if="props.description || (!props.title && !props.description)"
         :class="[ns.bem('description', 'split-line')]"
       ></div>
-      <div :class="[ns.bem('lang-tabs')]" v-if="tabs.length > 1 && showTabs">
+      <div :class="[ns.bem('lang-tabs')]" v-if="tabs.length > 1 && visible">
         <div
           v-for="tab in tabs"
           :key="tab"
