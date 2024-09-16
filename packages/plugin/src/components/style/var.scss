@@ -3,6 +3,8 @@
   --coot-demo-box-code-block-bg: #343030;
   --coot-demo-box-primary-color: var(--vp-c-brand);
   --coot-demo-box-code-bg: #f7f8fa;
+  --coot-demo-box-tooltip-bg: #000;
+  --coot-demo-box-tooltip-color: #fff;
 }
 
 .dark:root {
@@ -10,6 +12,8 @@
   --coot-demo-box-code-block-bg: #282626;
   --coot-demo-box-primary-color: var(--vp-c-brand);
   --coot-demo-box-code-bg: #161618;
+  --coot-demo-box-tooltip-bg: #fff;
+  --coot-demo-box-tooltip-color: #000;
 }
 
 $defaultPrefix: 'vitepress-demo-box';

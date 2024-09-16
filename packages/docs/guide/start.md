@@ -152,9 +152,9 @@ npm install react react-dom -D
 其对应的渲染效果如下：
 
 <demo
-  vue="../demos/demo.vue"
-  react="../demos/demo.tsx"
-  html="../demos/demo.html"
+  vue="demo.vue"
+  react="demo.tsx"
+  html="demo.html"
   order="html,react,vue"
   select="react"
 />

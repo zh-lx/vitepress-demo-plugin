@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { ref, inject, watch, nextTick, onMounted, computed, Ref } from 'vue';
+import { ref, inject, watch, nextTick, computed, Ref } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
 import FoldIcon from './icons/fold.vue';
+import CodeSandboxIcon from './icons/codesandbox.vue';
+import StackblitzIcon from './icons/stackblitz.vue';
 import { MessageService } from './message';
+import Tooltip from './tooltip/index.vue';
 import { useNameSpace } from './hooks/namespace';
 import { useCodeFold } from './hooks/fold';
 import { useCodeCopy } from './hooks/copy';
@@ -123,16 +126,27 @@ function runScript(target: HTMLElement, script: HTMLScriptElement) {
 }
 
 const htmlContainerRef = ref();
+let observer: () => void;
 function setHTMLWithScript() {
   nextTick(() => {
     if (!htmlContainerRef.value) {
       return;
     }
-    htmlContainerRef.value.innerHTML = props.htmlCode;
-    const scripts = htmlContainerRef.value.querySelectorAll('script');
-    return Array.prototype.slice.apply(scripts).reduce((chain, script) => {
-      return chain.then(() => runScript(htmlContainerRef.value, script));
-    }, Promise.resolve());
+    const iframe = htmlContainerRef.value.querySelector('iframe');
+    const iframeDocument =
+      iframe.contentDocument || iframe.contentWindow.document;
+    iframeDocument.open();
+    iframeDocument.write(props.htmlCode);
+    iframeDocument.close();
+    const originObserver = (observer = function () {
+      requestAnimationFrame(() => {
+        iframe.style.height = iframeDocument.body.scrollHeight + 'px';
+        if (originObserver === observer) {
+          observer();
+        }
+      });
+    });
+    observer();
   });
 }
 
@@ -225,7 +239,9 @@ watch(
     <!-- 预览区 -->
     <section :class="[ns.bem('preview')]">
       <slot name="vue" v-if="type === 'vue'"></slot>
-      <div ref="htmlContainerRef" v-else-if="type === 'html'"></div>
+      <div ref="htmlContainerRef" v-else-if="type === 'html'">
+        <iframe style="width: 100%; height: auto; border: none"></iframe>
+      </div>
       <div ref="reactContainerRef" v-else-if="type === 'react'"></div>
     </section>
     <!-- 描述及切换 -->
@@ -253,9 +269,21 @@ watch(
         </div>
       </div>
       <div :class="[ns.bem('description', 'handle-btn')]">
-        <CodeCloseIcon v-if="!isCodeFold" @click="setCodeFold(true)" />
-        <CodeOpenIcon v-else @click="setCodeFold(false)" />
-        <CopyIcon @click="clickCodeCopy" />
+        <Tooltip content="在 stackblitz 中打开">
+          <StackblitzIcon :code="currentCode" :type="type" />
+        </Tooltip>
+        <Tooltip content="在 codesandbox 中打开">
+          <CodeSandboxIcon :code="currentCode" :type="type" />
+        </Tooltip>
+        <Tooltip content="收起代码" v-if="!isCodeFold">
+          <CodeCloseIcon @click="setCodeFold(true)" />
+        </Tooltip>
+        <Tooltip content="展开代码" v-else>
+          <CodeOpenIcon @click="setCodeFold(false)" />
+        </Tooltip>
+        <Tooltip content="复制代码">
+          <CopyIcon @click="clickCodeCopy" />
+        </Tooltip>
       </div>
     </section>
 
@@ -345,12 +373,11 @@ watch(
     display: flex;
     align-items: center;
     justify-content: center;
+    column-gap: 8px;
 
     svg {
       width: 16px;
       height: 16px;
-      fill: currentColor;
-      color: var(--vp-c-text-1);
       cursor: pointer;
     }
 
@@ -397,8 +424,8 @@ watch(
   display: flex;
   justify-content: center;
   align-items: center;
-  line-height: 48px;
-  font-size: 14px;
+  line-height: 36px;
+  font-size: 12px;
   column-gap: 4px;
   cursor: pointer;
 }

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h4>This is a Vue counter</h4>
+  <div class="container">
+    <div class="title">This is a Vue counter</div>
     <div class="btn-container">
       <button class="btn" @click="increment">+1</button>
       <button class="btn" @click="decrement">-1</button>
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-const count = ref(0);
+const count = ref<number>(0);
 
 const increment = () => {
   count.value++;
@@ -23,6 +23,18 @@ const decrement = () => {
 </script>
 
 <style scoped>
+.container {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'SimHei', 'SimSun',
+    'sans-serif';
+  font-size: 14px;
+  line-height: 20px;
+}
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  line-height: 32px;
+}
 .btn-container {
   display: flex;
   align-items: center;
