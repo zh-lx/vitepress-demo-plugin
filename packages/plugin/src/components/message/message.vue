@@ -51,7 +51,7 @@ defineExpose({
       :style="{ top: topHeight + 'px' }"
     >
       <SuccessIcon />
-      <span>{{ content }}</span>
+      <span style="color: var(--vp-c-text-1)">{{ content }}</span>
     </div>
   </transition>
 </template>
@@ -64,7 +64,7 @@ defineExpose({
   align-items: center;
   border: 1px solid var(--coot-demo-box-border);
   box-shadow: 0px 0px 8px var(--coot-demo-box-border);
-  padding: 8px 30px;
+  padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
   color: var(--coot-demo-box-primary-color);

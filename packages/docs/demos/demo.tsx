@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
+const Container = styled.div`
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'SimHei', 'SimSun',
+    'sans-serif';
+  font-size: 14px;
+  line-height: 20px;
+`;
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  line-height: 32px;
+`;
+
 const Button = styled.button`
   cursor: pointer;
   background-color: #007bff;
@@ -11,6 +24,7 @@ const Button = styled.button`
   line-height: 20px;
   padding: 4px 16px;
   margin: 12px 0;
+  
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -30,13 +44,13 @@ export default function Demo() {
   };
 
   return (
-    <div>
-      <h4>This is a React counter</h4>
+    <Container>
+      <Title>This is a React counter</Title>
       <ButtonContainer>
         <Button onClick={increment}>+1</Button>
         <Button onClick={decrement}>-1</Button>
       </ButtonContainer>
       <div>Current count: {count}</div>
-    </div>
+    </Container>
   );
 }
