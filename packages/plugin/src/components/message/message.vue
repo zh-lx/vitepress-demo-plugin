@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import SuccessIcon from '../icons/success.vue';
-import { useNameSpace } from '../hooks/namespace';
+import { useNameSpace } from '../utils/namespace';
 
 const Duration = 3000;
 
@@ -95,3 +95,4 @@ defineExpose({
   opacity: 0;
 }
 </style>
+../utils/namespace

@@ -1,17 +1,6 @@
 import stackblitz from '@stackblitz/sdk';
-import { getDeps } from '../utils';
-
-export const htmlContent = `
-  <div id="app"></div>
-  <script type="module" src="/src/main.ts"></script>
-`;
-
-export const stackblitzRc = `
-  {
-    "installDependencies": false,
-    "startCommand": "npm install && npm run dev"
-  }
-`;
+import { getDeps } from '../../utils/deps';
+import { genStackblitzRc, genTsConfig, genHtmlTemplate } from '../templates';
 
 export const viteConfigContent = `
   import { defineConfig } from 'vite';
@@ -20,32 +9,6 @@ export const viteConfigContent = `
   export default defineConfig({
     plugins: [vue(), vueJsx()],
   });
-`;
-
-const tsConfig = `{
-  "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
-  },
-  "include": [
-    "src"
-  ]
-}
 `;
 
 export const packageJSONContent = (code: string) =>
@@ -90,11 +53,11 @@ export const openVueStackblitz = (code: string) => {
       files: {
         'src/Demo.vue': code,
         'src/main.ts': mainTs,
-        'index.html': htmlContent,
+        'index.html': genHtmlTemplate({ src: '/src/main.ts' }),
         'package.json': packageJSONContent(code),
         'vite.config.js': viteConfigContent,
-        '.stackblitzrc': stackblitzRc,
-        'tsconfig.json': tsConfig,
+        '.stackblitzrc': genStackblitzRc(),
+        'tsconfig.json': genTsConfig('vue'),
       },
     },
     {

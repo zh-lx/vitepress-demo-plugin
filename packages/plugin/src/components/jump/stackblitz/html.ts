@@ -1,4 +1,5 @@
 import stackblitz from '@stackblitz/sdk';
+import { genHtmlTemplate } from '../templates';
 
 export const openHtmlStackblitz = (code: string) => {
   stackblitz.openProject(
@@ -7,7 +8,7 @@ export const openHtmlStackblitz = (code: string) => {
       description: 'vitepress-demo',
       template: 'html',
       files: {
-        'index.html': code,
+        'index.html': genHtmlTemplate({ code }),
       },
     },
     {
