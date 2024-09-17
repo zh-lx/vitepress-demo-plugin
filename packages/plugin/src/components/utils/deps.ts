@@ -1,3 +1,4 @@
+// 根据代码获取依赖
 export function getDeps(code: string) {
   return [
     ...(code.match(/from '([^']+)'(;)?(\r)?\n/g) || []),
@@ -10,8 +11,12 @@ export function getDeps(code: string) {
       } else if (v.includes('"')) {
         dep = v.split('"')[1];
       }
-      if (dep.includes('/') && !dep.startsWith('@')) {
-        dep = dep.split('/')[0];
+      if (dep.includes('/')) {
+        if (!dep.startsWith('@')) {
+          dep = dep.split('/')[0];
+        } else {
+          dep = dep.split('/')[0] + '/' + dep.split('/')[1];
+        }
       }
       return dep;
     })

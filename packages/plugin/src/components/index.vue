@@ -8,11 +8,12 @@ import CodeSandboxIcon from './icons/codesandbox.vue';
 import StackblitzIcon from './icons/stackblitz.vue';
 import { MessageService } from './message';
 import Tooltip from './tooltip/index.vue';
-import { useNameSpace } from './hooks/namespace';
-import { useCodeFold } from './hooks/fold';
-import { useCodeCopy } from './hooks/copy';
-import { useHighlightCode } from './hooks/highlight';
+import { useNameSpace } from './utils/namespace';
+import { useCodeFold } from './utils/fold';
+import { useCodeCopy } from './utils/copy';
+import { useHighlightCode } from './utils/highlight';
 import 'highlight.js/styles/atom-one-dark.css';
+import { genHtmlCode } from './utils/template';
 
 interface VitepressDemoBoxProps {
   title?: string;
@@ -105,26 +106,6 @@ const clickCodeCopy = () => {
   MessageService.open();
 };
 
-function runScript(target: HTMLElement, script: HTMLScriptElement) {
-  return new Promise((reslove, rejected) => {
-    // 直接 document.head.appendChild(script) 是不会生效的，需要重新创建一个
-    const newScript = document.createElement('script');
-    // 获取 inline script
-    newScript.innerHTML = script.innerHTML.replace(/import\s+'([^']+)'/g, '');
-    // 存在 src 属性的话
-    const src = script.getAttribute('src');
-    if (src) newScript.setAttribute('src', src);
-    // script 加载完成和错误处理
-    newScript.onload = () => reslove(1);
-    newScript.onerror = (err) => rejected();
-    target.appendChild(newScript);
-    target.removeChild(newScript);
-    if (!src) {
-      reslove(1);
-    }
-  });
-}
-
 const htmlContainerRef = ref();
 let observer: () => void;
 function setHTMLWithScript() {
@@ -136,8 +117,9 @@ function setHTMLWithScript() {
     const iframeDocument =
       iframe.contentDocument || iframe.contentWindow.document;
     iframeDocument.open();
-    iframeDocument.write(props.htmlCode);
+    iframeDocument.write(genHtmlCode(props.htmlCode || ''));
     iframeDocument.close();
+    // 监听 iframe 高度变化
     const originObserver = (observer = function () {
       requestAnimationFrame(() => {
         iframe.style.height = iframeDocument.body.scrollHeight + 'px';
@@ -447,3 +429,4 @@ watch(
   }
 }
 </style>
+./utils/namespace./utils/fold./utils/copy./utils/highlight

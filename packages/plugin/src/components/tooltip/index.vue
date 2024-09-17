@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { useNameSpace } from '../hooks/namespace';
+import { useNameSpace } from '../utils/namespace';
 
 const ns = useNameSpace();
 
@@ -43,3 +43,4 @@ const props = defineProps<{
   display: none;
 }
 </style>
+../utils/namespace

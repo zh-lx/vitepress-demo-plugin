@@ -1,26 +1,7 @@
 // @ts-ignore
 import { getParameters } from 'codesandbox/lib/api/define';
-import { getDeps } from '../utils';
-
-const indexHtml = `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Vitepress Demo Plugin</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        padding: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
-</html>
-`;
+import { getDeps } from '../../utils/deps';
+import { genHtmlTemplate } from '../templates';
 
 const mainTsx = `import React from "react";
 import { createRoot } from "react-dom/client";
@@ -78,7 +59,7 @@ export function getReactCodeSandboxParams(code: string) {
         content: tsConfig,
       },
       'index.html': {
-        content: indexHtml,
+        content: genHtmlTemplate(),
       },
       'src/main.tsx': {
         content: mainTsx,
