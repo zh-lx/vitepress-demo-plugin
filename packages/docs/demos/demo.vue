@@ -32,7 +32,6 @@ const decrement = () => {
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #333;
   line-height: 32px;
 }
 .btn-container {

@@ -117,12 +117,20 @@ function setHTMLWithScript() {
     const iframeDocument =
       iframe.contentDocument || iframe.contentWindow.document;
     iframeDocument.open();
-    iframeDocument.write(genHtmlCode(props.htmlCode || ''));
+    const styles = document.head.querySelectorAll('style');
+    const styleString = Array.from(styles)
+      .map((style) => `<style>${style.innerText}</style>`)
+      .join('\n');
+    iframeDocument.write(genHtmlCode(props.htmlCode || '', styleString));
     iframeDocument.close();
     // 监听 iframe 高度变化
     const originObserver = (observer = function () {
       requestAnimationFrame(() => {
         iframe.style.height = iframeDocument.body.scrollHeight + 'px';
+        if (iframeDocument.documentElement) {
+          iframeDocument.documentElement.className =
+            document.documentElement.className;
+        }
         if (originObserver === observer) {
           observer();
         }
@@ -300,7 +308,6 @@ watch(
   width: 100%;
   border-radius: 4px;
   border: 1px solid var(--coot-demo-box-border);
-  box-shadow: 0px 0px 10px var(--coot-demo-box-border);
   margin: 10px 0;
 
   .#{$defaultPrefix}-preview,
@@ -410,6 +417,7 @@ watch(
   font-size: 12px;
   column-gap: 4px;
   cursor: pointer;
+  border-top: 1px solid var(--coot-demo-box-border);
 }
 
 .#{$defaultPrefix}-lang-tabs {
