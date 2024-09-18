@@ -10,7 +10,6 @@ const Container = styled.div`
 const Title = styled.div`
   font-size: 24px;
   font-weight: 600;
-  color: #333;
   line-height: 32px;
 `;
 
@@ -24,7 +23,6 @@ const Button = styled.button`
   line-height: 20px;
   padding: 4px 16px;
   margin: 12px 0;
-  
 `;
 const ButtonContainer = styled.div`
   display: flex;

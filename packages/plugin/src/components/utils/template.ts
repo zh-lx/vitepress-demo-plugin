@@ -1,4 +1,4 @@
-export const genHtmlCode = (code: string) => {
+export const genHtmlCode = (code: string, styles: string) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -6,11 +6,10 @@ export const genHtmlCode = (code: string) => {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    ${styles}
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      body {
+        min-height: 0;
       }
     </style>
   </head>
