@@ -1,18 +1,16 @@
 // @ts-ignore
 import { getParameters } from 'codesandbox/lib/api/define';
 import { genHtmlTemplate } from '../templates';
+import { PlatformParams } from '@/constant/type';
 
-export function getHtmlCodeSandboxParams(code: string) {
+export function getHtmlCodeSandboxParams(params: PlatformParams) {
+  const { code } = params;
   return (getParameters as any)({
     files: {
       'index.html': {
         content: genHtmlTemplate({ code }),
       },
-      'package.json': {
-        content: {
-          dependencies: {},
-        },
-      },
     },
+    template: 'static',
   });
 }

@@ -20,5 +20,10 @@ export default defineConfig({
     },
     emptyOutDir: false,
   },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
   plugins: [vue(), dts({ insertTypesEntry: true })],
 });

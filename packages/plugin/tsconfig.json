@@ -12,11 +12,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "tslib": ["node_modules/tslib/tslib.d.ts"]
+      "tslib": ["node_modules/tslib/tslib.d.ts"],
+      "@/*": ["src/*"]
     }
-  },
-  "vueCompilerOptions": {
-    "experimentalDisableTemplateSupport": true
   },
   "include": ["src/**/*.vue", "src/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["**/node_modules", "**/dist"]
