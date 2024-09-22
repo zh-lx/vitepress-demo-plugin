@@ -1,6 +1,8 @@
-export const genTsConfig = (type: string) => {
+import { ComponentType } from '@/constant/type';
+
+export function genTsConfig(type?: ComponentType): string {
   const additions: Record<string, any> = {};
-  if (type === 'react') {
+  if (type === ComponentType.REACT) {
     additions['jsx'] = 'react';
   }
   const content = JSON.stringify(
@@ -28,4 +30,4 @@ export const genTsConfig = (type: string) => {
     2
   );
   return content;
-};
+}

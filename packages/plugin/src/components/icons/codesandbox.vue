@@ -40,14 +40,29 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { getCodeSandboxParams, getInitialFile } from '../jump';
+import { getInitialFile } from '../platform';
+import { getCodeSandboxParams } from '../platform/sandbox';
+import {
+  ComponentType,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+} from '@/constant/type';
 
 const props = defineProps<{
   code: string;
-  type: string;
+  type: ComponentType;
+  title?: string;
+  description?: string;
 }>();
 
-const parameters = computed(() => getCodeSandboxParams(props.code, props.type));
+const parameters = computed(() =>
+  getCodeSandboxParams({
+    code: props.code,
+    type: props.type,
+    title: props.title || DEFAULT_TITLE,
+    description: props.description || DEFAULT_DESCRIPTION,
+  })
+);
 
 const initialFile = computed(() => {
   return getInitialFile(props.type);

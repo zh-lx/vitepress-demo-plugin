@@ -1,6 +1,6 @@
 <template>
   <svg
-    @click="openStackblitz(code, type)"
+    @click="open"
     viewBox="64 64 896 896"
     focusable="false"
     data-icon="thunderbolt"
@@ -16,10 +16,26 @@
 </template>
 
 <script lang="ts" setup>
-import { openStackblitz } from '../jump';
+import { openStackblitz } from '@/components/platform/stackblitz';
+import {
+  ComponentType,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+} from '@/constant/type';
 
 const props = defineProps<{
   code: string;
-  type: string;
+  type: ComponentType;
+  title?: string;
+  description?: string;
 }>();
+
+function open() {
+  openStackblitz({
+    code: props.code,
+    type: props.type,
+    title: props.title || DEFAULT_TITLE,
+    description: props.description || DEFAULT_DESCRIPTION,
+  });
+}
 </script>

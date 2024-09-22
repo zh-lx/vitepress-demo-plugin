@@ -13,17 +13,10 @@ export function genHtmlTemplate(params?: HtmlTemplateProps) {
   if (src) {
     code += `\n<script type="module" src="${src}"></script>`;
   }
-  const content = `
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vitepress Demo</title>
-  </head>
-  <body>
-    ${code}
-  </body>
-</html>`;
-  return pretty(content);
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(code, 'text/html');
+  return pretty(`<!DOCTYPE html>\n${doc.documentElement.outerHTML}`, {
+    ocd: true,
+  });
 }
