@@ -1,6 +1,6 @@
 {
-  "name": "vitepress-demo-box",
-  "version": "0.2.0-beta.4",
+  "name": "vitepress-demo-plugin",
+  "version": "0.0.1-beta.1",
   "description": "A vitepress plugin to preview component and display code",
   "type": "module",
   "main": "./dist/index.umd.cjs",
@@ -22,12 +22,12 @@
     "dev": "vite build --watch",
     "build": "vite build"
   },
-  "homepage": "https://github.com/zh-lx/vitepress-demo-box#README",
+  "homepage": "https://github.com/zh-lx/vitepress-demo-plugin#README",
   "repository": {
     "type": "git",
-    "url": "git@github.com:zh-lx/vitepress-demo-box.git"
+    "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
   },
-  "bugs": "https://github.com/zh-lx/vitepress-demo-box/issues",
+  "bugs": "https://github.com/zh-lx/vitepress-demo-plugin/issues",
   "keywords": [
     "vitepress",
     "plugin",

@@ -15,6 +15,8 @@ const reactPathRegex = /react="(.*?)"/;
 const descriptionRegex = /description="(.*?)"/;
 const orderRegex = /order="(.*?)"/;
 const selectRegex = /select="(.*?)"/;
+const githubRegex = /github="(.*?)"/;
+const gitlabRegex = /gitlab="(.*?)"/;
 
 export interface DefaultProps {
   title?: string;
@@ -87,6 +89,8 @@ export const transformPreview = (
   const descriptionRegexValue = token.content.match(descriptionRegex);
   const orderValue = token.content.match(orderRegex);
   const selectValue = token.content.match(selectRegex);
+  const githubValue = token.content.match(githubRegex);
+  const gitlabValue = token.content.match(gitlabRegex);
 
   const dirPath = demoDir || path.dirname(mdFile.path);
 
@@ -95,6 +99,14 @@ export const transformPreview = (
   }
   if (selectValue?.[1]) {
     select = selectValue[1];
+  }
+  let github = '';
+  let gitlab = '';
+  if (githubValue?.[1]) {
+    github = githubValue[1];
+  }
+  if (gitlabValue?.[1]) {
+    gitlab = gitlabValue[1];
   }
 
   if (vuePathRegexValue?.[1]) {
@@ -156,13 +168,13 @@ export const transformPreview = (
   const componentName = composeComponentName(absolutePath);
   const reactComponentName = handleComponentName(`react-${componentName}`);
 
-  // 注入 vitepress-demo-box 组件和样式
+  // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
     mdFile,
-    'vitepress-demo-box',
+    'vitepress-demo-plugin',
     `{ VitepressDemoBox }`
   );
-  injectComponentImportScript(mdFile, 'vitepress-demo-box/dist/style.css');
+  injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
 
   // 注入组件导入语句
   if (componentProps.vue) {
@@ -207,6 +219,8 @@ export const transformPreview = (
     description="${componentProps.description}"
     select="${select}"
     order="${order}"
+    github="${github}"
+    gitlab="${gitlab}"
     :visible="!!${visible}"
     :htmlCode="${encodeURIComponent(htmlCode)}"
     :vueCode="${encodeURIComponent(vueCode)}"

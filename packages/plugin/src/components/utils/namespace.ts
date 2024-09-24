@@ -14,7 +14,7 @@ export interface UseNameSpaceReturn {
   bem: (_block?: string, element?: string, modifier?: string) => string;
 }
 
-const defaultPrefix = 'vitepress-demo-box';
+const defaultPrefix = 'vitepress-demo-plugin';
 
 const generateName = (
   prefix: string,
