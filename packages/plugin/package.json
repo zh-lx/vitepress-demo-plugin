@@ -1,6 +1,6 @@
 {
   "name": "vitepress-demo-plugin",
-  "version": "0.2.0-beta.4",
+  "version": "0.0.1-beta.1",
   "description": "A vitepress plugin to preview component and display code",
   "type": "module",
   "main": "./dist/index.umd.cjs",
