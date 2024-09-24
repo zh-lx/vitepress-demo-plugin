@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-box';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
 import path, { dirname } from 'path';
 
 function fileURLToPath(fileURL: string) {
@@ -18,7 +18,7 @@ function fileURLToPath(fileURL: string) {
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Vitepress Demo Box',
-  description: 'The docs of vitepress-demo-box',
+  description: 'The docs of vitepress-demo-plugin',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -39,7 +39,10 @@ export default defineConfig({
     outline: [2, 4],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/zh-lx/vitepress-demo-box' },
+      {
+        icon: 'github',
+        link: 'https://github.com/zh-lx/vitepress-demo-plugin',
+      },
     ],
   },
   markdown: {

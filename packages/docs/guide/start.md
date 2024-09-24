@@ -5,15 +5,15 @@
 选择你喜欢的包管理器进行安装：
 
 ```bash
-npm install vitepress-demo-box -D
+npm install vitepress-demo-plugin -D
 ```
 
 ```bash
-yarn add vitepress-demo-box -D
+yarn add vitepress-demo-plugin -D
 ```
 
 ```bash
-pnpm add vitepress-demo-box -D
+pnpm add vitepress-demo-plugin -D
 ```
 
 ## 引入插件
@@ -22,7 +22,7 @@ pnpm add vitepress-demo-box -D
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-box'; // [!code ++]
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin'; // [!code ++]
 import path from 'path';
 
 export default defineConfig({
@@ -135,26 +135,22 @@ npm install react react-dom -D
   description="这是一个混合 demo 的示例，你可以使用 title 和 description 来指定 demo 的标题和描述"
 />
 
-## 展示顺序和默认选中
+## 打开 Github 和 Gitlab
 
-你可以通过 `order` 属性来指定 demo 的展示顺序，以及通过 `select` 属性来指定默认选中的 demo。
+你可以在 `<demo />` 中通过 `github` 和 `gitlab` 属性来指定一个链接，点击时能跳转至对应的链接地址。
 
 ```html
 <demo
   vue="../demos/demo.vue"
-  react="../demos/demo.tsx"
-  html="../demos/demo.html"
-  order="html,react,vue"
-  select="react"
-/>
+  github="https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/docs/demos/demo.vue" 
+/>  
 ```
 
 其对应的渲染效果如下：
 
 <demo
-  vue="demo.vue"
-  react="demo.tsx"
-  html="demo.html"
-  order="html,react,vue"
-  select="react"
+  vue="../demos/demo.vue"
+  github="https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/docs/demos/demo.vue" 
 />
+
+Gitlab 的使用方式和 Github 一致，只需将 `github` 属性替换为 `gitlab` 属性即可。

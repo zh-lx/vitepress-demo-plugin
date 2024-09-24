@@ -6,6 +6,8 @@ import CopyIcon from './icons/copy.vue';
 import FoldIcon from './icons/fold.vue';
 import CodeSandboxIcon from './icons/codesandbox.vue';
 import StackblitzIcon from './icons/stackblitz.vue';
+import GithubIcon from './icons/github.vue';
+import GitlabIcon from './icons/gitlab.vue';
 import { MessageService } from './message';
 import Tooltip from './tooltip/index.vue';
 import { useNameSpace } from './utils/namespace';
@@ -14,6 +16,7 @@ import { useCodeCopy } from './utils/copy';
 import { useHighlightCode } from './utils/highlight';
 import 'highlight.js/styles/atom-one-dark.css';
 import { genHtmlCode } from './utils/template';
+import { ComponentType } from '@/constant/type';
 
 interface VitepressDemoBoxProps {
   title?: string;
@@ -24,7 +27,9 @@ interface VitepressDemoBoxProps {
   htmlCode?: string;
   order: string;
   visible?: boolean;
-  select?: string;
+  select?: ComponentType;
+  github?: string;
+  gitlab?: string;
   reactCreateElement?: any; // import { createElement as reactCreateElement } from 'react';
   reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
 }
@@ -33,18 +38,23 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   title: '默认标题',
   description: '描述内容',
   visible: true,
-  select: 'vue',
+  select: ComponentType.VUE,
   order: 'vue,react,html',
+  github: '',
+  gitlab: '',
 });
 
 const tabOrders = computed(() => {
   return props.order.split(',').map((item: string) => item.trim());
 });
-const injectType = inject('coot-code-type');
-const setInjectType = inject<(type: string) => void>('set-coot-code-type');
+const injectType = inject('coot-code-type', {} as any);
+const setInjectType = inject<(type: string) => void>(
+  'set-coot-code-type',
+  (type: string) => {}
+);
 
-const type = ref('vue');
-function setCodeType(_type: string) {
+const type = ref<ComponentType>(ComponentType.VUE);
+function setCodeType(_type: ComponentType) {
   type.value = _type;
   if (typeof setInjectType === 'function') {
     setInjectType(_type);
@@ -64,8 +74,8 @@ const displayCode = computed(() => {
   return code;
 });
 
-const tabs = computed(() => {
-  return ['vue', 'react', 'html']
+const tabs = computed<ComponentType[]>(() => {
+  return [ComponentType.VUE, ComponentType.REACT, ComponentType.HTML]
     .filter((item) => props[`${item}Code` as keyof VitepressDemoBoxProps])
     .sort((a: string, b: string) => {
       return tabOrders.value.indexOf(a) - tabOrders.value.indexOf(b);
@@ -73,14 +83,22 @@ const tabs = computed(() => {
 });
 
 watch(
-  () => (injectType as Ref<string>)?.value,
-  (val) => {
+  () => (injectType as Ref<ComponentType>)?.value,
+  (val: ComponentType) => {
     if (val && props[`${val}Code` as keyof VitepressDemoBoxProps]) {
       type.value = val;
     }
   },
   { immediate: true }
 );
+
+const openGithub = () => {
+  window.open(props.github, '_blank');
+};
+
+const openGitlab = () => {
+  window.open(props.gitlab, '_blank');
+};
 
 watch(
   () => (type as any).value,
@@ -187,7 +205,7 @@ watch(
 
 watch(
   () => props.select,
-  (val) => {
+  (val: ComponentType) => {
     if (val && props[`${val}Code` as keyof VitepressDemoBoxProps]) {
       type.value = val;
     }
@@ -264,6 +282,12 @@ watch(
         </Tooltip>
         <Tooltip content="在 codesandbox 中打开">
           <CodeSandboxIcon :code="currentCode" :type="type" />
+        </Tooltip>
+        <Tooltip content="在 github 中打开" v-if="github">
+          <GithubIcon @click="openGithub" />
+        </Tooltip>
+        <Tooltip content="在 gitlab 中打开" v-if="gitlab">
+          <GitlabIcon @click="openGitlab" />
         </Tooltip>
         <Tooltip content="收起代码" v-if="!isCodeFold">
           <CodeCloseIcon @click="setCodeFold(true)" />

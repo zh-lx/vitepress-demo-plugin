@@ -1,5 +1,5 @@
 {
-  "name": "vitepress-demo-box-repository",
+  "name": "vitepress-demo-plugin-repository",
   "version": "1.0.0",
   "description": "一个用于在 vitepress 中组件预览和代码展示的插件。",
   "private": "true",
@@ -7,12 +7,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/zh-lx/vitepress-demo-box#README",
+  "homepage": "https://github.com/zh-lx/vitepress-demo-plugin#README",
   "repository": {
     "type": "git",
-    "url": "git@github.com:zh-lx/vitepress-demo-box.git"
+    "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
   },
-  "bugs": "https://github.com/zh-lx/vitepress-demo-box/issues",
+  "bugs": "https://github.com/zh-lx/vitepress-demo-plugin/issues",
   "keywords": [
     "vitepress",
     "plugin",
