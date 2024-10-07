@@ -29,6 +29,7 @@ export const openReactStackblitz = (params: PlatformParams) => {
         'vite.config.js': genViteConfig(ComponentType.REACT),
         '.stackblitzrc': genStackblitzRc(),
         'tsconfig.json': genTsConfig(ComponentType.REACT),
+        ...params.customFiles,
       },
     },
     {

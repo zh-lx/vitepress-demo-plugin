@@ -46,6 +46,7 @@ import {
   ComponentType,
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
+  PlatformTemplate,
 } from '@/constant/type';
 
 const props = defineProps<{
@@ -53,6 +54,8 @@ const props = defineProps<{
   type: ComponentType;
   title?: string;
   description?: string;
+  scope?: string;
+  templates: PlatformTemplate[];
 }>();
 
 const parameters = computed(() =>
@@ -61,6 +64,8 @@ const parameters = computed(() =>
     type: props.type,
     title: props.title || DEFAULT_TITLE,
     description: props.description || DEFAULT_DESCRIPTION,
+    scope: props.scope,
+    templates: props.templates,
   })
 );
 

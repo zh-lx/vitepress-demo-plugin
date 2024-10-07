@@ -17,14 +17,19 @@ function fileURLToPath(fileURL: string) {
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'Vitepress Demo Box',
+  title: 'Vitepress Demo Plugin',
   description: 'The docs of vitepress-demo-plugin',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      // { text: 'Home', link: '/' },
-      // { text: 'Examples', link: '/example' }
+      {
+        text: '工具推荐',
+        items: [
+          { text: 'code-inspector', link: 'https://inspector.fe-dev.cn/' },
+        ],
+      },
     ],
+    logo: '/logo.svg',
 
     sidebar: [
       {
@@ -32,6 +37,21 @@ export default defineConfig({
         items: [
           { text: '快速开始', link: '/guide/start' },
           { text: '进阶配置', link: '/guide/advance' },
+          { text: '第三方平台', link: '/guide/preset' },
+        ],
+      },
+      {
+        text: '组件库展示',
+        items: [
+          { text: 'Ant Design', link: '/components/antd' },
+          { text: 'Element Plus', link: '/components/element-plus' },
+        ],
+      },
+      {
+        text: '更多',
+        items: [
+          { text: '更新日志', link: '/more/changelog' },
+          { text: '交流与反馈', link: '/more/feedback' },
         ],
       },
     ],
@@ -52,6 +72,12 @@ export default defineConfig({
           dirname(fileURLToPath(import.meta.url)),
           '../demos'
         ),
+        stackblitz: {
+          show: true,
+        },
+        codesandbox: {
+          show: false,
+        },
       });
     },
   },

@@ -20,7 +20,7 @@ export const getDepsByType = (type: ComponentType, platform: PlatformType) => {
   if (type === ComponentType.VUE) {
     deps.dependencies.vue = 'latest';
     if (platform === PlatformType.STACKBLITZ) {
-      deps.dependencies.vite = 'latest';
+      deps.devDependencies.vite = 'latest';
       deps.devDependencies['@vitejs/plugin-vue'] = 'latest';
       deps.devDependencies['@vitejs/plugin-vue-jsx'] = 'latest';
     } else if (platform === PlatformType.CODESANDBOX) {
@@ -31,11 +31,11 @@ export const getDepsByType = (type: ComponentType, platform: PlatformType) => {
     deps.dependencies['react-dom'] = 'latest';
     deps.dependencies['@emotion/react'] = 'latest';
     deps.dependencies['@emotion/styled'] = 'latest';
+    deps.devDependencies['@types/react'] = 'latest';
+    deps.devDependencies['@types/react-dom'] = 'latest';
     if (platform === PlatformType.STACKBLITZ) {
-      deps.dependencies.vite = 'latest';
+      deps.devDependencies.vite = 'latest';
       deps.devDependencies['@vitejs/plugin-react'] = 'latest';
-      deps.devDependencies['@types/react'] = 'latest';
-      deps.devDependencies['@types/react-dom'] = 'latest';
     }
   }
   return deps;

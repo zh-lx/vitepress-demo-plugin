@@ -10,6 +10,7 @@ export function getHtmlCodeSandboxParams(params: PlatformParams) {
       'index.html': {
         content: genHtmlTemplate({ code }),
       },
+      ...params.customFiles,
     },
     template: 'static',
   });

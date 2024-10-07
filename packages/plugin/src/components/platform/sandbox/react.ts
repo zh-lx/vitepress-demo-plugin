@@ -31,6 +31,7 @@ export function getReactCodeSandboxParams(params: PlatformParams) {
       'src/Demo.tsx': {
         content: code,
       },
+      ...params.customFiles,
     },
   });
 }

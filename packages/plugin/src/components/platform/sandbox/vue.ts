@@ -31,6 +31,7 @@ export function getVueCodeSandboxParams(params: PlatformParams) {
       'src/Demo.vue': {
         content: code,
       },
+      ...params.customFiles,
     },
   });
 }

@@ -67,7 +67,6 @@ export default defineConfig({
 ```bash
 npm install react react-dom -D
 ```
-
 :::
 
 通过 `<demo react="xxx/path" />` 指定一个 `.jsx/.tsx` 文件的路径，渲染该 react 组件并展示其代码：

@@ -7,6 +7,7 @@ import {
   handleComponentName,
   injectComponentImportScript,
 } from './utils';
+import { PlatformTemplate } from '@/constant/type';
 
 const titleRegex = /title="(.*?)"/;
 const vuePathRegex = /vue="(.*?)"/;
@@ -17,6 +18,10 @@ const orderRegex = /order="(.*?)"/;
 const selectRegex = /select="(.*?)"/;
 const githubRegex = /github="(.*?)"/;
 const gitlabRegex = /gitlab="(.*?)"/;
+const stackblitzRegex = /stackblitz="(.*?)"/;
+const codesandboxRegex = /codesandbox="(.*?)"/;
+const codeplayerRegex = /codeplayer="(.*?)"/;
+const scopeRegex = /scope="(.*?)"/;
 
 export interface DefaultProps {
   title?: string;
@@ -41,6 +46,13 @@ export interface TabConfig {
   select?: string;
 }
 
+export type Files = Record<string, string>;
+
+export type Platform = {
+  show: boolean;
+  templates?: PlatformTemplate[];
+};
+
 export interface VitepressDemoBoxConfig {
   /**
    * @description demo所在目录
@@ -50,6 +62,18 @@ export interface VitepressDemoBoxConfig {
    * @description 代码切换 tab 的配置
    */
   tab?: TabConfig;
+  /**
+   * @description stackblitz 平台配置
+   */
+  stackblitz?: Platform;
+  /**
+   * @description codesandbox 平台配置
+   */
+  codesandbox?: Platform;
+  /**
+   * @description codeplayer 平台配置
+   */
+  codeplayer?: Platform;
 }
 
 /**
@@ -66,7 +90,13 @@ export const transformPreview = (
   mdFile: any,
   config?: VitepressDemoBoxConfig
 ) => {
-  const { demoDir, tab = {} } = config || {};
+  const {
+    demoDir,
+    tab = {},
+    stackblitz = { show: false },
+    codesandbox = { show: false },
+    codeplayer = { show: false },
+  } = config || {};
   let {
     order = 'vue,react,html',
     visible = true,
@@ -91,6 +121,10 @@ export const transformPreview = (
   const selectValue = token.content.match(selectRegex);
   const githubValue = token.content.match(githubRegex);
   const gitlabValue = token.content.match(gitlabRegex);
+  const stackblitzValue = token.content.match(stackblitzRegex);
+  const codesandboxValue = token.content.match(codesandboxRegex);
+  const codeplayerValue = token.content.match(codeplayerRegex);
+  const scopeValue = token.content.match(scopeRegex)?.[1] || '';
 
   const dirPath = demoDir || path.dirname(mdFile.path);
 
@@ -107,6 +141,15 @@ export const transformPreview = (
   }
   if (gitlabValue?.[1]) {
     gitlab = gitlabValue[1];
+  }
+  if (stackblitzValue?.[1]) {
+    stackblitz.show = stackblitzValue[1] === 'true';
+  }
+  if (codesandboxValue?.[1]) {
+    codesandbox.show = codesandboxValue[1] === 'true';
+  }
+  if (codeplayerValue?.[1]) {
+    codeplayer.show = codeplayerValue[1] === 'true';
   }
 
   if (vuePathRegexValue?.[1]) {
@@ -221,6 +264,10 @@ export const transformPreview = (
     order="${order}"
     github="${github}"
     gitlab="${gitlab}"
+    stackblitz="${encodeURIComponent(JSON.stringify(stackblitz))}"
+    codesandbox="${encodeURIComponent(JSON.stringify(codesandbox))}"
+    codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"
+    scope="${scopeValue || ''}"
     :visible="!!${visible}"
     :htmlCode="${encodeURIComponent(htmlCode)}"
     :vueCode="${encodeURIComponent(vueCode)}"
