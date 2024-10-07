@@ -12,6 +12,7 @@ export const openHtmlStackblitz = (params: PlatformParams) => {
       template: 'html',
       files: {
         'index.html': genHtmlTemplate({ code }),
+        ...params.customFiles,
       },
     },
     {

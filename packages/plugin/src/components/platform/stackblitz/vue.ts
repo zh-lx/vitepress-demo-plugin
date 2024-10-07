@@ -29,6 +29,7 @@ export const openVueStackblitz = (params: PlatformParams) => {
         'vite.config.js': genViteConfig(ComponentType.VUE),
         '.stackblitzrc': genStackblitzRc(),
         'tsconfig.json': genTsConfig(ComponentType.VUE),
+        ...params.customFiles,
       },
     },
     {

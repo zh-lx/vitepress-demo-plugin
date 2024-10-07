@@ -17,6 +17,7 @@ import { useHighlightCode } from './utils/highlight';
 import 'highlight.js/styles/atom-one-dark.css';
 import { genHtmlCode } from './utils/template';
 import { ComponentType } from '@/constant/type';
+import { Platform } from '@/markdown/preview';
 
 interface VitepressDemoBoxProps {
   title?: string;
@@ -32,6 +33,10 @@ interface VitepressDemoBoxProps {
   gitlab?: string;
   reactCreateElement?: any; // import { createElement as reactCreateElement } from 'react';
   reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
+  stackblitz?: string;
+  codesandbox?: string;
+  codeplayer?: string;
+  scope?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -42,6 +47,16 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   order: 'vue,react,html',
   github: '',
   gitlab: '',
+});
+
+const stackblitz = computed<Platform>(() => {
+  return JSON.parse(decodeURIComponent(props.stackblitz || '{}'));
+});
+const codesandbox = computed<Platform>(() => {
+  return JSON.parse(decodeURIComponent(props.codesandbox || '{}'));
+});
+const codeplayer = computed<Platform>(() => {
+  return JSON.parse(decodeURIComponent(props.codeplayer || '{}'));
 });
 
 const tabOrders = computed(() => {
@@ -277,11 +292,21 @@ watch(
         </div>
       </div>
       <div :class="[ns.bem('description', 'handle-btn')]">
-        <Tooltip content="在 stackblitz 中打开">
-          <StackblitzIcon :code="currentCode" :type="type" />
+        <Tooltip content="在 stackblitz 中打开" v-if="stackblitz.show">
+          <StackblitzIcon
+            :code="currentCode"
+            :type="type"
+            :scope="scope || ''"
+            :templates="stackblitz.templates || []"
+          />
         </Tooltip>
-        <Tooltip content="在 codesandbox 中打开">
-          <CodeSandboxIcon :code="currentCode" :type="type" />
+        <Tooltip content="在 codesandbox 中打开" v-if="codesandbox.show">
+          <CodeSandboxIcon
+            :code="currentCode"
+            :type="type"
+            :scope="scope || ''"
+            :templates="stackblitz.templates || []"
+          />
         </Tooltip>
         <Tooltip content="在 github 中打开" v-if="github">
           <GithubIcon @click="openGithub" />

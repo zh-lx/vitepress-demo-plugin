@@ -21,6 +21,7 @@ import {
   ComponentType,
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
+  PlatformTemplate,
 } from '@/constant/type';
 
 const props = defineProps<{
@@ -28,6 +29,8 @@ const props = defineProps<{
   type: ComponentType;
   title?: string;
   description?: string;
+  templates: PlatformTemplate[];
+  scope?: string;
 }>();
 
 function open() {
@@ -36,6 +39,8 @@ function open() {
     type: props.type,
     title: props.title || DEFAULT_TITLE,
     description: props.description || DEFAULT_DESCRIPTION,
+    templates: props.templates || [],
+    scope: props.scope,
   });
 }
 </script>
