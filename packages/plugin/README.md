@@ -23,11 +23,11 @@
 
 - 展示 Antd 组件库：
 
-  <img src="https://github.com/user-attachments/assets/607e6612-c315-4dc0-8f1c-8788c9eca68c" width="600" />
+  <img src="https://github.com/user-attachments/assets/607e6612-c315-4dc0-8f1c-8788c9eca68c" width="700" />
 
 - 展示 Element Plus 组件库：
 
-  <img src="https://github.com/user-attachments/assets/c9f90aa8-e489-4184-bb6a-818d0327e694" width="600" />
+  <img src="https://github.com/user-attachments/assets/c9f90aa8-e489-4184-bb6a-818d0327e694" width="700" />
 
 ## 🚀 安装
 
