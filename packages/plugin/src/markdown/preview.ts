@@ -257,29 +257,32 @@ export const transformPreview = (
     injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCode);
   }
 
-  const sourceCode = `<vitepress-demo-box 
-    title="${componentProps.title}"
-    description="${componentProps.description}"
-    select="${select}"
-    order="${order}"
-    github="${github}"
-    gitlab="${gitlab}"
-    stackblitz="${encodeURIComponent(JSON.stringify(stackblitz))}"
-    codesandbox="${encodeURIComponent(JSON.stringify(codesandbox))}"
-    codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"
-    scope="${scopeValue || ''}"
-    :visible="!!${visible}"
-    :htmlCode="${encodeURIComponent(htmlCode)}"
-    :vueCode="${encodeURIComponent(vueCode)}"
-    :reactCode="${encodeURIComponent(reactCode)}"
-    :reactComponent="${reactComponentName}"
-    :reactCreateRoot="reactCreateRoot"
-    :reactCreateElement="reactCreateElement"
-    >
-    <template #vue>
-      <${componentName}></${componentName}>
-    </template>
-  </vitepress-demo-box>`;
+  const sourceCode = `
+  <ClientOnly>
+    <vitepress-demo-box 
+      title="${componentProps.title}"
+      description="${componentProps.description}"
+      select="${select}"
+      order="${order}"
+      github="${github}"
+      gitlab="${gitlab}"
+      stackblitz="${encodeURIComponent(JSON.stringify(stackblitz))}"
+      codesandbox="${encodeURIComponent(JSON.stringify(codesandbox))}"
+      codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"
+      scope="${scopeValue || ''}"
+      :visible="!!${visible}"
+      :htmlCode="${encodeURIComponent(htmlCode)}"
+      :vueCode="${encodeURIComponent(vueCode)}"
+      :reactCode="${encodeURIComponent(reactCode)}"
+      :reactComponent="${reactComponentName}"
+      :reactCreateRoot="reactCreateRoot"
+      :reactCreateElement="reactCreateElement"
+      >
+      <template #vue>
+        <${componentName}></${componentName}>
+      </template>
+    </vitepress-demo-box>
+  </ClientOnly>`;
 
   return sourceCode;
 };
