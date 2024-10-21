@@ -305,7 +305,7 @@ watch(
             :code="currentCode"
             :type="type"
             :scope="scope || ''"
-            :templates="stackblitz.templates || []"
+            :templates="codesandbox.templates || []"
           />
         </Tooltip>
         <Tooltip content="在 github 中打开" v-if="github">
