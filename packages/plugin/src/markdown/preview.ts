@@ -271,16 +271,40 @@ export const transformPreview = (
       codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"
       scope="${scopeValue || ''}"
       :visible="!!${visible}"
-      :htmlCode="${encodeURIComponent(htmlCode)}"
-      :vueCode="${encodeURIComponent(vueCode)}"
-      :reactCode="${encodeURIComponent(reactCode)}"
-      :reactComponent="${reactComponentName}"
-      :reactCreateRoot="reactCreateRoot"
-      :reactCreateElement="reactCreateElement"
+      ${
+        componentProps.html
+          ? `
+            :htmlCode="${encodeURIComponent(htmlCode)}"
+            `
+          : ''
+      }
+      ${
+        componentProps.vue
+          ? `
+            :vueCode="${encodeURIComponent(vueCode)}"
+            `
+          : ''
+      }
+      ${
+        componentProps.react
+          ? `
+            :reactCode="${encodeURIComponent(reactCode)}"
+            :reactComponent="${reactComponentName}"
+            :reactCreateRoot="reactCreateRoot"
+            :reactCreateElement="reactCreateElement"
+            `
+          : ''
+      }
       >
-      <template #vue>
-        <${componentName}></${componentName}>
-      </template>
+      ${
+        componentProps.vue
+          ? `
+            <template #vue>
+              <${componentName}></${componentName}>
+            </template>
+            `
+          : ''
+      }
     </vitepress-demo-box>
   </ClientOnly>`;
 
