@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.0.3
+
+- 🐛 fix: 修复了只展示 vue/react 单组件时的告警问题 [#25](https://github.com/zh-lx/vitepress-demo-plugin/pull/25)
+
 ## 1.0.2
 
 - 🐛 fix: 修复了 `codesandbox.templates` 不生效的问题 [#22](https://github.com/zh-lx/vitepress-demo-plugin/pull/22)
