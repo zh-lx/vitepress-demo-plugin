@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.0.5
+
+- 🐛 fix: 修复了 react 组件使用了类似客户端代码时会导致构建失败的问题 [#27](https://github.com/zh-lx/vitepress-demo-plugin/pull/27)
+
 ## 1.0.4
 
 - 🐛 fix: 修复了只展示 vue/react 单组件时的告警问题 [#25](https://github.com/zh-lx/vitepress-demo-plugin/pull/25)
