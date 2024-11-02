@@ -196,7 +196,7 @@ function renderReactComponent() {
   });
 }
 watch(
-  () => reactContainerRef.value,
+  () => [reactContainerRef.value, props.reactComponent],
   (val) => {
     if (reactContainerRef.value) {
       renderReactComponent();

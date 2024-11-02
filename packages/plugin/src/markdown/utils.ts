@@ -31,7 +31,8 @@ export const handleComponentName = (name: string) => {
 export const injectComponentImportScript = (
   env: any,
   path: string,
-  name?: string
+  name?: string,
+  dynamicImport?: boolean
 ) => {
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
@@ -48,9 +49,25 @@ export const injectComponentImportScript = (
   // 统一处理组件名称为驼峰命名
   const componentName = handleComponentName(name || '');
 
-  const importCode = name
-    ? `import ${componentName} from '${path}'`
-    : `import '${path}'`;
+  let importCode = '';
+  if (dynamicImport) {
+    importCode = name
+      ? `
+      const ${componentName} = ref();
+      onMounted(async () => {
+        ${componentName}.value = (await import('${path}')).default;
+      });
+      `.trim()
+      : `
+      onMounted(async () => {
+        await import('${path}');
+      });
+      `.trim();
+  } else {
+    importCode = name
+      ? `import ${componentName} from '${path}'`
+      : `import '${path}'`;
+  }
 
   // MD文件中没有 <script setup> 或 <script setup lang='ts'> 脚本文件
   if (scriptsSetupIndex === -1) {
@@ -81,7 +98,6 @@ export const injectComponentImportScript = (
         scriptSetupCommonReg,
         scriptCodeBlock
       );
-      // 将组件引入的代码放进去
       scriptsCode[0].content = scriptsCode[0].content.replace(
         scriptCodeBlock,
         `<script setup>\n

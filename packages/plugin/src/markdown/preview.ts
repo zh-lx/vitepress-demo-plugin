@@ -218,6 +218,11 @@ export const transformPreview = (
     `{ VitepressDemoBox }`
   );
   injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
+  injectComponentImportScript(
+    mdFile,
+    'vue',
+    '{ ref, onMounted }'
+  );
 
   // 注入组件导入语句
   if (componentProps.vue) {
@@ -232,9 +237,10 @@ export const transformPreview = (
     injectComponentImportScript(
       mdFile,
       'react-dom/client',
-      '{ createRoot as reactCreateRoot }'
+      '{ createRoot as reactCreateRoot }',
+      
     );
-    injectComponentImportScript(mdFile, componentReactPath, reactComponentName);
+    injectComponentImportScript(mdFile, componentReactPath, reactComponentName, true);
   }
 
   // 组件代码，动态引入以便实时更新
