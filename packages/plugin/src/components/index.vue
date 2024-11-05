@@ -151,10 +151,24 @@ function setHTMLWithScript() {
       iframe.contentDocument || iframe.contentWindow.document;
     iframeDocument.open();
     const styles = document.head.querySelectorAll('style');
+    const styleLinks = document.head.querySelectorAll('link[as="style"]');
+    const fontLinks = document.head.querySelectorAll('link[as="font"]');
     const styleString = Array.from(styles)
-      .map((style) => `<style>${style.innerText}</style>`)
+      .map((style) => `<style replace="true">${style.innerText}</style>`)
       .join('\n');
-    iframeDocument.write(genHtmlCode(props.htmlCode || '', styleString));
+    const styleLinkString = Array.from(styleLinks)
+      .map((link) => link.outerHTML)
+      .join('\n');
+    const fontLinkString = Array.from(fontLinks)
+      .map((link) => link.outerHTML)
+      .join('\n');
+    iframeDocument.write(
+      genHtmlCode({
+        code: props.htmlCode || '',
+        styles: styleString,
+        links: styleLinkString + '\n' + fontLinkString,
+      })
+    );
     iframeDocument.close();
     // 监听 iframe 高度变化
     const originObserver = (observer = function () {
