@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.0.6
+
+- 🐛 fix: 修复了打包后 html 组件样式表现不一致的问题 [#30](https://github.com/zh-lx/vitepress-demo-plugin/pull/30)
+
 ## 1.0.5
 
 - 🐛 fix: 修复了 react 组件使用了类似客户端代码时会导致构建失败的问题 [#27](https://github.com/zh-lx/vitepress-demo-plugin/pull/27)
@@ -22,4 +26,4 @@
 
 ## 1.0.0
 
-- vitepress-demo-plugin 首次发布了！
+- 🎉 release: vitepress-demo-plugin 首次发布了！
