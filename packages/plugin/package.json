@@ -22,7 +22,7 @@
     "dev": "vite build --watch",
     "build": "vite build"
   },
-  "homepage": "https://github.com/zh-lx/vitepress-demo-plugin#README",
+  "homepage": "https://vitepress-demo.fe-dev.cn/",
   "repository": {
     "type": "git",
     "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
