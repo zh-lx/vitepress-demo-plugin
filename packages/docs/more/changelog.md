@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.0
+
+- 🎉 feat: 支持多文件代码展示 [#34](https://github.com/zh-lx/vitepress-demo-plugin/pull/34)
+- 🐛 fix: 修复移动端代码块的适配问题 [#33](https://github.com/zh-lx/vitepress-demo-plugin/pull/33)
+
 ## 1.0.6
 
 - 🐛 fix: 修复了打包后 html 组件样式表现不一致的问题 [#30](https://github.com/zh-lx/vitepress-demo-plugin/pull/30)
