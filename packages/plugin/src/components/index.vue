@@ -488,6 +488,7 @@ watch(
   .language-html {
     background-color: #f5f7fa;
     margin: 0;
+    overflow-x: auto;
 
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
