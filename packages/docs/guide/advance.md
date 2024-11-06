@@ -110,3 +110,95 @@ export default defineConfig({
   },
 });
 ```
+
+## 展示多文件代码
+
+### 数组方式
+
+如果你的 demo 中包含多个文件，你可以通过 `vueFiles/reactFiles/htmlFiles` 属性来指定需要展示对应类型 demo 的文件及代码。例如：
+
+```html
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']"
+/>
+```
+
+其对应的渲染效果如下：
+
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']"
+/>
+
+### 对象方式
+
+默认情况下，`vitepress-demo-plugin` 多文件展示时会取文件路径的 `basename` 作为文件名，你也可以通过 `Object` 类型的 `vueFiles/reactFiles/htmlFiles` 属性来指定文件名。例如，你想通过 `constant/students.ts` 来体现出文件所在的目录层级，你可以通过如下方式：
+
+```html
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="{
+    'multiple.vue': '../demos/multiple.vue',
+    'constant/students.ts': '../demos/constant/students.ts',
+  }"
+/>
+```
+
+其对应的渲染效果如下：
+
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="{
+    'multiple.vue': '../demos/multiple.vue',
+    'constant/students.ts': '../demos/constant/students.ts',
+  }"
+/>
+
+### 自定义展示
+
+你也可以通过 `vueFiles/reactFiles/htmlFiles` 属性去完全自定义要展示的文件及代码，例如你要展示一份代码的 `typescript` 和 `javascript` 的两种格式，你可以通过如下方式：
+
+```html
+<demo
+  react="../demos/demo.tsx"
+  :reactFiles="{
+    'Typescript': '../demos/demo.tsx',
+    'Javascript': '../demos/demo.jsx',
+  }"
+/>
+```
+
+其对应的渲染效果如下：
+
+<demo
+  react="../demos/demo.tsx"
+  :reactFiles="{
+    'Typescript': '../demos/demo.tsx',
+    'Javascript': '../demos/demo.jsx',
+  }"
+/>
+
+### 🚨 注意事项
+
+`vitepress-demo-plugin` 内部会将 `vueFiles/reactFiles/htmlFiles` 作为一个类型为 `string[] | Record<string, string>` 的字符串来处理，所以你只能直接声明  `vueFiles/reactFiles/htmlFiles` 的值，不能通过引用变量的方式来代替。
+
+- ❌ 错误示例
+
+  ```html
+  const vueFiles = ['../demos/multiple.vue', '../demos/constant/students.ts'];
+
+  <demo
+    vue="../demos/multiple.vue"
+    :vueFiles="vueFiles"
+  />
+  ```
+
+- ✅ 正确示例
+
+  ```html
+  <demo
+    vue="../demos/multiple.vue"
+    :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']"
+  />
+  ```

@@ -2,6 +2,7 @@
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
 import path from 'path';
+import fs from 'fs';
 import {
   composeComponentName,
   handleComponentName,
@@ -22,6 +23,9 @@ const stackblitzRegex = /stackblitz="(.*?)"/;
 const codesandboxRegex = /codesandbox="(.*?)"/;
 const codeplayerRegex = /codeplayer="(.*?)"/;
 const scopeRegex = /scope="(.*?)"/;
+const vueFilesRegex = /vueFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
+const reactFilesRegex = /reactFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
+const htmlFilesRegex = /htmlFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 
 export interface DefaultProps {
   title?: string;
@@ -53,6 +57,8 @@ export type Platform = {
   templates?: PlatformTemplate[];
 };
 
+export type CodeFiles = string[] | Record<string, string>;
+
 export interface VitepressDemoBoxConfig {
   /**
    * @description demo所在目录
@@ -74,6 +80,18 @@ export interface VitepressDemoBoxConfig {
    * @description codeplayer 平台配置
    */
   codeplayer?: Platform;
+  /**
+   * @description vue 展示的代码文件
+   */
+  vueFiles?: CodeFiles;
+  /**
+   * @description vue 展示的代码文件
+   */
+  reactFiles?: CodeFiles;
+  /**
+   * @description vue 展示的代码文件
+   */
+  htmlFiles?: CodeFiles;
 }
 
 /**
@@ -125,6 +143,9 @@ export const transformPreview = (
   const codesandboxValue = token.content.match(codesandboxRegex);
   const codeplayerValue = token.content.match(codeplayerRegex);
   const scopeValue = token.content.match(scopeRegex)?.[1] || '';
+  const vueFilesValue = token.content.match(vueFilesRegex);
+  const reactFilesValue = token.content.match(reactFilesRegex);
+  const htmlFilesValue = token.content.match(htmlFilesRegex);
 
   const dirPath = demoDir || path.dirname(mdFile.path);
 
@@ -218,11 +239,7 @@ export const transformPreview = (
     `{ VitepressDemoBox }`
   );
   injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
-  injectComponentImportScript(
-    mdFile,
-    'vue',
-    '{ ref, onMounted }'
-  );
+  injectComponentImportScript(mdFile, 'vue', '{ ref, onMounted }');
 
   // 注入组件导入语句
   if (componentProps.vue) {
@@ -237,10 +254,14 @@ export const transformPreview = (
     injectComponentImportScript(
       mdFile,
       'react-dom/client',
-      '{ createRoot as reactCreateRoot }',
-      
+      '{ createRoot as reactCreateRoot }'
     );
-    injectComponentImportScript(mdFile, componentReactPath, reactComponentName, true);
+    injectComponentImportScript(
+      mdFile,
+      componentReactPath,
+      reactComponentName,
+      true
+    );
   }
 
   // 组件代码，动态引入以便实时更新
@@ -263,6 +284,64 @@ export const transformPreview = (
     injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCode);
   }
 
+  // 多文件展示
+  const files = {
+    vue: {} as Record<string, string>,
+    react: {} as Record<string, string>,
+    html: {} as Record<string, string>,
+  };
+
+  function formatString(value: string) {
+    return value.replace(/'/g, '"')
+      .replace(/\\n/g, '')
+      .trim()
+      .replace(/^"/, '')
+      .replace(/"$/, '')
+      .replace(/,(\s|\n)*\}$/, '}')
+      .replace(/,(\s|\n)*\]$/, ']');
+  }
+
+  const inputFiles = {
+    vue: formatString(vueFilesValue?.[1] || ''),
+    react: formatString(reactFilesValue?.[1] || ''),
+    html: formatString(htmlFilesValue?.[1] || ''),
+  };
+
+  for (const key in inputFiles) {
+    let value = inputFiles[key as keyof typeof inputFiles];
+    if (value) {
+      try {
+        const codeFiles = JSON.parse(value);
+        if (Array.isArray(codeFiles)) {
+          (codeFiles as string[]).forEach((file) => {
+            const fileName = path.basename(file);
+            files[key as keyof typeof files][fileName] = file;
+          });
+        } else {
+          files[key as keyof typeof files] = codeFiles;
+        }
+        for (const file in files[key as keyof typeof files]) {
+          const filePath = files[key as keyof typeof files][file];
+          if (filePath) {
+            const absPath = path
+              .resolve(demoDir || path.dirname(mdFile.path), filePath || '.')
+              .replace(/\\/g, '/');
+            if (fs.existsSync(absPath)) {
+              const code = fs.readFileSync(absPath, 'utf-8');
+              files[key as keyof typeof files][file] = code;
+            } else {
+              delete files[key as keyof typeof files][file];
+            }
+          } else {
+            delete files[key as keyof typeof files][file];
+          }
+        }
+      } catch (error) {
+        // 格式错误，则不展示该文件
+      }
+    }
+  }
+
   const sourceCode = `
   <ClientOnly>
     <vitepress-demo-box 
@@ -275,6 +354,7 @@ export const transformPreview = (
       stackblitz="${encodeURIComponent(JSON.stringify(stackblitz))}"
       codesandbox="${encodeURIComponent(JSON.stringify(codesandbox))}"
       codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"
+      files="${encodeURIComponent(JSON.stringify(files))}"
       scope="${scopeValue || ''}"
       :visible="!!${visible}"
       ${
