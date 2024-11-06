@@ -37,6 +37,7 @@ interface VitepressDemoBoxProps {
   codesandbox?: string;
   codeplayer?: string;
   scope?: string;
+  files: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -57,6 +58,16 @@ const codesandbox = computed<Platform>(() => {
 });
 const codeplayer = computed<Platform>(() => {
   return JSON.parse(decodeURIComponent(props.codeplayer || '{}'));
+});
+
+const activeFile = ref<string>('');
+const currentFiles = computed<Record<string, string>>(() => {
+  const files = JSON.parse(decodeURIComponent(props.files || '{}'));
+  const result = files[type.value];
+  if (result && !result[activeFile.value]) {
+    activeFile.value = Object.keys(result)?.[0] || '';
+  }
+  return result;
 });
 
 const tabOrders = computed(() => {
@@ -85,6 +96,9 @@ const currentCode = computed(() => {
 });
 // 要展示的高亮代码
 const displayCode = computed(() => {
+  if (currentFiles.value && currentFiles.value[activeFile.value]) {
+    return useHighlightCode(currentFiles.value[activeFile.value]);
+  }
   let code = useHighlightCode(currentCode.value);
   return code;
 });
@@ -254,6 +268,16 @@ watch(
   { immediate: true, deep: true }
 );
 
+function handleFileClick(file: string) {
+  activeFile.value = file;
+  if (sourceRef.value) {
+    sourceRef.value.style.height = 'auto';
+  }
+  nextTick(() => {
+    sourceRef.value.style.height = sourceRef.value.scrollHeight + 'px';
+  });
+}
+
 const sourceRef = ref();
 watch(
   () => isCodeFold.value,
@@ -299,7 +323,7 @@ watch(
         <div
           v-for="tab in tabs"
           :key="tab"
-          :class="['tab', type === tab && 'active-tab']"
+          :class="[ns.bem('tab'), type === tab && ns.bem('active-tab')]"
           @click="setCodeType?.(tab)"
         >
           {{ tab }}
@@ -342,6 +366,19 @@ watch(
 
     <!-- 代码展示区 -->
     <section :class="[ns.bem('source')]" ref="sourceRef">
+      <div
+        :class="[ns.bem('file-tabs')]"
+        v-if="Object.keys(currentFiles).length"
+      >
+        <div
+          v-for="file in Object.keys(currentFiles)"
+          :key="file"
+          :class="[ns.bem('tab'), activeFile === file && ns.bem('active-tab')]"
+          @click="handleFileClick(file)"
+        >
+          {{ file }}
+        </div>
+      </div>
       <pre class="language-html"><code v-html="displayCode"></code></pre>
     </section>
 
@@ -483,21 +520,28 @@ watch(
   border-top: 1px solid var(--coot-demo-box-border);
 }
 
-.#{$defaultPrefix}-lang-tabs {
-  border-bottom: 1px dashed var(--coot-demo-box-border);
+.#{$defaultPrefix}-lang-tabs,
+.#{$defaultPrefix}-file-tabs {
   line-height: 36px;
   display: flex;
   justify-content: center;
   column-gap: 16px;
+  overflow-x: auto;
 
-  .tab {
+  .#{$defaultPrefix}-tab {
     cursor: pointer;
   }
 
-  .active-tab {
+  .#{$defaultPrefix}-active-tab {
     color: #1677ff;
     font-weight: 500;
   }
 }
+.#{$defaultPrefix}-lang-tabs {
+  border-bottom: 1px dashed var(--coot-demo-box-border);
+}
+
+.#{$defaultPrefix}-file-tabs {
+  border-top: 1px dashed var(--coot-demo-box-border);
+}
 </style>
-./utils/namespace./utils/fold./utils/copy./utils/highlight
