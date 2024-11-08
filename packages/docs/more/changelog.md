@@ -1,5 +1,10 @@
 # 更新日志
 
+### 1.1.1
+
+- 🐛 fix: 修复了将 `<demo />` 注释后依然会渲染的问题 [#38](https://github.com/zh-lx/vitepress-demo-plugin/pull/38)
+- 🐛 fix: 修复了 demo 路径中包含中文字符时编译失败的问题 [#37](https://github.com/zh-lx/vitepress-demo-plugin/pull/37)
+
 ## 1.1.0
 
 - 🎉 feat: 支持多文件代码展示 [#34](https://github.com/zh-lx/vitepress-demo-plugin/pull/34)
