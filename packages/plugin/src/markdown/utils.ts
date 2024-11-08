@@ -12,17 +12,6 @@ const scriptSetupCommonReg =
   /<\s*script\s+(setup|lang='ts'|lang="ts")?\s*(setup|lang='ts'|lang="ts")?\s*>/;
 
 /**
- * 统一处理组件名称->驼峰命名
- * @param name
- */
-export const handleComponentName = (name: string) => {
-  const componentName = name.replaceAll(/[_|-]+(\w)/g, ($0, $1) => {
-    return $1.toUpperCase();
-  });
-  return componentName;
-};
-
-/**
  * 注入 script 脚本
  * @param mdInstance
  * @param path
@@ -47,7 +36,7 @@ export const injectComponentImportScript = (
   });
 
   // 统一处理组件名称为驼峰命名
-  const componentName = handleComponentName(name || '');
+  const componentName = name || '';
 
   let importCode = '';
   if (dynamicImport) {
@@ -125,7 +114,7 @@ export const composeComponentName = (path: string) => {
       path = path.substring(0, lastIndex);
     }
   }
-  return componentList.join('-').split('.')[0];
+  return 'Temp' + btoa(encodeURIComponent(componentList.join('-').split('.')[0])).replace(/=/g, 'Equal');
 };
 
 /**
