@@ -5,7 +5,6 @@ import path from 'path';
 import fs from 'fs';
 import {
   composeComponentName,
-  handleComponentName,
   injectComponentImportScript,
 } from './utils';
 import { PlatformTemplate } from '@/constant/type';
@@ -230,7 +229,7 @@ export const transformPreview = (
     .replace(/\\/g, '/');
 
   const componentName = composeComponentName(absolutePath);
-  const reactComponentName = handleComponentName(`react-${componentName}`);
+  const reactComponentName = `react${componentName}`;
 
   // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
@@ -265,23 +264,23 @@ export const transformPreview = (
   }
 
   // 组件代码，动态引入以便实时更新
-  const htmlCode = componentProps.html
-    ? handleComponentName(`code-html-${componentName}`)
+  const htmlCodeTempVariable = componentProps.html
+    ? `TempCodeHtml${componentName}`
     : `''`;
-  const reactCode = componentProps.react
-    ? handleComponentName(`code-react-${componentName}`)
+  const reactCodeTempVariable = componentProps.react
+    ? `TempCodeReact${componentName}`
     : `''`;
-  const vueCode = componentProps.vue
-    ? handleComponentName(`code-vue-${componentName}`)
+  const vueCodeTempVariable = componentProps.vue
+    ? `TempCodeVue${componentName}`
     : `''`;
   if (componentProps.html) {
-    injectComponentImportScript(mdFile, `${componentHtmlPath}?raw`, htmlCode);
+    injectComponentImportScript(mdFile, `${componentHtmlPath}?raw`, htmlCodeTempVariable);
   }
   if (componentProps.react) {
-    injectComponentImportScript(mdFile, `${componentReactPath}?raw`, reactCode);
+    injectComponentImportScript(mdFile, `${componentReactPath}?raw`, reactCodeTempVariable);
   }
   if (componentProps.vue) {
-    injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCode);
+    injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCodeTempVariable);
   }
 
   // 多文件展示
@@ -360,21 +359,21 @@ export const transformPreview = (
       ${
         componentProps.html
           ? `
-            :htmlCode="${encodeURIComponent(htmlCode)}"
+            :htmlCode="${htmlCodeTempVariable}"
             `
           : ''
       }
       ${
         componentProps.vue
           ? `
-            :vueCode="${encodeURIComponent(vueCode)}"
+            :vueCode="${vueCodeTempVariable}"
             `
           : ''
       }
       ${
         componentProps.react
           ? `
-            :reactCode="${encodeURIComponent(reactCode)}"
+            :reactCode="${reactCodeTempVariable}"
             :reactComponent="${reactComponentName}"
             :reactCreateRoot="reactCreateRoot"
             :reactCreateElement="reactCreateElement"
