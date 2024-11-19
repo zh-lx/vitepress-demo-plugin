@@ -114,7 +114,7 @@ export const composeComponentName = (path: string) => {
       path = path.substring(0, lastIndex);
     }
   }
-  return 'Temp' + btoa(encodeURIComponent(componentList.join('-').split('.')[0])).replace(/=/g, 'Equal');
+  return 'Temp' + btoa(encodeURIComponent(componentList.join('-').split('.').slice(0, -1).join("."))).replace(/=/g, 'Equal');
 };
 
 /**
