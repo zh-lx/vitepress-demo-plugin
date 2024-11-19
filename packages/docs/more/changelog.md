@@ -1,6 +1,10 @@
 # 更新日志
 
-### 1.1.1
+## 1.1.2
+
+- 🐛 fix: 修复一个文件路径中包含多个 `.` 导致组件命名重复的问题 [#40](https://github.com/zh-lx/vitepress-demo-plugin/pull/40)
+
+## 1.1.1
 
 - 🐛 fix: 修复了将 `<demo />` 注释后依然会渲染的问题 [#38](https://github.com/zh-lx/vitepress-demo-plugin/pull/38)
 - 🐛 fix: 修复了 demo 路径中包含中文字符时编译失败的问题 [#37](https://github.com/zh-lx/vitepress-demo-plugin/pull/37)
