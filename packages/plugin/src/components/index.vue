@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, inject, watch, nextTick, computed, Ref } from 'vue';
+import { ref, inject, watch, nextTick, computed, Ref, onUnmounted } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -223,6 +223,13 @@ function renderReactComponent() {
     }
   });
 }
+onUnmounted(() => {
+  if (root) {
+    root.unmount();
+    root = null;
+  }
+});
+
 watch(
   () => [reactContainerRef.value, props.reactComponent],
   (val) => {
