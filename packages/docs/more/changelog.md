@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.1.3
+
+- 🐛 fix: 修复了组件卸载时未卸载 react 节点的问题 [#42](https://github.com/zh-lx/vitepress-demo-plugin/pull/42)
+
 ## 1.1.2
 
 - 🐛 fix: 修复一个文件路径中包含多个 `.` 导致组件命名重复的问题 [#40](https://github.com/zh-lx/vitepress-demo-plugin/pull/40)
