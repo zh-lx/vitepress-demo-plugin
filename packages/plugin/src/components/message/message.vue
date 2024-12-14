@@ -62,7 +62,6 @@ defineExpose({
 .#{$defaultPrefix}-message-notice__container {
   display: flex;
   align-items: center;
-  border: 1px solid var(--coot-demo-box-border);
   box-shadow: 0px 0px 8px var(--coot-demo-box-border);
   padding: 8px 12px;
   border-radius: 4px;

@@ -202,3 +202,37 @@ export default defineConfig({
     :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']"
   />
   ```
+
+## 样式隔离
+
+::: tip 注意
+样式隔离是基于 `vitepress` 自身提供的 [raw](https://vitepress.dev/zh/guide/markdown#raw) 实现的，但是 `vitepress-demo-plugin` 内部已经对 `demo` 添加了 `vp-raw` 类名，所以你不需要再手动添加 `::: raw` 或者 `vp-raw` 类名，否则会影响到代码块的样式。
+:::
+
+vitepress 内置的一些 css 样式可能会影响到 demo 的展示，可以参考通过以下方法实现样式隔离：
+
+1. 安装 `postcss` 插件：
+  ```shell
+  npm install postcss-isolate-styles -D
+  # or
+  yarn add postcss-isolate-styles -D
+  # or
+  pnpm add postcss-isolate-styles -D
+  ```
+
+2. 在项目根目录下创建 `postcss.config.mjs` 文件，并添加以下内容：
+  ```js
+  import { postcssIsolateStyles } from 'vitepress'
+
+  export default {
+    plugins: [
+      postcssIsolateStyles({
+        includeFiles: [/vp-doc\.css/]
+      })
+    ]
+  }
+  ```
+
+以 `element-plus` 的 `table` 组件为例，渲染效果如下：
+
+<demo vue="element-table.vue" />
