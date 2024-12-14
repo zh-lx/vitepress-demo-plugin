@@ -305,7 +305,7 @@ watch(
 <template>
   <div :class="[ns.e('container')]">
     <!-- 预览区 -->
-    <section :class="[ns.bem('preview')]">
+    <section :class="[ns.bem('preview'), 'vp-raw']">
       <slot name="vue" v-if="type === 'vue'"></slot>
       <div ref="htmlContainerRef" v-else-if="type === 'html'">
         <iframe style="width: 100%; height: auto; border: none"></iframe>
@@ -469,7 +469,7 @@ watch(
     display: flex;
     align-items: center;
     justify-content: center;
-    column-gap: 8px;
+    column-gap: 16px;
 
     svg {
       width: 16px;

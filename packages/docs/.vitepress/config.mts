@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
 import path, { dirname } from 'path';
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 
 function fileURLToPath(fileURL: string) {
   let filePath = fileURL;
@@ -82,6 +83,10 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [],
+    plugins: [
+      codeInspectorPlugin({
+        bundler: 'vite',
+      })
+    ],
   },
 });
