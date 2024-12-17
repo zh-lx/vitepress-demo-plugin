@@ -91,6 +91,18 @@ export interface VitepressDemoBoxConfig {
    * @description vue 展示的代码文件
    */
   htmlFiles?: CodeFiles;
+  /**
+   * @description 亮色模式主题，参考 https://highlightjs.org/demo
+   */
+  lightTheme?: string;
+  /**
+   * @description 暗色模式主题，参考 https://highlightjs.org/demo
+   */
+  darkTheme?: string;
+  /**
+   * @description 亮色/暗色模式统一的主题(建议使用 lightTheme 和 darkTheme 分开)，参考 https://highlightjs.org/demo
+   */
+  theme?: string;
 }
 
 /**
@@ -350,6 +362,9 @@ export const transformPreview = (
       order="${order}"
       github="${github}"
       gitlab="${gitlab}"
+      theme="${config?.theme || ''}"
+      lightTheme="${config?.lightTheme || ''}"
+      darkTheme="${config?.darkTheme || ''}"
       stackblitz="${encodeURIComponent(JSON.stringify(stackblitz))}"
       codesandbox="${encodeURIComponent(JSON.stringify(codesandbox))}"
       codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"

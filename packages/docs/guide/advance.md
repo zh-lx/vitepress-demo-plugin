@@ -236,3 +236,27 @@ vitepress 内置的一些 css 样式可能会影响到 demo 的展示，可以�
 以 `element-plus` 的 `table` 组件为例，渲染效果如下：
 
 <demo vue="element-table.vue" />
+
+## 代码主题
+
+`vitepress-demo-plugin` 的代码块展示是基于 [highlight.js](https://github.com/highlightjs/highlight.js) 实现的，因此你可以使用一切 `highlight.js` 支持的主题。主题列表可以参考 [highlight.js 官网](https://highlightjs.org/demo)。
+
+你可以通过 `lightTheme`(默认为 `vs`) 和 `darkTheme`(默认为 `vs2015`) 分别指定亮色模式和暗色模式下的代码块主题。在 `config.ts` 中添加如下代码：
+
+```ts
+import { defineConfig } from 'vitepress';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import path from 'path';
+
+export default defineConfig({
+  // other configs...
+  markdown: {
+    config(md) {
+      md.use(vitepressDemoPlugin, {
+        lightTheme: 'atom-one-light', // [!code ++]
+        darkTheme: 'atom-one-dark', // [!code ++]
+      });
+    },
+  },
+});
+```
