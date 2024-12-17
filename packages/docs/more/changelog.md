@@ -1,5 +1,13 @@
 # 更新日志
 
+## 1.2.0
+
+- 🎉 feat: 支持自定义代码主题 [#48](https://github.com/zh-lx/vitepress-demo-plugin/pull/48)
+
+## 1.1.4
+
+- 🐛 fix: 修复使用 `raw` 进行样式隔离时，`vitepress-demo-plugin` 代码块样式受影响的问题 [#47](https://github.com/zh-lx/vitepress-demo-plugin/pull/47)
+
 ## 1.1.3
 
 - 🐛 fix: 修复了组件卸载时未卸载 react 节点的问题 [#42](https://github.com/zh-lx/vitepress-demo-plugin/pull/42)
