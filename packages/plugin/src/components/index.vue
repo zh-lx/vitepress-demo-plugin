@@ -1,5 +1,14 @@
 <script lang="ts" setup>
-import { ref, inject, watch, nextTick, computed, Ref, onUnmounted } from 'vue';
+import {
+  ref,
+  inject,
+  watch,
+  nextTick,
+  computed,
+  Ref,
+  onMounted,
+  onUnmounted,
+} from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
 import CopyIcon from './icons/copy.vue';
@@ -14,7 +23,6 @@ import { useNameSpace } from './utils/namespace';
 import { useCodeFold } from './utils/fold';
 import { useCodeCopy } from './utils/copy';
 import { useHighlightCode } from './utils/highlight';
-import 'highlight.js/styles/atom-one-dark.css';
 import { genHtmlCode } from './utils/template';
 import { ComponentType } from '@/constant/type';
 import { Platform } from '@/markdown/preview';
@@ -38,6 +46,9 @@ interface VitepressDemoBoxProps {
   codeplayer?: string;
   scope?: string;
   files: string;
+  lightTheme?: string;
+  darkTheme?: string;
+  theme?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -300,6 +311,63 @@ watch(
     });
   }
 );
+
+function loadTheme(mode: 'light' | 'dark') {
+  const previousThemeLink = document.querySelector(
+    'link[data-vitepress-demo-plugin-theme]'
+  );
+  if (previousThemeLink) {
+    previousThemeLink.remove();
+  }
+
+  const lightTheme = props.lightTheme || props.theme || 'vs';
+  const darkTheme = props.darkTheme || props.theme || 'vs2015';
+
+  const theme = mode === 'light' ? lightTheme : darkTheme;
+  const themeLink = document.createElement('link');
+  themeLink.href = `https://cdn.jsdelivr.net/npm/highlight.js/styles/${theme}.css`;
+  themeLink.rel = 'stylesheet';
+  themeLink.type = 'text/css';
+  themeLink.dataset.vitepressDemoPluginTheme = mode;
+  document.head.appendChild(themeLink);
+}
+
+// 观察 <html> 标签 上是否有 `dark` 类，从而决定是否使用 dark 主题
+function observeThemeChange() {
+  const targetNode = document.documentElement;
+  // 创建一个 MutationObserver 实例并传入回调函数
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === 'class'
+      ) {
+        if (targetNode.classList.contains('dark')) {
+          loadTheme('dark');
+        } else {
+          loadTheme('light');
+        }
+      }
+    }
+  });
+  // 配置观察选项，只观察属性变化
+  const config = { attributes: true };
+  // 开始观察目标节点
+  observer.observe(targetNode, config);
+}
+
+function loadInitTheme() {
+  if (document.documentElement.classList.contains('dark')) {
+    loadTheme('dark');
+  } else {
+    loadTheme('light');
+  }
+}
+
+onMounted(() => {
+  loadInitTheme();
+  observeThemeChange();
+});
 </script>
 
 <template>
@@ -493,7 +561,7 @@ watch(
   }
 
   .language-html {
-    background-color: #f5f7fa;
+    background-color: #f7fafc;
     margin: 0;
     overflow-x: auto;
 
@@ -507,7 +575,7 @@ watch(
 
 .dark .#{$defaultPrefix}__container > .#{$defaultPrefix}-source {
   .language-html {
-    background-color: rgb(40, 44, 52);
+    background-color: #21242b;
   }
 }
 
