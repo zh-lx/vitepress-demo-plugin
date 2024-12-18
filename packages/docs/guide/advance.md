@@ -213,11 +213,11 @@ vitepress 内置的一些 css 样式可能会影响到 demo 的展示，可以�
 
 1. 安装 `postcss` 插件：
   ```shell
-  npm install postcss-isolate-styles -D
+  npm install postcss -D
   # or
-  yarn add postcss-isolate-styles -D
+  yarn add postcss -D
   # or
-  pnpm add postcss-isolate-styles -D
+  pnpm add postcss -D
   ```
 
 2. 在项目根目录下创建 `postcss.config.mjs` 文件，并添加以下内容：
