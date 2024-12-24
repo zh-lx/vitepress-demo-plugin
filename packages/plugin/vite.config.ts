@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   build: {
@@ -11,7 +12,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['vue', 'markdown-it', 'fs', 'path', 'react', 'react-dom'],
+      external: ['vue', 'markdown-it', 'react', 'react-dom'],
       output: {
         globals: {
           vue: 'Vue',
@@ -25,5 +26,5 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
-  plugins: [vue(), dts({ insertTypesEntry: true })],
+  plugins: [nodePolyfills(), vue(), dts({ insertTypesEntry: true })],
 });
