@@ -96,6 +96,12 @@ function setCodeType(_type: ComponentType) {
   if (typeof setInjectType === 'function') {
     setInjectType(_type);
   }
+  nextTick(() => {
+    // 重新计算代码块高度
+    if (sourceRef.value && !isCodeFold.value) {
+      sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
+    }
+  });
 }
 
 const ns = useNameSpace();
@@ -292,11 +298,12 @@ function handleFileClick(file: string) {
     sourceRef.value.style.height = 'auto';
   }
   nextTick(() => {
-    sourceRef.value.style.height = sourceRef.value.scrollHeight + 'px';
+    sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
   });
 }
 
 const sourceRef = ref();
+const sourceContentRef = ref();
 watch(
   () => isCodeFold.value,
   (val) => {
@@ -305,7 +312,8 @@ watch(
         if (val) {
           sourceRef.value.style.height = 0;
         } else {
-          sourceRef.value.style.height = sourceRef.value.scrollHeight + 'px';
+          sourceRef.value.style.height =
+            sourceContentRef.value.scrollHeight + 'px';
         }
       }
     });
@@ -441,20 +449,25 @@ onMounted(() => {
 
     <!-- 代码展示区 -->
     <section :class="[ns.bem('source')]" ref="sourceRef">
-      <div
-        :class="[ns.bem('file-tabs')]"
-        v-if="Object.keys(currentFiles).length"
-      >
+      <div ref="sourceContentRef">
         <div
-          v-for="file in Object.keys(currentFiles)"
-          :key="file"
-          :class="[ns.bem('tab'), activeFile === file && ns.bem('active-tab')]"
-          @click="handleFileClick(file)"
+          :class="[ns.bem('file-tabs')]"
+          v-if="Object.keys(currentFiles).length"
         >
-          {{ file }}
+          <div
+            v-for="file in Object.keys(currentFiles)"
+            :key="file"
+            :class="[
+              ns.bem('tab'),
+              activeFile === file && ns.bem('active-tab'),
+            ]"
+            @click="handleFileClick(file)"
+          >
+            {{ file }}
+          </div>
         </div>
+        <pre class="language-html"><code v-html="displayCode"></code></pre>
       </div>
-      <pre class="language-html"><code v-html="displayCode"></code></pre>
     </section>
 
     <div :class="ns.bem('fold')" v-if="!isCodeFold" @click="setCodeFold(true)">
