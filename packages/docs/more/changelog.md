@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.2.2
+
+- 🐛 fix: 修复了 `vite-plugin-node-polyfills` 插件不兼容 `fs` 模块导致多文件 demo 展示不生效的问题 [#c1d3b39f](https://github.com/zh-lx/vitepress-demo-plugin/commit/c1d3b39f0e517a7680f472585259614a512cd942)
+
 ## 1.2.1
 
 - 🐛 fix: 修复了文档打包时关于 `Module "path" has been externalized for browser compatibility` 的告警问题 [#51](https://github.com/zh-lx/vitepress-demo-plugin/pull/51)
