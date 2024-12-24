@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.2.1
+
+- 🐛 fix: 修复了文档打包时关于 `Module "path" has been externalized for browser compatibility` 的告警问题 [#51](https://github.com/zh-lx/vitepress-demo-plugin/pull/51)
+- 🐛 fix: 修复了多语法 demo 切换语法时，代码块高度展示异常的问题 [#50](https://github.com/zh-lx/vitepress-demo-plugin/pull/50)
+
 ## 1.2.0
 
 - 🎉 feat: 支持自定义代码主题 [#48](https://github.com/zh-lx/vitepress-demo-plugin/pull/48)
