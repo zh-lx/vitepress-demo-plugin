@@ -14,9 +14,7 @@
     "./dist/style.css": "./dist/style.css"
   },
   "files": [
-    "dist",
-    "README.md",
-    "package.json"
+    "dist"
   ],
   "scripts": {
     "dev": "vite build --watch",
