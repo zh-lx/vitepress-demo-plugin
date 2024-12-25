@@ -1,5 +1,3 @@
-import MarkdownIt from 'markdown-it';
-
 // <demo></demo> or <demo />
 export const demoReg = [
   /<demo(\s|\n)((.|\n)*)><\/demo>/,
@@ -115,20 +113,4 @@ export const composeComponentName = (path: string) => {
     }
   }
   return 'Temp' + btoa(encodeURIComponent(componentList.join('-').split('.').slice(0, -1).join("."))).replace(/=/g, 'Equal');
-};
-
-/**
- * 检查组件相对路径
- * @param path
- * @returns
- */
-export const isCheckingRelativePath = (path: string) => {
-  const relativePath = path;
-  if (
-    relativePath.startsWith('./') ||
-    relativePath.startsWith('../') ||
-    relativePath.startsWith('/')
-  )
-    return relativePath;
-  return `./${relativePath}`;
 };

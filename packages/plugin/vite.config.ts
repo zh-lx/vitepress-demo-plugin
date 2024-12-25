@@ -27,5 +27,12 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
-  plugins: [nodePolyfills(), vue(), dts({ insertTypesEntry: true })],
+  plugins: [
+    nodePolyfills(),
+    vue(),
+    dts({
+      entryRoot: 'src/markdown',
+      rollupTypes: true,
+    })
+  ],
 });

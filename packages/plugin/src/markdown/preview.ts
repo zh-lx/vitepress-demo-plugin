@@ -7,7 +7,11 @@ import {
   composeComponentName,
   injectComponentImportScript,
 } from './utils';
-import { PlatformTemplate } from '@/constant/type';
+
+interface PlatformTemplate {
+  scope: 'global' | 'vue' | 'react' | 'html' | string;
+  files: Record<string, string>;
+}
 
 const titleRegex = /title="(.*?)"/;
 const vuePathRegex = /vue="(.*?)"/;
