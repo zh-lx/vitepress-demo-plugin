@@ -33,6 +33,7 @@ export default defineConfig({
     dts({
       entryRoot: 'src/markdown',
       rollupTypes: true,
+      strictOutput: true,
     })
   ],
 });
