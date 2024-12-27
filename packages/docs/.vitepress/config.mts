@@ -66,6 +66,63 @@ export default defineConfig({
       },
     ],
   },
+  locales:{
+    root: {
+      label: '简体中文',
+      lang: 'zh'
+    },
+    en: {
+      label: 'English',
+      lang: 'en',
+      link: '/en',
+      themeConfig: {
+        // https://vitepress.dev/reference/default-theme-config
+        nav: [
+          {
+            text: 'Recommended Tools',
+            items: [
+              { text: 'code-inspector', link: 'https://inspector.fe-dev.cn/' },
+            ],
+          },
+        ],
+        logo: '/logo.svg',
+    
+        sidebar: [
+          {
+            text: 'Guide',
+            items: [
+              { text: 'Quick Start', link: '/en/guide/start' },
+              { text: 'Advanced Configuration', link: '/en/guide/advance' },
+              { text: 'Third Party Platform', link: '/en/guide/preset' },
+            ],
+          },
+          {
+            text: 'Component Library',
+            items: [
+              { text: 'Ant Design', link: '/en/components/antd' },
+              { text: 'Element Plus', link: '/en/components/element-plus' },
+            ],
+          },
+          {
+            text: 'More',
+            items: [
+              { text: 'Changelog', link: '/en/more/changelog' },
+              { text: 'Feedback', link: '/en/more/feedback' },
+            ],
+          },
+        ],
+    
+        outline: [2, 4],
+    
+        socialLinks: [
+          {
+            icon: 'github',
+            link: 'https://github.com/zh-lx/vitepress-demo-plugin',
+          },
+        ],
+      },
+    }
+  },
   markdown: {
     config(md) {
       md.use(vitepressDemoPlugin, {

@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: 'Vitepress Demo Plugin'
-  text: '实时预览你的DEMO'
+  name: Vitepress Demo Plugin
+  text: 实时预览你的DEMO
   tagline: Vue, React, and HTML 都支持
   actions:
     - theme: brand
