@@ -607,6 +607,8 @@ onMounted(() => {
   column-gap: 4px;
   cursor: pointer;
   border-top: 1px solid var(--coot-demo-box-border);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .#{$defaultPrefix}-lang-tabs,
