@@ -18,7 +18,9 @@
   ],
   "scripts": {
     "dev": "vite build --watch",
-    "build": "vite build"
+    "build": "vite build",
+    "pub": "pnpm build && pnpm publish",
+    "pub:beta": "pnpm build && pnpm publish --tag beta"
   },
   "homepage": "https://vitepress-demo.fe-dev.cn/",
   "repository": {
