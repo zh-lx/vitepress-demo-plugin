@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 packages/docs/.vitepress/cache/
 dist.zip
+
+*.gz
+*.tgz
