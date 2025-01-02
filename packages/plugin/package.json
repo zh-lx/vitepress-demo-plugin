@@ -2,30 +2,6 @@
   "name": "vitepress-demo-plugin",
   "version": "1.2.2",
   "description": "A vitepress plugin to preview component and display code",
-  "type": "module",
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
-    },
-    "./dist/style.css": "./dist/style.css"
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "dev": "vite build --watch",
-    "build": "vite build"
-  },
-  "homepage": "https://vitepress-demo.fe-dev.cn/",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
-  },
-  "bugs": "https://github.com/zh-lx/vitepress-demo-plugin/issues",
   "keywords": [
     "vitepress",
     "plugin",
@@ -36,11 +12,32 @@
     "component",
     "display"
   ],
-  "author": "zh-lx",
+  "homepage": "https://vitepress-demo.fe-dev.cn/",
+  "bugs": "https://github.com/zh-lx/vitepress-demo-plugin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
+  },
   "license": "MIT",
-  "peerDependencies": {
-    "vitepress": "*",
-    "vue": "^3.2.0"
+  "author": "zh-lx",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "release": "pnpm build && vr release --skip-changelog"
   },
   "devDependencies": {
     "@stackblitz/sdk": "^1.11.0",
@@ -56,5 +53,9 @@
     "vite-plugin-dts": "^4.4.0",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vue": "^3.2.38"
+  },
+  "peerDependencies": {
+    "vitepress": "*",
+    "vue": "^3.2.0"
   }
 }

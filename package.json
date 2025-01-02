@@ -1,18 +1,8 @@
 {
   "name": "vitepress-demo-plugin-repository",
   "version": "1.0.0",
-  "description": "一个用于在 vitepress 中组件预览和代码展示的插件。",
   "private": "true",
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "homepage": "https://vitepress-demo.fe-dev.cn/",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
-  },
-  "bugs": "https://github.com/zh-lx/vitepress-demo-plugin/issues",
+  "description": "一个用于在 vitepress 中组件预览和代码展示的插件。",
   "keywords": [
     "vitepress",
     "plugin",
@@ -23,6 +13,18 @@
     "component",
     "display"
   ],
+  "homepage": "https://vitepress-demo.fe-dev.cn/",
+  "bugs": "https://github.com/zh-lx/vitepress-demo-plugin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zh-lx/vitepress-demo-plugin.git"
+  },
+  "license": "MIT",
   "author": "zhoulixiang",
-  "license": "ISC"
+  "scripts": {
+    "release": "pnpm --dir ./packages/plugin release"
+  },
+  "devDependencies": {
+    "@varlet/release": "^0.3.2"
+  }
 }
