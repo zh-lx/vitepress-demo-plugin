@@ -25,6 +25,7 @@
     "release": "pnpm --dir ./packages/plugin release"
   },
   "devDependencies": {
-    "@varlet/release": "^0.3.2"
+    "@varlet/release": "^0.3.2",
+    "rimraf": "^6.0.1"
   }
 }

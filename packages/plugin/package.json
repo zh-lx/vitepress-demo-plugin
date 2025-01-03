@@ -35,7 +35,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "build": "rimraf dist && vite build",
+    "clean": "rimraf dist node_modules",
     "dev": "vite build --watch",
     "release": "pnpm build && vr release --skip-changelog"
   },
