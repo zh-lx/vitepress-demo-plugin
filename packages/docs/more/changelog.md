@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.2.3
+
+- 🐛 fix: 修复了代码块展开时底部两侧的样式问题 [#58](https://github.com/zh-lx/vitepress-demo-plugin/pull/58)
+
 ## 1.2.2
 
 - 🐛 fix: 修复了 `vite-plugin-node-polyfills` 插件不兼容 `fs` 模块导致多文件 demo 展示不生效的问题 [#c1d3b39f](https://github.com/zh-lx/vitepress-demo-plugin/commit/c1d3b39f0e517a7680f472585259614a512cd942)

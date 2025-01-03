@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3
+
+- 🐛 fix: Fixed the issue that the bottom style of the code block is affected when expanded [#58](https://github.com/zh-lx/vitepress-demo-plugin/pull/58)
+
 ## 1.2.2
 
 - 🐛 fix: Fixed the issue that `vite-plugin-node-polyfills` plugin is incompatible with `fs` module, which causes the multi-file demo display to fail [#c1d3b39f](https://github.com/zh-lx/vitepress-demo-plugin/commit/c1d3b39f0e517a7680f472585259614a512cd942)
