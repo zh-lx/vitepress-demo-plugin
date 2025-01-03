@@ -1,6 +1,6 @@
 {
   "name": "vitepress-demo-plugin",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A vitepress plugin to preview component and display code",
   "keywords": [
     "vitepress",
