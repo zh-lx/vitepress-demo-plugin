@@ -5,6 +5,8 @@
   --coot-demo-box-code-bg: #f7f8fa;
   --coot-demo-box-tooltip-bg: #000;
   --coot-demo-box-tooltip-color: #fff;
+  --coot-demo-box-message-bg: #fff;
+  --coot-demo-box-message-border: #ddd;
 }
 
 .dark:root {
@@ -14,6 +16,8 @@
   --coot-demo-box-code-bg: #161618;
   --coot-demo-box-tooltip-bg: #fff;
   --coot-demo-box-tooltip-color: #000;
+  --coot-demo-box-message-bg: #282626;
+  --coot-demo-box-message-border: transparent;
 }
 
 $defaultPrefix: 'vitepress-demo-plugin';
