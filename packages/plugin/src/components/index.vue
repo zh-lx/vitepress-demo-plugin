@@ -109,6 +109,9 @@ const { isCodeFold, setCodeFold } = useCodeFold();
 const { clickCopy } = useCodeCopy();
 
 const currentCode = computed(() => {
+  if (currentFiles.value && currentFiles.value[activeFile.value]) {
+    return currentFiles.value[activeFile.value];
+  }
   return props[`${type.value}Code` as keyof VitepressDemoBoxProps];
 });
 // 要展示的高亮代码
