@@ -104,12 +104,6 @@ function setCodeType(_type: ComponentType) {
   if (typeof setInjectType === 'function') {
     setInjectType(_type);
   }
-  setTimeout(() => {
-    // 重新计算代码块高度
-    if (sourceRef.value && !isCodeFold.value) {
-      sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
-    }
-  }, 100);
 }
 const fileType = computed(() => {
   return type.value === 'react' ? 'tsx' : type.value;
@@ -137,7 +131,17 @@ watchEffect(async () => {
       light: props.lightTheme || 'github-light',
     },
   });
+  resetCodeBlockHeight();
 });
+
+function resetCodeBlockHeight() {
+  setTimeout(() => {
+    // 重新计算代码块高度
+    if (sourceRef.value && !isCodeFold.value) {
+      sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
+    }
+  });
+}
 
 const tabs = computed<ComponentType[]>(() => {
   return [ComponentType.VUE, ComponentType.REACT, ComponentType.HTML]
@@ -316,9 +320,6 @@ function handleFileClick(file: string) {
   if (sourceRef.value) {
     sourceRef.value.style.height = 'auto';
   }
-  setTimeout(() => {
-    sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
-  }, 100);
 }
 
 const sourceRef = ref();
