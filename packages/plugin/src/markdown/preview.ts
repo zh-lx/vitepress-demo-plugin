@@ -247,7 +247,7 @@ export const transformPreview = (
   injectComponentImportScript(
     mdFile,
     'vitepress-demo-plugin',
-    `{ VitepressDemoBox }`
+    `{ VitepressDemoBox, VitepressDemoPlaceholder }`
   );
   injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
   injectComponentImportScript(mdFile, 'vue', '{ ref, onMounted }');
@@ -271,9 +271,14 @@ export const transformPreview = (
       mdFile,
       componentReactPath,
       reactComponentName,
-      true
+      'dynamicImport',
     );
   }
+
+  const placeholderVisibleKey = `__placeholder_visible_key__`;
+
+  // 控制 placeholder 的显示
+  injectComponentImportScript(mdFile, placeholderVisibleKey, `const ${placeholderVisibleKey} = ref(true);`, 'inject');
 
   // 组件代码，动态引入以便实时更新
   const htmlCodeTempVariable = componentProps.html
@@ -363,6 +368,7 @@ export const transformPreview = (
   }
 
   const sourceCode = `
+  <vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />
   <ClientOnly>
     <vitepress-demo-box 
       title="${componentProps.title}"
@@ -380,6 +386,7 @@ export const transformPreview = (
       files="${encodeURIComponent(JSON.stringify(files))}"
       scope="${scopeValue || ''}"
       :visible="!!${visible}"
+      @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
         componentProps.html
           ? `

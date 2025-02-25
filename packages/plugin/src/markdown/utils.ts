@@ -19,7 +19,7 @@ export const injectComponentImportScript = (
   env: any,
   path: string,
   name?: string,
-  dynamicImport?: boolean
+  type?: 'dynamicImport' | 'inject',
 ) => {
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
@@ -37,7 +37,7 @@ export const injectComponentImportScript = (
   const componentName = name || '';
 
   let importCode = '';
-  if (dynamicImport) {
+  if (type === 'dynamicImport') {
     importCode = name
       ? `
       const ${componentName} = ref();
@@ -50,6 +50,10 @@ export const injectComponentImportScript = (
         await import('${path}');
       });
       `.trim();
+  } else if (type === 'inject') {
+    importCode = `
+      ${name}
+    `.trim();
   } else {
     importCode = name
       ? `import ${componentName} from '${path}'`
