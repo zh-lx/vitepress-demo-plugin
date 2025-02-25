@@ -154,3 +154,23 @@ The corresponding rendering result is as follows:
 />
 
 For GitLab, the usage is the same as GitHub. Simply replace `github` with `gitlab`.
+
+## SSG
+
+To avoid using `window`、`document` 等 browser environment variables in user components, `vitepress-demo-plugin` defaults to using the `<ClientOnly>` component to wrap user components. However, this will cause the user's components to not participate in static compilation, thus slowing down the loading speed of the components on the page.
+
+If you are sure that your components do not use `window`、`document` etc. browser environment variables and only use vue components, you can close the `<ClientOnly>` component's packaging by setting the `ssg` attribute, thus speeding up the loading speed of the components.
+
+```html
+<demo
+  vue="../demos/demo.vue"
+  ssg="true"
+/>  
+```
+
+The corresponding rendering result is as follows:
+
+<demo
+  vue="../demos/demo.vue"
+  ssg="true"
+/>

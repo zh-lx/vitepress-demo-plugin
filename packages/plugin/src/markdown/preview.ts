@@ -25,6 +25,7 @@ const scopeRegex = /scope="(.*?)"/;
 const vueFilesRegex = /vueFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const reactFilesRegex = /reactFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const htmlFilesRegex = /htmlFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
+const ssgRegex = /ssg="(.*?)"/;
 
 export interface DefaultProps {
   title?: string;
@@ -157,7 +158,7 @@ export const transformPreview = (
   const vueFilesValue = token.content.match(vueFilesRegex);
   const reactFilesValue = token.content.match(reactFilesRegex);
   const htmlFilesValue = token.content.match(htmlFilesRegex);
-
+  const ssgValue = !!(token.content.match(ssgRegex)?.[1]);
   const dirPath = demoDir || path.dirname(mdFile.path);
 
   if (orderValue?.[1]) {
@@ -368,8 +369,8 @@ export const transformPreview = (
   }
 
   const sourceCode = `
-  <vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />
-  <ClientOnly>
+  ${ssgValue ? '' : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`}
+  ${ssgValue ? '' : '<ClientOnly>'}
     <vitepress-demo-box 
       title="${componentProps.title}"
       description="${componentProps.description}"
@@ -422,7 +423,7 @@ export const transformPreview = (
           : ''
       }
     </vitepress-demo-box>
-  </ClientOnly>`;
+  ${ssgValue ? '' : '</ClientOnly>'}`.trim();
 
   return sourceCode;
 };
