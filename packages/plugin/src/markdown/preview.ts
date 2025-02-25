@@ -7,11 +7,7 @@ import {
   composeComponentName,
   injectComponentImportScript,
 } from './utils';
-
-interface PlatformTemplate {
-  scope: 'global' | 'vue' | 'react' | 'html' | string;
-  files: Record<string, string>;
-}
+import { PlatformTemplate } from '../constant/type';
 
 const titleRegex = /title="(.*?)"/;
 const vuePathRegex = /vue="(.*?)"/;
@@ -53,7 +49,7 @@ export interface TabConfig {
   select?: string;
 }
 
-export type Files = Record<string, string>;
+export type Files = Record<string, { code: string; filename: string }>;
 
 export type Platform = {
   show: boolean;
@@ -96,15 +92,15 @@ export interface VitepressDemoBoxConfig {
    */
   htmlFiles?: CodeFiles;
   /**
-   * @description 亮色模式主题，参考 https://highlightjs.org/demo
+   * @description 亮色模式主题，参考 https://shiki.style/themes#bundled-themes
    */
   lightTheme?: string;
   /**
-   * @description 暗色模式主题，参考 https://highlightjs.org/demo
+   * @description 暗色模式主题，参考 https://shiki.style/themes#bundled-themes
    */
   darkTheme?: string;
   /**
-   * @description 亮色/暗色模式统一的主题(建议使用 lightTheme 和 darkTheme 分开)，参考 https://highlightjs.org/demo
+   * @description 亮色/暗色模式统一的主题(建议使用 lightTheme 和 darkTheme 分开)，参考 https://shiki.style/themes#bundled-themes
    */
   theme?: string;
 }
@@ -301,9 +297,9 @@ export const transformPreview = (
 
   // 多文件展示
   const files = {
-    vue: {} as Record<string, string>,
-    react: {} as Record<string, string>,
-    html: {} as Record<string, string>,
+    vue: {} as Record<string, { code: string; filename: string }>,
+    react: {} as Record<string, { code: string; filename: string }>,
+    html: {} as Record<string, { code: string; filename: string }>,
   };
 
   function formatString(value: string) {
@@ -330,20 +326,28 @@ export const transformPreview = (
         if (Array.isArray(codeFiles)) {
           (codeFiles as string[]).forEach((file) => {
             const fileName = path.basename(file);
-            files[key as keyof typeof files][fileName] = file;
+            files[key as keyof typeof files][fileName] = {
+              filename: file,
+              code: '',
+            };
           });
-        } else {
-          files[key as keyof typeof files] = codeFiles;
+        } else if (typeof codeFiles === 'object') {
+          for (const file in codeFiles) {
+            files[key as keyof typeof files][file] = {
+              filename: codeFiles[file],
+              code: '',
+            };
+          }
         }
         for (const file in files[key as keyof typeof files]) {
-          const filePath = files[key as keyof typeof files][file];
+          const filePath = files[key as keyof typeof files][file].filename;
           if (filePath) {
             const absPath = path
               .resolve(demoDir || path.dirname(mdFile.path), filePath || '.')
               .replace(/\\/g, '/');
             if (fs.existsSync(absPath)) {
               const code = fs.readFileSync(absPath, 'utf-8');
-              files[key as keyof typeof files][file] = code;
+              files[key as keyof typeof files][file].code = code;
             } else {
               delete files[key as keyof typeof files][file];
             }
@@ -355,6 +359,7 @@ export const transformPreview = (
         // 格式错误，则不展示该文件
       }
     }
+
   }
 
   const sourceCode = `
