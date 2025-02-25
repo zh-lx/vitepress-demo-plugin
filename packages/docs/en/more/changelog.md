@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+
+- 🎉 feat: For vue components that do not use client api, support static build with SSG [#71](https://github.com/zh-lx/vitepress-demo-plugin/pull/71)
+- 🎉 feat: Add loading state before component is loaded [#70](https://github.com/zh-lx/vitepress-demo-plugin/pull/70)
+- 🎉 feat: Migrate code theme from highlight.js to shiki [#69](https://github.com/zh-lx/vitepress-demo-plugin/pull/69)
+- 🐛 fix: Fixed the problem of copying the wrong code when copying multiple files [#68](https://github.com/zh-lx/vitepress-demo-plugin/pull/68)
+- 🐛 fix: Fixed the problem that multi-file demo cannot be switched on Windows [#ab1675b0](https://github.com/zh-lx/vitepress-demo-plugin/commit/ab1675b07ce4c68ba86081e123b81c6f597bd350)
+
 ## 1.2.3
 
 - 🐛 fix: Fixed the issue that the bottom style of the code block is affected when expanded [#58](https://github.com/zh-lx/vitepress-demo-plugin/pull/58)

@@ -1,5 +1,13 @@
 # 更新日志
 
+## 1.3.0
+
+- 🎉 feat: 对于未使用客户端 api 的 vue 组件，支持 SSG 进行静态构建 [#71](https://github.com/zh-lx/vitepress-demo-plugin/pull/71)
+- 🎉 feat: 组件加载完成前，增加 loading 状态 [#70](https://github.com/zh-lx/vitepress-demo-plugin/pull/70)
+- 🎉 feat: 代码主题从 highlight.js 迁移至 shiki [#69](https://github.com/zh-lx/vitepress-demo-plugin/pull/69)
+- 🐛 fix: 修复了多文件 demo 复制代码时，复制的不是当前文件代码的问题 [#68](https://github.com/zh-lx/vitepress-demo-plugin/pull/68)
+- 🐛 fix: 修复了 Windows 系统多文件无法切换的问题 [ab1675b0](https://github.com/zh-lx/vitepress-demo-plugin/commit/ab1675b07ce4c68ba86081e123b81c6f597bd350)
+
 ## 1.2.3
 
 - 🐛 fix: 修复了代码块展开时底部两侧的样式问题 [#58](https://github.com/zh-lx/vitepress-demo-plugin/pull/58)
