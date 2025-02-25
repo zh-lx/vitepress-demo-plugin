@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig(() => {
   // 判断是否是 --watch 模式
@@ -16,7 +15,7 @@ export default defineConfig(() => {
         fileName: 'index',
       },
       rollupOptions: {
-        external: ['vue', 'markdown-it', 'fs', 'react', 'react-dom', 'sass', 'shiki'],
+        external: ['vue', 'markdown-it', 'fs', 'path', 'react', 'react-dom', 'sass', 'shiki'],
         output: {
           globals: {
             vue: 'Vue',
@@ -32,7 +31,6 @@ export default defineConfig(() => {
       },
     },
     plugins: [
-      nodePolyfills(),
       vue(),
       dts({
         entryRoot: 'src/markdown',
