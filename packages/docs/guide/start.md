@@ -153,3 +153,23 @@ npm install react react-dom -D
 />
 
 Gitlab 的使用方式和 Github 一致，只需将 `github` 属性替换为 `gitlab` 属性即可。
+
+## SSG
+
+为了避免用户组件中使用了 `window`、`document` 等浏览器环境变量，`vitepress-demo-plugin` 默认会使用 `<ClientOnly>` 组件包装用户的组件。然而，这会导致用户的组件无法参与静态编译，从而组件在页面的加载速度变慢。
+
+如果你确定你的组件中没有使用到 `window`、`document` 等浏览器环境变量且仅是用了 vue 组件，你可以通过 `ssg` 属性来关闭 `<ClientOnly>` 组件的包装，从而加快组件的加载速度。
+
+```html
+<demo
+  vue="../demos/demo.vue"
+  ssg="true"
+/>  
+```
+
+其对应的渲染效果如下：
+
+<demo
+  vue="../demos/demo.vue"
+  ssg="true"
+/>
