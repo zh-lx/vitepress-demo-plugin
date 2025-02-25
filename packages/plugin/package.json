@@ -46,16 +46,17 @@
     "@types/pretty": "^2.0.3",
     "@vitejs/plugin-vue": "^3.0.3",
     "codesandbox": "^2.2.3",
-    "highlight.js": "^11.10.0",
     "pretty": "^2.0.0",
     "sass": "^1.54.8",
     "vite": "^3.0.9",
     "vite-plugin-dts": "^4.4.0",
     "vite-plugin-node-polyfills": "^0.22.0",
-    "vue": "^3.2.38"
+    "vue": "^3.2.38",
+    "shiki": "^3.0.0"
   },
   "peerDependencies": {
     "vitepress": "*",
-    "vue": "^3.2.0"
+    "vue": "^3.2.0",
+    "shiki": "*"
   }
 }

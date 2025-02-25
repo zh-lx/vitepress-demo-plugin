@@ -6,8 +6,8 @@ import {
   nextTick,
   computed,
   Ref,
-  onMounted,
   onUnmounted,
+  watchEffect,
 } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
@@ -22,10 +22,10 @@ import Tooltip from './tooltip/index.vue';
 import { useNameSpace } from './utils/namespace';
 import { useCodeFold } from './utils/fold';
 import { useCodeCopy } from './utils/copy';
-import { useHighlightCode } from './utils/highlight';
 import { genHtmlCode } from './utils/template';
 import { ComponentType } from '@/constant/type';
 import { Platform } from '@/markdown/preview';
+import { codeToHtml } from 'shiki';
 
 interface VitepressDemoBoxProps {
   title?: string;
@@ -72,7 +72,9 @@ const codeplayer = computed<Platform>(() => {
 });
 
 const activeFile = ref<string>('');
-const currentFiles = computed<Record<string, string>>(() => {
+const currentFiles = computed<
+  Record<string, { code: string; filename: string }>
+>(() => {
   const files = JSON.parse(decodeURIComponent(props.files || '{}'));
   const result = files[type.value];
   if (result && !result[activeFile.value]) {
@@ -96,13 +98,16 @@ function setCodeType(_type: ComponentType) {
   if (typeof setInjectType === 'function') {
     setInjectType(_type);
   }
-  nextTick(() => {
+  setTimeout(() => {
     // 重新计算代码块高度
     if (sourceRef.value && !isCodeFold.value) {
       sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
     }
-  });
+  }, 100);
 }
+const fileType = computed(() => {
+  return type.value === 'react' ? 'tsx' : type.value;
+});
 
 const ns = useNameSpace();
 const { isCodeFold, setCodeFold } = useCodeFold();
@@ -110,17 +115,22 @@ const { clickCopy } = useCodeCopy();
 
 const currentCode = computed(() => {
   if (currentFiles.value && currentFiles.value[activeFile.value]) {
-    return currentFiles.value[activeFile.value];
+    return currentFiles.value[activeFile.value].code;
   }
   return props[`${type.value}Code` as keyof VitepressDemoBoxProps];
 });
-// 要展示的高亮代码
-const displayCode = computed(() => {
-  if (currentFiles.value && currentFiles.value[activeFile.value]) {
-    return useHighlightCode(currentFiles.value[activeFile.value]);
-  }
-  let code = useHighlightCode(currentCode.value);
-  return code;
+
+const displayCode = ref('');
+watchEffect(async () => {
+  displayCode.value = await codeToHtml(currentCode.value || '', {
+    lang:
+      currentFiles.value[activeFile.value]?.filename.split('.').pop() ||
+      fileType.value,
+    themes: {
+      dark: props.darkTheme || 'github-dark',
+      light: props.lightTheme || 'github-light',
+    },
+  });
 });
 
 const tabs = computed<ComponentType[]>(() => {
@@ -300,9 +310,9 @@ function handleFileClick(file: string) {
   if (sourceRef.value) {
     sourceRef.value.style.height = 'auto';
   }
-  nextTick(() => {
+  setTimeout(() => {
     sourceRef.value.style.height = sourceContentRef.value.scrollHeight + 'px';
-  });
+  }, 100);
 }
 
 const sourceRef = ref();
@@ -322,63 +332,6 @@ watch(
     });
   }
 );
-
-function loadTheme(mode: 'light' | 'dark') {
-  const previousThemeLink = document.querySelector(
-    'link[data-vitepress-demo-plugin-theme]'
-  );
-  if (previousThemeLink) {
-    previousThemeLink.remove();
-  }
-
-  const lightTheme = props.lightTheme || props.theme || 'vs';
-  const darkTheme = props.darkTheme || props.theme || 'vs2015';
-
-  const theme = mode === 'light' ? lightTheme : darkTheme;
-  const themeLink = document.createElement('link');
-  themeLink.href = `https://cdn.jsdelivr.net/npm/highlight.js/styles/${theme}.css`;
-  themeLink.rel = 'stylesheet';
-  themeLink.type = 'text/css';
-  themeLink.dataset.vitepressDemoPluginTheme = mode;
-  document.head.appendChild(themeLink);
-}
-
-// 观察 <html> 标签 上是否有 `dark` 类，从而决定是否使用 dark 主题
-function observeThemeChange() {
-  const targetNode = document.documentElement;
-  // 创建一个 MutationObserver 实例并传入回调函数
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (
-        mutation.type === 'attributes' &&
-        mutation.attributeName === 'class'
-      ) {
-        if (targetNode.classList.contains('dark')) {
-          loadTheme('dark');
-        } else {
-          loadTheme('light');
-        }
-      }
-    }
-  });
-  // 配置观察选项，只观察属性变化
-  const config = { attributes: true };
-  // 开始观察目标节点
-  observer.observe(targetNode, config);
-}
-
-function loadInitTheme() {
-  if (document.documentElement.classList.contains('dark')) {
-    loadTheme('dark');
-  } else {
-    loadTheme('light');
-  }
-}
-
-onMounted(() => {
-  loadInitTheme();
-  observeThemeChange();
-});
 </script>
 
 <template>
@@ -469,7 +422,7 @@ onMounted(() => {
             {{ file }}
           </div>
         </div>
-        <pre class="language-html"><code v-html="displayCode"></code></pre>
+        <pre class="language-html"><div v-html="displayCode"></div></pre>
       </div>
     </section>
 
@@ -481,6 +434,14 @@ onMounted(() => {
 
 <style lang="scss">
 @import './style/var.scss';
+
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
 
 .#{$defaultPrefix}__container > * {
   font-size: 14px;
@@ -577,21 +538,17 @@ onMounted(() => {
   }
 
   .language-html {
-    background-color: #f7fafc;
     margin: 0;
     overflow-x: auto;
+    .shiki {
+      background-color: var(--vp-code-block-bg) !important;
+    }
 
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         Liberation Mono, Courier New, monospace;
-      padding: 20px 24px;
+      padding: 0 24px;
     }
-  }
-}
-
-.dark .#{$defaultPrefix}__container > .#{$defaultPrefix}-source {
-  .language-html {
-    background-color: #21242b;
   }
 }
 

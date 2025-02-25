@@ -239,9 +239,9 @@ Taking the `table` component of `element-plus` as an example, the rendering resu
 
 ## Code Theme
 
-The code block display of `vitepress-demo-plugin` is based on [highlight.js](https://github.com/highlightjs/highlight.js), so you can use all themes supported by `highlight.js`. For a list of themes, please refer to the [highlight.js official website](https://highlightjs.org/demo).
+The code block display of `vitepress-demo-plugin` is based on [Shiki](https://shiki.style/), so you can use all themes supported by `Shiki`. For a list of themes, please refer to the [Shiki - Bundled Themes](https://shiki.style/themes#bundled-themes).
 
-You can specify the code block themes in light mode and dark mode respectively through `lightTheme` (default is `vs`) and `darkTheme` (default is `vs2015`). Add the following code in `config.ts`:
+You can specify the code block themes in light mode and dark mode respectively through `lightTheme` (default is `github-light`) and `darkTheme` (default is `github-dark`). Add the following code in `config.ts`:
 
 ```ts
 import { defineConfig } from 'vitepress';
@@ -253,8 +253,8 @@ export default defineConfig({
   markdown: {
     config(md) {
       md.use(vitepressDemoPlugin, {
-        lightTheme: 'atom-one-light', // [!code ++]
-        darkTheme: 'atom-one-dark', // [!code ++]
+        lightTheme: 'github-light', // [!code ++]
+        darkTheme: 'github-dark', // [!code ++]
       });
     },
   },

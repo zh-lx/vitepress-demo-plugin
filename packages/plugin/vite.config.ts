@@ -16,7 +16,7 @@ export default defineConfig(() => {
         fileName: 'index',
       },
       rollupOptions: {
-        external: ['vue', 'markdown-it', 'fs', 'react', 'react-dom'],
+        external: ['vue', 'markdown-it', 'fs', 'react', 'react-dom', 'sass', 'shiki'],
         output: {
           globals: {
             vue: 'Vue',
