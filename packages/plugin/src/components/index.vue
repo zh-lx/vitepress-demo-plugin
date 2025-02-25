@@ -8,6 +8,7 @@ import {
   Ref,
   onUnmounted,
   watchEffect,
+  onMounted,
 } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
@@ -59,6 +60,11 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   order: 'vue,react,html',
   github: '',
   gitlab: '',
+});
+
+const emit = defineEmits(['mount']);
+onMounted(() => {
+  emit('mount');
 });
 
 const stackblitz = computed<Platform>(() => {
