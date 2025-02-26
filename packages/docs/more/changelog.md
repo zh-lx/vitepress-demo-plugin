@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.3.1
+
+- 🐛 fix: 修复了 ssg 组件打包时关于 `DOMParser` 报错的问题 [#74](https://github.com/zh-lx/vitepress-demo-plugin/pull/74)
+- 🐛 fix: 修复了组件展开时不展示代码的问题 [#73](https://github.com/zh-lx/vitepress-demo-plugin/pull/73)
+
 ## 1.3.0
 
 - 🎉 feat: 对于未使用客户端 api 的 vue 组件，支持 SSG 进行静态构建 [#71](https://github.com/zh-lx/vitepress-demo-plugin/pull/71)

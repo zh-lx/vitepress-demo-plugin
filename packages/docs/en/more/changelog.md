@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+
+- 🐛 fix: Fixed the error about `DOMParser` when building ssg component [#74](https://github.com/zh-lx/vitepress-demo-plugin/pull/74)
+- 🐛 fix: Fixed the issue that the code block is not displayed when expanding the component [#73](https://github.com/zh-lx/vitepress-demo-plugin/pull/73)
+
 ## 1.3.0
 
 - 🎉 feat: For vue components that do not use client api, support static build with SSG [#71](https://github.com/zh-lx/vitepress-demo-plugin/pull/71)
