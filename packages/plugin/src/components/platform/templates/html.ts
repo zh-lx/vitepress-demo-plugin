@@ -14,9 +14,13 @@ export function genHtmlTemplate(params?: HtmlTemplateProps) {
     code += `\n<script type="module" src="${src}"></script>`;
   }
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(code, 'text/html');
-  return pretty(`<!DOCTYPE html>\n${doc.documentElement.outerHTML}`, {
-    ocd: true,
-  });
+  if (typeof DOMParser !== 'undefined') {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(code, 'text/html');
+    return pretty(`<!DOCTYPE html>\n${doc.documentElement.outerHTML}`, {
+      ocd: true,
+    });
+  }
+
+  return '';
 }
