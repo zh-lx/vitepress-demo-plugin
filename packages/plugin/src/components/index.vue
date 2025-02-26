@@ -122,6 +122,11 @@ const currentCode = computed(() => {
 
 const displayCode = ref('');
 watchEffect(async () => {
+  await updatetDisplayCode();
+  updateCodeBlockHeight();
+});
+
+async function updatetDisplayCode() {
   displayCode.value = await codeToHtml(currentCode.value || '', {
     lang:
       currentFiles.value[activeFile.value]?.filename.split('.').pop() ||
@@ -131,10 +136,9 @@ watchEffect(async () => {
       light: props.lightTheme || 'github-light',
     },
   });
-  resetCodeBlockHeight();
-});
+}
 
-function resetCodeBlockHeight() {
+function updateCodeBlockHeight() {
   setTimeout(() => {
     // 重新计算代码块高度
     if (sourceRef.value && !isCodeFold.value) {
@@ -327,13 +331,13 @@ const sourceContentRef = ref();
 watch(
   () => isCodeFold.value,
   (val) => {
-    nextTick(() => {
+    nextTick(async () => {
       if (sourceRef.value) {
         if (val) {
           sourceRef.value.style.height = 0;
         } else {
-          sourceRef.value.style.height =
-            sourceContentRef.value.scrollHeight + 'px';
+          await updatetDisplayCode();
+          updateCodeBlockHeight();
         }
       }
     });
