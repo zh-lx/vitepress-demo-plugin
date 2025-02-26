@@ -519,7 +519,7 @@ export default defineConfig({
               } 
             },
             { // [!code ++]
-              scope: 'myScope', // 仅针对 Vue 类型的 demo 组件生效 // [!code ++]
+              scope: 'myScope', // 仅针对 scope demo 组件生效 // [!code ++]
               files: { // [!code ++]
                 // 替换预设的 main.ts 文件 // [!code ++]
                 'main.ts': `console.log("this is a custom template")`, // [!code ++]

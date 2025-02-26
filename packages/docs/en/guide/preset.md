@@ -519,7 +519,7 @@ export default defineConfig({
               } 
             },
             { // [!code ++]
-              scope: 'myScope', // Only valid for Vue demo components // [!code ++]
+              scope: 'myScope', // Only valid for scope demo components // [!code ++]
               files: { // [!code ++]
                 // Replace the default main.ts file // [!code ++]
                 'main.ts': `console.log("this is a custom template")`, // [!code ++]

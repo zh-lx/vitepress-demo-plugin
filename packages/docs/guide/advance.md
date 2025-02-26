@@ -235,7 +235,7 @@ vitepress 内置的一些 css 样式可能会影响到 demo 的展示，可以�
 
 以 `element-plus` 的 `table` 组件为例，渲染效果如下：
 
-<demo vue="element-table.vue" />
+<demo vue="element-table.vue" scope="element" />
 
 ## 代码主题
 

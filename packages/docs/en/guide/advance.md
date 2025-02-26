@@ -235,7 +235,7 @@ Some built-in CSS styles of vitepress may affect the display of demo. You can re
 
 Taking the `table` component of `element-plus` as an example, the rendering result is as follows:
 
-<demo vue="element-table.vue" />
+<demo vue="element-table.vue" scope="element" />
 
 ## Code Theme
 

@@ -7,6 +7,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ElTable, ElTableColumn } from 'element-plus';
+
 const tableData = [
   {
     date: '2016-05-03',

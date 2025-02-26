@@ -27,6 +27,10 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import { ElButton } from 'element-plus';
+</script>
+
 <style>
 .mb-4 {
   margin-bottom: 16px;

@@ -16,6 +16,13 @@ function fileURLToPath(fileURL: string) {
   return filePath;
 }
 
+const srcMain = `import { createApp } from "vue";
+import Demo from "./Demo.vue";
+import 'element-plus/dist/index.css'
+
+const app = createApp(Demo);
+app.mount("#app");`
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Vitepress Demo Plugin',
@@ -132,9 +139,25 @@ export default defineConfig({
         ),
         stackblitz: {
           show: true,
+          templates: [
+            { 
+              scope: 'element',
+              files: { 
+                'src/main.ts': srcMain, 
+              } 
+            }, 
+          ]
         },
         codesandbox: {
           show: false,
+          templates: [
+            { 
+              scope: 'element',
+              files: {
+                'src/main.ts': srcMain, 
+              } 
+            }, 
+          ]
         },
       });
     },

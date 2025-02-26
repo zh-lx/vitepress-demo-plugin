@@ -30,9 +30,9 @@ app.use(ElementPlus); // Register component library
 ## Display Demo
 
 ```html
-<demo vue="ele.vue" />
+<demo vue="ele.vue" scope="element" />
 ```
 
 The rendering result is as follows:
 
-<demo vue="ele.vue" />
+<demo vue="ele.vue" scope="element" />

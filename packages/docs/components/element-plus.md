@@ -30,9 +30,9 @@ export default {
 ## 展示 Demo
 
 ```html
-<demo vue="ele.vue" />
+<demo vue="ele.vue" scope="element" />
 ```
 
 渲染效果如下：
 
-<demo vue="ele.vue" />
+<demo vue="ele.vue" scope="element" />
