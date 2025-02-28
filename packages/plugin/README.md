@@ -27,7 +27,7 @@
 
 - 展示 Vue 组件：
 
-  <img src="https://github.com/user-attachments/assets/a42f081a-22d4-440c-86a6-b67777b93b57" width="700" />
+  <img src="https://github.com/user-attachments/assets/f8fbb33f-a42d-43ce-b9cb-42c1a6af8422" width="700" />
 
 ## 🚀 安装
 
