@@ -21,13 +21,13 @@
 
 [在线查看效果](https://vitepress-demo.fe-dev.cn/components/antd.html)
 
-- 展示 Antd 组件库：
+- 展示 React 组件：
 
-  <img src="https://github.com/user-attachments/assets/c036951e-930e-405f-bd91-45410080f8be" width="700" />
+  <img src="https://github.com/user-attachments/assets/f7d90222-c38b-452d-b4fa-85310f0bdedb" width="700" />
 
-- 展示 Element Plus 组件库：
+- 展示 Vue 组件：
 
-  <img src="https://github.com/user-attachments/assets/06458d8f-d8d3-4e33-aefd-184d5610fc53" width="700" />
+  <img src="https://github.com/user-attachments/assets/a42f081a-22d4-440c-86a6-b67777b93b57" width="700" />
 
 ## 🚀 安装
 
