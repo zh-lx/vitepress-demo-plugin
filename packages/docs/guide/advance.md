@@ -203,6 +203,40 @@ export default defineConfig({
   />
   ```
 
+## Html 引用本地资源
+
+如果想在 `html` 标签中通过链接引用本地的资源，需要将资源文件放置在 `public` 目录下，然后通过绝对路径引用。以 [demo-link.html](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/docs/demos/demo-link.html) 的代码为例：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo With Style Link</title>
+    <!-- 通过绝对路径引用 public 目录下的本地资源 -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="title">Html demo with style link</div>
+  </body>
+</html>
+
+```
+
+正确的资源结构如下：
+
+```
+my-docs
+├── demos
+│   └── demo-link.html
+└── public
+    └── style.css
+```
+
+<demo html="demo-link.html" />
+
+
 ## 样式隔离
 
 ::: tip 注意

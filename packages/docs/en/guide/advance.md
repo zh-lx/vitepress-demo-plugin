@@ -203,6 +203,38 @@ The corresponding rendering result is as follows:
   />
   ```
 
+## HTML Local Resource References
+
+To reference local resources via links in HTML tags, you need to place the resource files in the `public` directory and reference them using absolute paths. Here's an example from [demo-link.html](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/docs/demos/demo-link.html):
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo With Style Link</title>
+    <!-- Reference local resources from the public directory using absolute path -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="title">Html demo with style link</div>
+  </body>
+</html>
+```
+
+The correct resource structure should be:
+
+```
+my-docs
+├── demos
+│   └── demo-link.html
+└── public
+    └── style.css
+```
+
+<demo html="demo-link.html" />
+
 ## Style Isolation
 
 ::: tip Tip
