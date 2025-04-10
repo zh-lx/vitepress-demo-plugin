@@ -27,6 +27,9 @@ import { genHtmlCode } from './utils/template';
 import { ComponentType } from '@/constant/type';
 import { Platform } from '@/markdown/preview';
 import { codeToHtml } from 'shiki';
+import { createI18n } from 'vue-i18n';
+import enUS from '../locales/en-US.json';
+import zhCN from '../locales/zh-CN.json';
 
 interface VitepressDemoBoxProps {
   title?: string;
@@ -50,6 +53,7 @@ interface VitepressDemoBoxProps {
   lightTheme?: string;
   darkTheme?: string;
   theme?: string;
+  locale?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -60,11 +64,59 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   order: 'vue,react,html',
   github: '',
   gitlab: '',
+  locale: 'zh-CN',
 });
 
 const emit = defineEmits(['mount']);
 onMounted(() => {
   emit('mount');
+});
+
+const i18n = createI18n({
+  locale: props.locale,
+  fallbackLocale: 'en-US',
+  messages: {
+    'en-US': enUS,
+    'zh-CN': zhCN
+  },
+  datetimeFormats: {
+    'en-US': {
+      short: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      },
+    },
+    'zh-CN': {
+      short: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      },
+    }
+  },
+  numberFormats: {
+    'en-US': {
+      currency: {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+      },
+    },
+    'zh-CN': {
+      currency: {
+        style: 'currency',
+        currency: 'CNY',
+        minimumFractionDigits: 2,
+      },
+    }
+  }
 });
 
 const stackblitz = computed<Platform>(() => {
@@ -95,7 +147,7 @@ const tabOrders = computed(() => {
 const injectType = inject('coot-code-type', {} as any);
 const setInjectType = inject<(type: string) => void>(
   'set-coot-code-type',
-  (type: string) => {}
+  (type: string) => { }
 );
 
 const type = ref<ComponentType>(ComponentType.VUE);
@@ -360,55 +412,37 @@ watch(
       <div v-if="title" :class="[ns.bem('description', 'title')]">
         <div style="flex-shrink: 0">{{ title }}</div>
       </div>
-      <div
-        v-if="description"
-        :class="[ns.bem('description', 'content')]"
-        v-html="description"
-      ></div>
-      <div
-        v-if="props.description || (!props.title && !props.description)"
-        :class="[ns.bem('description', 'split-line')]"
-      ></div>
+      <div v-if="description" :class="[ns.bem('description', 'content')]" v-html="description"></div>
+      <div v-if="props.description || (!props.title && !props.description)"
+        :class="[ns.bem('description', 'split-line')]"></div>
       <div :class="[ns.bem('lang-tabs')]" v-if="tabs.length > 1 && visible">
-        <div
-          v-for="tab in tabs"
-          :key="tab"
-          :class="[ns.bem('tab'), type === tab && ns.bem('active-tab')]"
-          @click="setCodeType?.(tab)"
-        >
+        <div v-for="tab in tabs" :key="tab" :class="[ns.bem('tab'), type === tab && ns.bem('active-tab')]"
+          @click="setCodeType?.(tab)">
           {{ tab }}
         </div>
       </div>
       <div :class="[ns.bem('description', 'handle-btn')]">
-        <Tooltip content="在 stackblitz 中打开" v-if="stackblitz.show">
-          <StackblitzIcon
-            :code="currentCode"
-            :type="type"
-            :scope="scope || ''"
-            :templates="stackblitz.templates || []"
-          />
+        <Tooltip :content="i18n.global.t('openInStackblitz')" v-if="stackblitz.show">
+          <StackblitzIcon :code="currentCode" :type="type" :scope="scope || ''"
+            :templates="stackblitz.templates || []" />
         </Tooltip>
-        <Tooltip content="在 codesandbox 中打开" v-if="codesandbox.show">
-          <CodeSandboxIcon
-            :code="currentCode"
-            :type="type"
-            :scope="scope || ''"
-            :templates="codesandbox.templates || []"
-          />
+        <Tooltip :content="i18n.global.t('openInCodeSandbox')" v-if="codesandbox.show">
+          <CodeSandboxIcon :code="currentCode" :type="type" :scope="scope || ''"
+            :templates="codesandbox.templates || []" />
         </Tooltip>
-        <Tooltip content="在 github 中打开" v-if="github">
+        <Tooltip :content="i18n.global.t('openInGithub')" v-if="github">
           <GithubIcon @click="openGithub" />
         </Tooltip>
-        <Tooltip content="在 gitlab 中打开" v-if="gitlab">
+        <Tooltip :content="i18n.global.t('openInGitlab')" v-if="gitlab">
           <GitlabIcon @click="openGitlab" />
         </Tooltip>
-        <Tooltip content="收起代码" v-if="!isCodeFold">
+        <Tooltip :content="i18n.global.t('collapseCode')" v-if="!isCodeFold">
           <CodeCloseIcon @click="setCodeFold(true)" />
         </Tooltip>
-        <Tooltip content="展开代码" v-else>
+        <Tooltip :content="i18n.global.t('expandCode')" v-else>
           <CodeOpenIcon @click="setCodeFold(false)" />
         </Tooltip>
-        <Tooltip content="复制代码">
+        <Tooltip :content="i18n.global.t('copyCode')">
           <CopyIcon @click="clickCodeCopy" />
         </Tooltip>
       </div>
@@ -417,19 +451,11 @@ watch(
     <!-- 代码展示区 -->
     <section :class="[ns.bem('source')]" ref="sourceRef">
       <div ref="sourceContentRef">
-        <div
-          :class="[ns.bem('file-tabs')]"
-          v-if="Object.keys(currentFiles).length"
-        >
-          <div
-            v-for="file in Object.keys(currentFiles)"
-            :key="file"
-            :class="[
-              ns.bem('tab'),
-              activeFile === file && ns.bem('active-tab'),
-            ]"
-            @click="handleFileClick(file)"
-          >
+        <div :class="[ns.bem('file-tabs')]" v-if="Object.keys(currentFiles).length">
+          <div v-for="file in Object.keys(currentFiles)" :key="file" :class="[
+            ns.bem('tab'),
+            activeFile === file && ns.bem('active-tab'),
+          ]" @click="handleFileClick(file)">
             {{ file }}
           </div>
         </div>
@@ -438,7 +464,7 @@ watch(
     </section>
 
     <div :class="ns.bem('fold')" v-if="!isCodeFold" @click="setCodeFold(true)">
-      <FoldIcon />收起代码
+      <FoldIcon />{{ i18n.global.t('collapseCode') }}
     </div>
   </div>
 </template>
@@ -454,7 +480,7 @@ html.dark .shiki span {
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
-.#{$defaultPrefix}__container > * {
+.#{$defaultPrefix}__container>* {
   font-size: 14px;
 }
 
@@ -480,16 +506,16 @@ html.dark .shiki span {
   }
 }
 
-.#{$defaultPrefix}__container > .#{$defaultPrefix}-preview {
+.#{$defaultPrefix}__container>.#{$defaultPrefix}-preview {
   padding: 20px 20px 30px 20px;
 
-  & > p {
+  &>p {
     margin: 0;
     padding: 0;
   }
 }
 
-.#{$defaultPrefix}__container > .#{$defaultPrefix}-description {
+.#{$defaultPrefix}__container>.#{$defaultPrefix}-description {
   .#{$defaultPrefix}-description__title {
     width: 100%;
     display: flex;
@@ -539,7 +565,7 @@ html.dark .shiki span {
   }
 }
 
-.#{$defaultPrefix}__container > .#{$defaultPrefix}-source {
+.#{$defaultPrefix}__container>.#{$defaultPrefix}-source {
   transition: all 0.4s ease-in-out;
   overflow: hidden;
   height: 0;
@@ -551,6 +577,7 @@ html.dark .shiki span {
   .language-html {
     margin: 0;
     overflow-x: auto;
+
     .shiki {
       background-color: var(--vp-code-block-bg) !important;
     }
@@ -563,7 +590,7 @@ html.dark .shiki span {
   }
 }
 
-.#{$defaultPrefix}__container > .#{$defaultPrefix}-fold {
+.#{$defaultPrefix}__container>.#{$defaultPrefix}-fold {
   position: sticky;
   left: 0;
   bottom: 0;
@@ -599,6 +626,7 @@ html.dark .shiki span {
     font-weight: 500;
   }
 }
+
 .#{$defaultPrefix}-lang-tabs {
   border-bottom: 1px dashed var(--coot-demo-box-border);
 }

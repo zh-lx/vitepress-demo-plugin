@@ -104,6 +104,10 @@ export interface VitepressDemoBoxConfig {
    * @description 亮色/暗色模式统一的主题(建议使用 lightTheme 和 darkTheme 分开)，参考 https://shiki.style/themes#bundled-themes
    */
   theme?: string;
+  /**
+   * @description 国际化配置 'zh-CN' | 'en-US'
+   */
+  locale?: 'zh-CN' | 'en-US';
 }
 
 /**
@@ -374,6 +378,7 @@ export const transformPreview = (
     <vitepress-demo-box 
       title="${componentProps.title}"
       description="${componentProps.description}"
+      locale="${config?.locale || ''}"
       select="${select}"
       order="${order}"
       github="${github}"
