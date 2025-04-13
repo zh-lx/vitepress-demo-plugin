@@ -52,7 +52,7 @@ importers:
     dependencies:
       vitepress:
         specifier: '*'
-        version: 1.3.4(@algolia/client-search@5.2.5)(@types/node@20.16.5)(async-validator@4.2.5)(postcss@8.4.49)(sass@1.78.0)(search-insights@2.17.1)(typescript@5.4.2)
+        version: 1.3.4(@algolia/client-search@5.2.5)(@types/node@20.16.5)(@types/react@18.3.5)(async-validator@4.2.5)(postcss@8.4.49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.78.0)(search-insights@2.17.1)(typescript@5.4.2)
     devDependencies:
       '@stackblitz/sdk':
         specifier: ^1.11.0
@@ -304,7 +304,7 @@ packages:
     resolution: {integrity: sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==}
 
   '@emotion/react@11.13.3':
-    resolution: {integrity: sha512-lIsdU6JNrmYfJ5EbUCf4xW1ovy5wKQ2CkPRM4xogziOxH1nXxBSjpC9YqbFAP7circxMfYp+6x676BqWcEiixg==}
+    resolution: {integrity: sha512-lIsdU6JNrmYfJ5EbUCf4xW1ovy5wKQ2CkPRM4xogziOxH1nXxBSjpC9YqbFAP7circxMfYp+6x676BqWcEiixg==, tarball: https://mirrors.cloud.tencent.com/npm/@emotion/react/-/react-11.13.3.tgz}
     peerDependencies:
       '@types/react': '*'
       react: '>=16.8.0'
@@ -1027,7 +1027,7 @@ packages:
     hasBin: true
 
   abbrev@2.0.0:
-    resolution: {integrity: sha512-6/mh1E2u2YgEsCHdY0Yx5oW+61gZU+1vXaoiHHrpKeuRNNgFvS+/jrwHiQhB5apAf5oB7UB7E19ol2R2LKH8hQ==}
+    resolution: {integrity: sha512-6/mh1E2u2YgEsCHdY0Yx5oW+61gZU+1vXaoiHHrpKeuRNNgFvS+/jrwHiQhB5apAf5oB7UB7E19ol2R2LKH8hQ==, tarball: https://mirrors.cloud.tencent.com/npm/abbrev/-/abbrev-2.0.0.tgz}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
   acorn@8.14.0:
@@ -1321,7 +1321,7 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
   concat-stream@1.6.2:
-    resolution: {integrity: sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw==}
+    resolution: {integrity: sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw==, tarball: https://mirrors.cloud.tencent.com/npm/concat-stream/-/concat-stream-1.6.2.tgz}
     engines: {'0': node >= 0.8}
 
   condense-newlines@0.2.1:
@@ -1750,7 +1750,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   filesize@3.6.1:
-    resolution: {integrity: sha512-7KjR1vv6qnicaPMi1iiTcI85CyYwRO/PSFCu6SvqL8jN2Wjt/NIYQTFtFs7fSDCYOstUkEWIQGFUg5YZQfjlcg==}
+    resolution: {integrity: sha512-7KjR1vv6qnicaPMi1iiTcI85CyYwRO/PSFCu6SvqL8jN2Wjt/NIYQTFtFs7fSDCYOstUkEWIQGFUg5YZQfjlcg==, tarball: https://mirrors.cloud.tencent.com/npm/filesize/-/filesize-3.6.1.tgz}
     engines: {node: '>= 0.4.0'}
 
   fill-range@7.1.1:
@@ -1941,7 +1941,7 @@ packages:
     resolution: {integrity: sha512-5ai2iksyV8ZXmnZhHH4rWPoxxistEexSi5936zIQ1bnNTW5VnA85B6P/VpXiRM017IgRvb2kKo1a//y+0wSp3w==}
 
   http-proxy-agent@2.1.0:
-    resolution: {integrity: sha512-qwHbBLV7WviBl0rQsOzH6o5lwyOIvwp/BdFnvVxXORldu5TmjFfjzBcWUWS5kWAZhmv+JtiDhSuQCp4sBfbIgg==}
+    resolution: {integrity: sha512-qwHbBLV7WviBl0rQsOzH6o5lwyOIvwp/BdFnvVxXORldu5TmjFfjzBcWUWS5kWAZhmv+JtiDhSuQCp4sBfbIgg==, tarball: https://mirrors.cloud.tencent.com/npm/http-proxy-agent/-/http-proxy-agent-2.1.0.tgz}
     engines: {node: '>= 4.5.0'}
 
   https-proxy-agent@2.2.4:
@@ -2069,7 +2069,7 @@ packages:
     engines: {node: '>=8'}
 
   is-path-inside@1.0.1:
-    resolution: {integrity: sha512-qhsCR/Esx4U4hg/9I19OVUAJkGWtjRYHMRgUMZE2TDdj+Ag+kttZanLupfddNyglzz50cUlmWzUaI37GDfNx/g==}
+    resolution: {integrity: sha512-qhsCR/Esx4U4hg/9I19OVUAJkGWtjRYHMRgUMZE2TDdj+Ag+kttZanLupfddNyglzz50cUlmWzUaI37GDfNx/g==, tarball: https://mirrors.cloud.tencent.com/npm/is-path-inside/-/is-path-inside-1.0.1.tgz}
     engines: {node: '>=0.10.0'}
 
   is-redirect@1.0.0:
@@ -2268,7 +2268,7 @@ packages:
     engines: {node: '>=16.10'}
 
   micromark-util-character@2.1.1:
-    resolution: {integrity: sha512-wv8tdUTJ3thSFFFJKtpYKOYiGP2+v96Hvk4Tu8KpCAsTMs6yi+nVmGh1syvSCsaxz45J6Jbw+9DD6g97+NV67Q==}
+    resolution: {integrity: sha512-wv8tdUTJ3thSFFFJKtpYKOYiGP2+v96Hvk4Tu8KpCAsTMs6yi+nVmGh1syvSCsaxz45J6Jbw+9DD6g97+NV67Q==, tarball: https://mirrors.cloud.tencent.com/npm/micromark-util-character/-/micromark-util-character-2.1.1.tgz}
 
   micromark-util-encode@2.0.1:
     resolution: {integrity: sha512-c3cVx2y4KqUnwopcO9b/SCdo2O67LwJJ/UyqGfbigahfegL9myoEFoDYZgkT7f36T0bLrM9hZTAaAyH+PCAXjw==}
@@ -2277,7 +2277,7 @@ packages:
     resolution: {integrity: sha512-9N9IomZ/YuGGZZmQec1MbgxtlgougxTodVwDzzEouPKo3qFWvymFHWcnDi2vzV1ff6kas9ucW+o3yzJK9YB1AQ==}
 
   micromark-util-symbol@2.0.1:
-    resolution: {integrity: sha512-vs5t8Apaud9N28kgCrRUdEed4UJ+wWNvicHLPxCa9ENlYuAY31M0ETy5y1vA33YoNPDFTghEbnh6efaE8h4x0Q==}
+    resolution: {integrity: sha512-vs5t8Apaud9N28kgCrRUdEed4UJ+wWNvicHLPxCa9ENlYuAY31M0ETy5y1vA33YoNPDFTghEbnh6efaE8h4x0Q==, tarball: https://mirrors.cloud.tencent.com/npm/micromark-util-symbol/-/micromark-util-symbol-2.0.1.tgz}
 
   micromark-util-types@2.0.1:
     resolution: {integrity: sha512-534m2WhVTddrcKVepwmVEVnUAmtrx9bfIjNoQHRqfnvdaHQiFytEhJoTgpWJvDEXCO5gLTQh3wYC1PgOJA4NSQ==}
@@ -2367,7 +2367,7 @@ packages:
     resolution: {integrity: sha512-Zt/AmG6qRU3e+WnzGGLuMCEAO/dAu45stNbHY223tUxldaDAeE+FxSPsd9Q+j+paejmm0ZbrNVs5Sraqy3dRxA==}
 
   neo-async@2.6.2:
-    resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+    resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==, tarball: https://mirrors.cloud.tencent.com/npm/neo-async/-/neo-async-2.6.2.tgz}
 
   node-fetch-npm@2.0.4:
     resolution: {integrity: sha512-iOuIQDWDyjhv9qSDrj9aq/klt6F9z1p2otB3AV7v3zBDcL/x+OfGsvGQZZCcMZbUf4Ujw1xGNQkjvGnVT22cKg==}
@@ -2490,7 +2490,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   path-is-absolute@1.0.1:
-    resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
+    resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==, tarball: https://mirrors.cloud.tencent.com/npm/path-is-absolute/-/path-is-absolute-1.0.1.tgz}
     engines: {node: '>=0.10.0'}
 
   path-is-inside@1.0.2:
@@ -3231,7 +3231,7 @@ packages:
     resolution: {integrity: sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==}
 
   tslib@1.14.1:
-    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==, tarball: https://mirrors.cloud.tencent.com/npm/tslib/-/tslib-1.14.1.tgz}
 
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
@@ -3499,7 +3499,7 @@ packages:
     engines: {node: '>=12.20'}
 
   yoctocolors-cjs@2.1.2:
-    resolution: {integrity: sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==}
+    resolution: {integrity: sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==, tarball: https://mirrors.cloud.tencent.com/npm/yoctocolors-cjs/-/yoctocolors-cjs-2.1.2.tgz}
     engines: {node: '>=18'}
 
   zwitch@2.0.4:
@@ -7218,7 +7218,7 @@ snapshots:
       fsevents: 2.3.3
       sass: 1.78.0
 
-  vitepress@1.3.4(@algolia/client-search@5.2.5)(@types/node@20.16.5)(async-validator@4.2.5)(postcss@8.4.49)(sass@1.78.0)(search-insights@2.17.1)(typescript@5.4.2):
+  vitepress@1.3.4(@algolia/client-search@5.2.5)(@types/node@20.16.5)(@types/react@18.3.5)(async-validator@4.2.5)(postcss@8.4.49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.78.0)(search-insights@2.17.1)(typescript@5.4.2):
     dependencies:
       '@docsearch/css': 3.6.1
       '@docsearch/js': 3.6.1(@algolia/client-search@5.2.5)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.1)

@@ -27,6 +27,7 @@ import { genHtmlCode } from './utils/template';
 import { ComponentType } from '@/constant/type';
 import { Platform } from '@/markdown/preview';
 import { codeToHtml } from 'shiki';
+import { i18n, initI18nData, observeI18n, unobserveI18n } from '@/locales/i18n';
 
 interface VitepressDemoBoxProps {
   title?: string;
@@ -50,10 +51,11 @@ interface VitepressDemoBoxProps {
   lightTheme?: string;
   darkTheme?: string;
   theme?: string;
+  locale?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
-  title: '默认标题',
+  title: '标题',
   description: '描述内容',
   visible: true,
   select: ComponentType.VUE,
@@ -65,7 +67,22 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
 const emit = defineEmits(['mount']);
 onMounted(() => {
   emit('mount');
+  initI18n();
+  observeI18n();
 });
+onUnmounted(() => {
+  unobserveI18n();
+});
+
+function initI18n() {
+  if (props.locale) {
+    try {
+      initI18nData(JSON.parse(decodeURIComponent(props.locale)));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
 
 const stackblitz = computed<Platform>(() => {
   return JSON.parse(decodeURIComponent(props.stackblitz || '{}'));
@@ -380,7 +397,7 @@ watch(
         </div>
       </div>
       <div :class="[ns.bem('description', 'handle-btn')]">
-        <Tooltip content="在 stackblitz 中打开" v-if="stackblitz.show">
+        <Tooltip :content="i18n.openInStackblitz" v-if="stackblitz.show">
           <StackblitzIcon
             :code="currentCode"
             :type="type"
@@ -388,7 +405,7 @@ watch(
             :templates="stackblitz.templates || []"
           />
         </Tooltip>
-        <Tooltip content="在 codesandbox 中打开" v-if="codesandbox.show">
+        <Tooltip :content="i18n.openInCodeSandbox" v-if="codesandbox.show">
           <CodeSandboxIcon
             :code="currentCode"
             :type="type"
@@ -396,19 +413,19 @@ watch(
             :templates="codesandbox.templates || []"
           />
         </Tooltip>
-        <Tooltip content="在 github 中打开" v-if="github">
+        <Tooltip :content="i18n.openInGithub" v-if="github">
           <GithubIcon @click="openGithub" />
         </Tooltip>
-        <Tooltip content="在 gitlab 中打开" v-if="gitlab">
+        <Tooltip :content="i18n.openInGitlab" v-if="gitlab">
           <GitlabIcon @click="openGitlab" />
         </Tooltip>
-        <Tooltip content="收起代码" v-if="!isCodeFold">
+        <Tooltip :content="i18n.collapseCode" v-if="!isCodeFold">
           <CodeCloseIcon @click="setCodeFold(true)" />
         </Tooltip>
-        <Tooltip content="展开代码" v-else>
+        <Tooltip :content="i18n.expandCode" v-else>
           <CodeOpenIcon @click="setCodeFold(false)" />
         </Tooltip>
-        <Tooltip content="复制代码">
+        <Tooltip :content="i18n.copyCode">
           <CopyIcon @click="clickCodeCopy" />
         </Tooltip>
       </div>
@@ -438,7 +455,7 @@ watch(
     </section>
 
     <div :class="ns.bem('fold')" v-if="!isCodeFold" @click="setCodeFold(true)">
-      <FoldIcon />收起代码
+      <FoldIcon />{{ i18n.collapseCode }}
     </div>
   </div>
 </template>
@@ -551,6 +568,7 @@ html.dark .shiki span {
   .language-html {
     margin: 0;
     overflow-x: auto;
+
     .shiki {
       background-color: var(--vp-code-block-bg) !important;
     }
@@ -599,6 +617,7 @@ html.dark .shiki span {
     font-weight: 500;
   }
 }
+
 .#{$defaultPrefix}-lang-tabs {
   border-bottom: 1px dashed var(--coot-demo-box-border);
 }
