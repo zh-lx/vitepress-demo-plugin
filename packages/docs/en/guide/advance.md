@@ -101,7 +101,8 @@ export default defineConfig({
     config(md) {
       md.use(vitepressDemoPlugin, {
         demoDir: path.resolve(__dirname, '../demos'),
-        tabs: { // [!code ++]
+        tabs: {
+          // [!code ++]
           order: 'html,react,vue', // [!code ++]
           select: 'react', // [!code ++]
         }, // [!code ++]
@@ -188,10 +189,7 @@ The corresponding rendering result is as follows:
   ```html
   const vueFiles = ['../demos/multiple.vue', '../demos/constant/students.ts'];
 
-  <demo
-    vue="../demos/multiple.vue"
-    :vueFiles="vueFiles"
-  />
+  <demo vue="../demos/multiple.vue" :vueFiles="vueFiles" />
   ```
 
 - ✅ Right
@@ -244,26 +242,28 @@ Style isolation is based on [raw](https://vitepress.dev/zh/guide/markdown#raw) p
 Some built-in CSS styles of vitepress may affect the display of demo. You can refer to the following methods to achieve style isolation:
 
 1. Install `postcss`:
-  ```shell
-  npm install postcss -D
-  # or
-  yarn add postcss -D
-  # or
-  pnpm add postcss -D
-  ```
+
+```shell
+npm install postcss -D
+# or
+yarn add postcss -D
+# or
+pnpm add postcss -D
+```
 
 2. Create a `postcss.config.mjs` file in the project root directory and add the following content:
-  ```js
-  import { postcssIsolateStyles } from 'vitepress'
 
-  export default {
-    plugins: [
-      postcssIsolateStyles({
-        includeFiles: [/vp-doc\.css/]
-      })
-    ]
-  }
-  ```
+```js
+import { postcssIsolateStyles } from 'vitepress';
+
+export default {
+  plugins: [
+    postcssIsolateStyles({
+      includeFiles: [/vp-doc\.css/],
+    }),
+  ],
+};
+```
 
 Taking the `table` component of `element-plus` as an example, the rendering result is as follows:
 
@@ -292,3 +292,56 @@ export default defineConfig({
   },
 });
 ```
+
+## Internationalization
+
+You can configure the internationalization text of the code display component through the `locale` parameter. `locale` is a key-value pair object, where the `key` corresponds to the `lang` attribute configured in your `vitepress` multilingual settings, and the `value` can be either `'zh-CN' | 'en-US' | LocaleText`.
+
+Example:
+
+```ts
+import { defineConfig } from 'vitepress';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import path from 'path';
+
+export default defineConfig({
+  // other configs...
+  locales: {
+    root: {
+      lang: 'zh',
+      // ...other config
+    },
+    en: {
+      lang: 'en-US',
+      // ...other config
+    },
+    ja: {
+      lang: 'ja',
+      // ...other config
+    },
+  },
+  markdown: {
+    config(md) {
+      md.use(vitepressDemoPlugin, {
+        // key corresponds to the lang above
+        locale: {
+          zh: 'zh-CN', // zh-CN represents using built-in Chinese text
+          'en-US': 'en-US', // en-US represents using built-in English text
+          // Customize other languages:
+          ja: {
+            openInStackblitz: 'Stackblitz で開く',
+            openInCodeSandbox: 'Codesandbox で開く',
+            openInGithub: 'GitHub で開く',
+            openInGitlab: 'GitLab で開く',
+            collapseCode: 'コードを折りたたむ',
+            expandCode: 'コードを展開する',
+            copyCode: 'コードをコピーする',
+          },
+        },
+      });
+    },
+  },
+});
+```
+
+For the `LocaleText` type definition that needs to be configured, please refer to [text.ts](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/plugin/src/locales/text.ts)

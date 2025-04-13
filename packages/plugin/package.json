@@ -57,8 +57,5 @@
     "shiki": "*",
     "vitepress": "*",
     "vue": "^3.2.0"
-  },
-  "dependencies": {
-    "vue-i18n": "11.1.3"
   }
 }

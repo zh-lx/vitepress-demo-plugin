@@ -3,11 +3,9 @@ import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
 import path from 'path';
 import fs from 'fs';
-import {
-  composeComponentName,
-  injectComponentImportScript,
-} from './utils';
+import { composeComponentName, injectComponentImportScript } from './utils';
 import { PlatformTemplate } from '../constant/type';
+import { Locale } from '@/locales/text';
 
 const titleRegex = /title="(.*?)"/;
 const vuePathRegex = /vue="(.*?)"/;
@@ -37,15 +35,18 @@ export interface DefaultProps {
 
 export interface TabConfig {
   /**
-   * @description 代码切换 tab 的展示顺序
+   * @cn 代码切换 tab 的展示顺序
+   * @en The order of the code switch tab
    */
   order?: string;
   /**
-   * @description 是否显示 tab
+   * @cn 是否显示 tab
+   * @en Whether to show the tab
    */
   visible?: boolean;
   /**
-   * @description 默认选中的 tab
+   * @cn 默认选中的 tab
+   * @en The default selected tab
    */
   select?: string;
 }
@@ -61,53 +62,65 @@ export type CodeFiles = string[] | Record<string, string>;
 
 export interface VitepressDemoBoxConfig {
   /**
-   * @description demo所在目录
+   * @cn demo所在目录
+   * @en The directory of the demo
    */
   demoDir?: string;
   /**
-   * @description 代码切换 tab 的配置
+   * @cn 代码切换 tab 的配置
+   * @en The configuration of the code switch tab
    */
   tab?: TabConfig;
   /**
-   * @description stackblitz 平台配置
+   * @cn stackblitz 平台配置
+   * @en The configuration of the stackblitz platform
    */
   stackblitz?: Platform;
   /**
-   * @description codesandbox 平台配置
+   * @cn codesandbox 平台配置
+   * @en The configuration of the codesandbox platform
    */
   codesandbox?: Platform;
   /**
-   * @description codeplayer 平台配置
+   * @cn codeplayer 平台配置
+   * @en The configuration of the codeplayer platform
    */
   codeplayer?: Platform;
   /**
-   * @description vue 展示的代码文件
+   * @cn vue 展示的代码文件
+   * @en The code files of the vue
    */
   vueFiles?: CodeFiles;
   /**
-   * @description vue 展示的代码文件
+   * @cn react 展示的代码文件
+   * @en The code files of the react
    */
   reactFiles?: CodeFiles;
   /**
-   * @description vue 展示的代码文件
+   * @cn html 展示的代码文件
+   * @en The code files of the html
    */
   htmlFiles?: CodeFiles;
   /**
-   * @description 亮色模式主题，参考 https://shiki.style/themes#bundled-themes
+   * @cn 亮色模式主题，参考 https://shiki.style/themes#bundled-themes
+   * @en The light theme, reference https://shiki.style/themes#bundled-themes
    */
   lightTheme?: string;
   /**
-   * @description 暗色模式主题，参考 https://shiki.style/themes#bundled-themes
+   * @cn 暗色模式主题，参考 https://shiki.style/themes#bundled-themes
+   * @en The dark theme, reference https://shiki.style/themes#bundled-themes
    */
   darkTheme?: string;
   /**
-   * @description 亮色/暗色模式统一的主题(建议使用 lightTheme 和 darkTheme 分开)，参考 https://shiki.style/themes#bundled-themes
+   * @cn 亮色/暗色模式统一的主题(建议使用 lightTheme 和 darkTheme 分开)，参考 https://shiki.style/themes#bundled-themes
+   * @en The light/dark theme, reference https://shiki.style/themes#bundled-themes
    */
   theme?: string;
   /**
-   * @description 国际化配置 'zh-CN' | 'en-US'
+   * @cn 国际化配置 'zh-CN' | 'en-US'
+   * @en The locale configuration 'zh-CN' | 'en-US'
    */
-  locale?: 'zh-CN' | 'en-US';
+  locale?: Locale;
 }
 
 /**
@@ -162,7 +175,7 @@ export const transformPreview = (
   const vueFilesValue = token.content.match(vueFilesRegex);
   const reactFilesValue = token.content.match(reactFilesRegex);
   const htmlFilesValue = token.content.match(htmlFilesRegex);
-  const ssgValue = !!(token.content.match(ssgRegex)?.[1]);
+  const ssgValue = !!token.content.match(ssgRegex)?.[1];
   const dirPath = demoDir || path.dirname(mdFile.path);
 
   if (orderValue?.[1]) {
@@ -276,14 +289,19 @@ export const transformPreview = (
       mdFile,
       componentReactPath,
       reactComponentName,
-      'dynamicImport',
+      'dynamicImport'
     );
   }
 
   const placeholderVisibleKey = `__placeholder_visible_key__`;
 
   // 控制 placeholder 的显示
-  injectComponentImportScript(mdFile, placeholderVisibleKey, `const ${placeholderVisibleKey} = ref(true);`, 'inject');
+  injectComponentImportScript(
+    mdFile,
+    placeholderVisibleKey,
+    `const ${placeholderVisibleKey} = ref(true);`,
+    'inject'
+  );
 
   // 组件代码，动态引入以便实时更新
   const htmlCodeTempVariable = componentProps.html
@@ -296,13 +314,25 @@ export const transformPreview = (
     ? `TempCodeVue${componentName}`
     : `''`;
   if (componentProps.html) {
-    injectComponentImportScript(mdFile, `${componentHtmlPath}?raw`, htmlCodeTempVariable);
+    injectComponentImportScript(
+      mdFile,
+      `${componentHtmlPath}?raw`,
+      htmlCodeTempVariable
+    );
   }
   if (componentProps.react) {
-    injectComponentImportScript(mdFile, `${componentReactPath}?raw`, reactCodeTempVariable);
+    injectComponentImportScript(
+      mdFile,
+      `${componentReactPath}?raw`,
+      reactCodeTempVariable
+    );
   }
   if (componentProps.vue) {
-    injectComponentImportScript(mdFile, `${componentVuePath}?raw`, vueCodeTempVariable);
+    injectComponentImportScript(
+      mdFile,
+      `${componentVuePath}?raw`,
+      vueCodeTempVariable
+    );
   }
 
   // 多文件展示
@@ -313,7 +343,8 @@ export const transformPreview = (
   };
 
   function formatString(value: string) {
-    return value.replace(/'/g, '"')
+    return value
+      .replace(/'/g, '"')
       .replace(/\\n/g, '')
       .trim()
       .replace(/^"/, '')
@@ -369,16 +400,25 @@ export const transformPreview = (
         // 格式错误，则不展示该文件
       }
     }
+  }
 
+  // 国际化
+  let locale = '';
+  if (config?.locale && typeof config.locale === 'object') {
+    locale = encodeURIComponent(JSON.stringify(config.locale));
   }
 
   const sourceCode = `
-  ${ssgValue ? '' : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`}
+  ${
+    ssgValue
+      ? ''
+      : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`
+  }
   ${ssgValue ? '' : '<ClientOnly>'}
     <vitepress-demo-box 
       title="${componentProps.title}"
       description="${componentProps.description}"
-      locale="${config?.locale || ''}"
+      locale="${locale}"
       select="${select}"
       order="${order}"
       github="${github}"
