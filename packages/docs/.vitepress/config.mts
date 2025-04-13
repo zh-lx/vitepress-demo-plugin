@@ -21,7 +21,7 @@ import Demo from "./Demo.vue";
 import 'element-plus/dist/index.css'
 
 const app = createApp(Demo);
-app.mount("#app");`
+app.mount("#app");`;
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -73,14 +73,14 @@ export default defineConfig({
       },
     ],
   },
-  locales:{
+  locales: {
     root: {
       label: '简体中文',
-      lang: 'zh'
+      lang: 'zh-CN',
     },
     en: {
       label: 'English',
-      lang: 'en',
+      lang: 'en-US',
       link: '/en',
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
@@ -93,7 +93,7 @@ export default defineConfig({
           },
         ],
         logo: '/logo.svg',
-    
+
         sidebar: [
           {
             text: 'Guide',
@@ -118,9 +118,9 @@ export default defineConfig({
             ],
           },
         ],
-    
+
         outline: [2, 4],
-    
+
         socialLinks: [
           {
             icon: 'github',
@@ -128,7 +128,7 @@ export default defineConfig({
           },
         ],
       },
-    }
+    },
   },
   markdown: {
     config(md) {
@@ -140,24 +140,24 @@ export default defineConfig({
         stackblitz: {
           show: true,
           templates: [
-            { 
+            {
               scope: 'element',
-              files: { 
-                'src/main.ts': srcMain, 
-              } 
-            }, 
-          ]
+              files: {
+                'src/main.ts': srcMain,
+              },
+            },
+          ],
         },
         codesandbox: {
           show: false,
           templates: [
-            { 
+            {
               scope: 'element',
               files: {
-                'src/main.ts': srcMain, 
-              } 
-            }, 
-          ]
+                'src/main.ts': srcMain,
+              },
+            },
+          ],
         },
       });
     },
@@ -166,7 +166,7 @@ export default defineConfig({
     plugins: [
       codeInspectorPlugin({
         bundler: 'vite',
-      })
+      }),
     ],
   },
 });
