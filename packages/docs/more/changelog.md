@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.4.0
+
+- 🎉 feat: 支持国际化 [#80](https://github.com/zh-lx/vitepress-demo-plugin/pull/80)
+
 ## 1.3.1
 
 - 🐛 fix: 修复了 ssg 组件打包时关于 `DOMParser` 报错的问题 [#74](https://github.com/zh-lx/vitepress-demo-plugin/pull/74)

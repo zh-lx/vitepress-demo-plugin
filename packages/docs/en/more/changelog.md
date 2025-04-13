@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- 🎉 feat: Support internationalization [#80](https://github.com/zh-lx/vitepress-demo-plugin/pull/80)
+
 ## 1.3.1
 
 - 🐛 fix: Fixed the error about `DOMParser` when building ssg component [#74](https://github.com/zh-lx/vitepress-demo-plugin/pull/74)
