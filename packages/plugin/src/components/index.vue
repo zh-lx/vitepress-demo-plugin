@@ -211,7 +211,7 @@ watch(
 
 const clickCodeCopy = () => {
   clickCopy(currentCode.value || '');
-  MessageService.open();
+  MessageService.open(i18n.value.copySuccess);
 };
 
 const htmlContainerRef = ref();

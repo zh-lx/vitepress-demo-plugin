@@ -5,12 +5,12 @@ import Message from './message.vue';
 const messageInstanceList: ComponentPublicInstance[] = [];
 
 const MessageService = {
-  open: () => {
+  open: (content: string) => {
     // 创建一个div元素
     const messageBox = document.createElement('div');
     // 创建一个应用实例
     const messageApp = createApp(Message, {
-      content: '已将代码复制至剪切板！',
+      content,
       close: () => {
         document.body.removeChild(messageBox);
         messageInstanceList.pop();

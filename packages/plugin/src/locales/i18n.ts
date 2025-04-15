@@ -16,7 +16,7 @@ export const initI18nData = (locale: Locale) => {
     } else if (locale[key] === 'en-US') {
       i18nData.value[key] = EN;
     } else {
-      i18nData.value[key] = locale[key];
+      i18nData.value[key] = locale[key] as LocaleText;
     }
   }
   if (typeof document !== 'undefined') {
