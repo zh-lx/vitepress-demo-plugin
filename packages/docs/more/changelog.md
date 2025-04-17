@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.4.1
+
+- 🐛 fix: 修复了复制成功的文案国际化不生效的问题 [#81](https://github.com/zh-lx/vitepress-demo-plugin/pull/81)
+
 ## 1.4.0
 
 - 🎉 feat: 支持国际化 [#80](https://github.com/zh-lx/vitepress-demo-plugin/pull/80)

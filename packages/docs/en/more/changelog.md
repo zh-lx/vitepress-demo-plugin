@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- 🐛 fix: Fixed the issue that copy success text internationalization was not working [#81](https://github.com/zh-lx/vitepress-demo-plugin/pull/81)
+
 ## 1.4.0
 
 - 🎉 feat: Support internationalization [#80](https://github.com/zh-lx/vitepress-demo-plugin/pull/80)
