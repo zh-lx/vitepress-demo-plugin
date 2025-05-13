@@ -24,6 +24,7 @@ const vueFilesRegex = /vueFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const reactFilesRegex = /reactFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const htmlFilesRegex = /htmlFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const ssgRegex = /ssg="(.*?)"/;
+const vueDefineClientRegex = /vue-define-client="(.*?)"/;
 
 export interface DefaultProps {
   title?: string;
@@ -176,6 +177,7 @@ export const transformPreview = (
   const reactFilesValue = token.content.match(reactFilesRegex);
   const htmlFilesValue = token.content.match(htmlFilesRegex);
   const ssgValue = !!token.content.match(ssgRegex)?.[1];
+  const vueDefineClientValue = !!token.content.match(vueDefineClientRegex)?.[1];
   const dirPath = demoDir || path.dirname(mdFile.path);
 
   if (orderValue?.[1]) {
@@ -272,7 +274,15 @@ export const transformPreview = (
 
   // 注入组件导入语句
   if (componentProps.vue) {
-    injectComponentImportScript(mdFile, componentVuePath, componentName);
+    if (vueDefineClientValue) {
+      injectComponentImportScript(mdFile, 'vitepress', '{ defineClientComponent }')
+    }
+    injectComponentImportScript(
+      mdFile,
+      componentVuePath,
+      componentName,
+      vueDefineClientValue ? 'defineClientComponent' : undefined,
+    )
   }
   if (componentProps.react) {
     injectComponentImportScript(
