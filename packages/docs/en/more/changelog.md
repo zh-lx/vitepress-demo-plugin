@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2
+
+- 🐛 fix: Fixed the issue that the build failed when the demo uses browser API [#86](https://github.com/zh-lx/vitepress-demo-plugin/pull/86)
+
 ## 1.4.1
 
 - 🐛 fix: Fixed the issue that copy success text internationalization was not working [#81](https://github.com/zh-lx/vitepress-demo-plugin/pull/81)

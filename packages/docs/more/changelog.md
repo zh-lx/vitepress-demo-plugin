@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.4.2
+
+- 🐛 fix: 修复了部分组件打包时使用浏览器 API 的报错问题 [#86](https://github.com/zh-lx/vitepress-demo-plugin/pull/86)
+
 ## 1.4.1
 
 - 🐛 fix: 修复了复制成功的文案国际化不生效的问题 [#81](https://github.com/zh-lx/vitepress-demo-plugin/pull/81)
