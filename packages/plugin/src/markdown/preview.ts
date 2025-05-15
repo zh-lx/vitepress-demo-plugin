@@ -272,7 +272,12 @@ export const transformPreview = (
 
   // 注入组件导入语句
   if (componentProps.vue) {
-    injectComponentImportScript(mdFile, componentVuePath, componentName);
+    injectComponentImportScript(
+      mdFile,
+      componentVuePath,
+      componentName,
+      ssgValue ? undefined : 'dynamicImport'
+    );
   }
   if (componentProps.react) {
     injectComponentImportScript(
