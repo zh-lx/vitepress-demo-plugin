@@ -19,7 +19,7 @@ export const injectComponentImportScript = (
   env: any,
   path: string,
   name?: string,
-  type?: 'dynamicImport' | 'inject' | 'defineClientComponent',
+  type?: 'dynamicImport' | 'inject',
 ) => {
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
@@ -53,10 +53,6 @@ export const injectComponentImportScript = (
   } else if (type === 'inject') {
     importCode = `
       ${name}
-    `.trim();
-  } else if (type === 'defineClientComponent') {
-    importCode = `
-      const ${componentName} = defineClientComponent(() => import('${path}'))
     `.trim();
   } else {
     importCode = name
