@@ -475,7 +475,7 @@ export default defineConfig({
               scope: 'vue', // 仅针对 Vue 类型的 demo 组件生效 // [!code ++]
               files: { // [!code ++]
                 // 替换预设的 main.ts 文件 // [!code ++]
-                'main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, // [!code ++]
+                'src/main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, // [!code ++]
               } // [!code ++]
             }, // [!code ++]
           ]
@@ -515,14 +515,14 @@ export default defineConfig({
               scope: 'vue', // 仅针对 Vue 类型的 demo 组件生效
               files: { 
                 // 替换预设的 main.ts 文件
-                'main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, 
+                'src/main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, 
               } 
             },
             { // [!code ++]
               scope: 'myScope', // 仅针对 scope demo 组件生效 // [!code ++]
               files: { // [!code ++]
                 // 替换预设的 main.ts 文件 // [!code ++]
-                'main.ts': `console.log("this is a custom template")`, // [!code ++]
+                'src/main.ts': `console.log("this is a custom template")`, // [!code ++]
               } // [!code ++]
             }, // [!code ++]
           ]
