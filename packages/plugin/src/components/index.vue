@@ -248,7 +248,8 @@ function setHTMLWithScript() {
     // 监听 iframe 高度变化
     const originObserver = (observer = function () {
       requestAnimationFrame(() => {
-        iframe.style.height = iframeDocument.body.scrollHeight + 'px';
+        iframe.style.height =
+          iframeDocument.documentElement.offsetHeight + 'px';
         if (iframeDocument.documentElement) {
           iframeDocument.documentElement.className =
             document.documentElement.className;
