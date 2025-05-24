@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.3
+
+- 🐛 fix: Fixed the issue that Html Demo style isolation does not take effect [#89](https://github.com/zh-lx/vitepress-demo-plugin/pull/89)
+
 ## 1.4.2
 
 - 🐛 fix: Fixed the issue that the build failed when the demo uses browser API [#86](https://github.com/zh-lx/vitepress-demo-plugin/pull/86)
