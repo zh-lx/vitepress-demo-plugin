@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.4.4
+
+- 🐛 fix: 修复了 Html Demo 不显示的问题 [#90](https://github.com/zh-lx/vitepress-demo-plugin/pull/90)
+
 ## 1.4.3
 
 - 🐛 fix: 修复了 Html Demo 样式隔离不生效的问题 [#89](https://github.com/zh-lx/vitepress-demo-plugin/pull/89)
