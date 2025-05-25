@@ -23,7 +23,7 @@ export const genHtmlCode = ({
     </style>
   </head>
   <body>
-    <div class="vp-raw>
+    <div class="vp-raw">
       ${code}
     </div>
   </body>
