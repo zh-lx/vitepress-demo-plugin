@@ -222,9 +222,6 @@ function setHTMLWithScript() {
       return;
     }
     const iframe = htmlContainerRef.value.querySelector('iframe');
-    const iframeDocument =
-      iframe.contentDocument || iframe.contentWindow.document;
-    iframeDocument.open();
     const styles = document.head.querySelectorAll('style');
     const styleLinks = document.head.querySelectorAll('link[as="style"]');
     const fontLinks = document.head.querySelectorAll('link[as="font"]');
@@ -237,19 +234,39 @@ function setHTMLWithScript() {
     const fontLinkString = Array.from(fontLinks)
       .map((link) => link.outerHTML)
       .join('\n');
-    iframeDocument.write(
-      genHtmlCode({
+    let iframeDocument =
+      iframe.contentDocument || iframe.contentWindow.document;
+    // 优先使用 iframeDocument.write 写入内容；虽然浏览器不支持，但是不需要异步，交互很丝滑
+    if (typeof iframeDocument.write === 'function') {
+      iframeDocument.open();
+      iframeDocument.write(
+        genHtmlCode({
+          code: props.htmlCode || '',
+          styles: styleString,
+          links: styleLinkString + '\n' + fontLinkString,
+        })
+      );
+      iframeDocument.close();
+    } else {
+      iframe.srcdoc = genHtmlCode({
         code: props.htmlCode || '',
         styles: styleString,
         links: styleLinkString + '\n' + fontLinkString,
-      })
-    );
-    iframeDocument.close();
+      });
+      iframe.onload = () => {
+        iframeDocument =
+          iframe.contentDocument || iframe.contentWindow.document;
+      };
+    }
+
     // 监听 iframe 高度变化
     const originObserver = (observer = function () {
       requestAnimationFrame(() => {
-        iframe.style.height =
-          iframeDocument.documentElement.offsetHeight + 'px';
+        const height = iframeDocument.documentElement.offsetHeight + 'px';
+        iframe.style.height = height;
+        if (htmlContainerRef.value) {
+          htmlContainerRef.value.style.height = height;
+        }
         if (iframeDocument.documentElement) {
           iframeDocument.documentElement.className =
             document.documentElement.className;
