@@ -19,7 +19,7 @@ export const injectComponentImportScript = (
   env: any,
   path: string,
   name?: string,
-  type?: 'dynamicImport' | 'inject',
+  type?: 'dynamicImport' | 'inject'
 ) => {
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
@@ -40,7 +40,7 @@ export const injectComponentImportScript = (
   if (type === 'dynamicImport') {
     importCode = name
       ? `
-      const ${componentName} = ref();
+      const ${componentName} = shallowRef();
       onMounted(async () => {
         ${componentName}.value = (await import('${path}')).default;
       });
@@ -116,5 +116,12 @@ export const composeComponentName = (path: string) => {
       path = path.substring(0, lastIndex);
     }
   }
-  return 'Temp' + btoa(encodeURIComponent(componentList.join('-').split('.').slice(0, -1).join("."))).replace(/=/g, 'Equal');
+  return (
+    'Temp' +
+    btoa(
+      encodeURIComponent(
+        componentList.join('-').split('.').slice(0, -1).join('.')
+      )
+    ).replace(/=/g, 'Equal')
+  );
 };

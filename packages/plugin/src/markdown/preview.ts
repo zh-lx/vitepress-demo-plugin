@@ -268,7 +268,7 @@ export const transformPreview = (
     `{ VitepressDemoBox, VitepressDemoPlaceholder }`
   );
   injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
-  injectComponentImportScript(mdFile, 'vue', '{ ref, onMounted }');
+  injectComponentImportScript(mdFile, 'vue', '{ ref, shallowRef, onMounted }');
 
   // 注入组件导入语句
   if (componentProps.vue) {
@@ -466,7 +466,7 @@ export const transformPreview = (
       ${
         componentProps.vue
           ? `
-            <template #vue>
+            <template v-if="${componentName}" #vue>
               <${componentName}></${componentName}>
             </template>
             `
