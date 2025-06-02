@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.5
+
+- 🐛 fix: Fixed the issue that Demo width may overflow the container [#94](https://github.com/zh-lx/vitepress-demo-plugin/pull/94)
+- 🐛 fix: Supported `document.write` in browsers that support `document.write` to preview Html Demo [#94](https://github.com/zh-lx/vitepress-demo-plugin/pull/94)
+- 🐛 fix: Fixed the error about `Vue received a Component that was made a reactive object` in the development environment [#93](https://github.com/zh-lx/vitepress-demo-plugin/pull/93)
+
 ## 1.4.4
 
 - 🐛 fix: Fixed the issue that Html Demo is not displayed [#90](https://github.com/zh-lx/vitepress-demo-plugin/pull/90)

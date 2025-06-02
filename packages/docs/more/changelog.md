@@ -1,5 +1,11 @@
 # 更新日志
 
+## 1.4.5
+
+- 🐛 fix: 修复了 Demo 宽度可能溢出容器的问题 [#94](https://github.com/zh-lx/vitepress-demo-plugin/pull/94)
+- 🐛 fix: 支持 `document.write` 的浏览器中预览 Html Demo [#94](https://github.com/zh-lx/vitepress-demo-plugin/pull/94)
+- 🐛 fix: 修复了开发环境关于 `Vue received a Component that was made a reactive object` 的报错问题 [#93](https://github.com/zh-lx/vitepress-demo-plugin/pull/93)
+
 ## 1.4.4
 
 - 🐛 fix: 修复了 Html Demo 不显示的问题 [#90](https://github.com/zh-lx/vitepress-demo-plugin/pull/90)
