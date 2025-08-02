@@ -23,7 +23,8 @@
   "author": "zhoulixiang",
   "scripts": {
     "release": "pnpm --dir ./packages/plugin release",
-    "deploy:docs": "bash ./deploy.sh"
+    "build:docs": "pnpm  --filter \"./packages/docs\" run docs:build",
+    "deploy:docs": "pnpm build:docs && bash ./deploy.sh"
   },
   "devDependencies": {
     "@varlet/release": "^0.3.2"

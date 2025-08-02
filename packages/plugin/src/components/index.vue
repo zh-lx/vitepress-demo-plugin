@@ -52,6 +52,7 @@ interface VitepressDemoBoxProps {
   darkTheme?: string;
   theme?: string;
   locale?: string;
+  htmlWriteWay?: 'write' | 'srcdoc';
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -62,6 +63,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   order: 'vue,react,html',
   github: '',
   gitlab: '',
+  htmlWriteWay: 'write',
 });
 
 const emit = defineEmits(['mount']);
@@ -218,7 +220,7 @@ const htmlContainerRef = ref();
 let observer: () => void;
 function setHTMLWithScript() {
   nextTick(() => {
-    if (!htmlContainerRef.value) {
+    if (!htmlContainerRef.value || !props.htmlCode) {
       return;
     }
     const iframe = htmlContainerRef.value.querySelector('iframe');
@@ -237,7 +239,10 @@ function setHTMLWithScript() {
     let iframeDocument =
       iframe.contentDocument || iframe.contentWindow.document;
     // 优先使用 iframeDocument.write 写入内容；虽然浏览器不支持，但是不需要异步，交互很丝滑
-    if (typeof iframeDocument.write === 'function') {
+    if (
+      typeof iframeDocument.write === 'function' &&
+      props.htmlWriteWay === 'write'
+    ) {
       iframeDocument.open();
       iframeDocument.write(
         genHtmlCode({
@@ -279,16 +284,6 @@ function setHTMLWithScript() {
     observer();
   });
 }
-
-watch(
-  () => props.htmlCode,
-  (val, prevVal) => {
-    if (val && val !== prevVal) {
-      setHTMLWithScript();
-    }
-  },
-  { immediate: true }
-);
 
 const reactContainerRef = ref();
 let root: any = null;
