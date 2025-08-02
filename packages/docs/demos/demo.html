@@ -43,33 +43,31 @@
       </div>
       <div id="countDisplay">Current count: 0</div>
     </div>
-    <script type="module">
-      (function () {
-        let count = 0;
+    <script>
+      let count = 0;
 
-        const increment = () => {
-          count++;
-          updateCountDisplay();
-        };
+      const increment = () => {
+        count++;
+        updateCountDisplay();
+      };
 
-        const decrement = () => {
-          count--;
-          updateCountDisplay();
-        };
+      const decrement = () => {
+        count--;
+        updateCountDisplay();
+      };
 
-        document
-          .getElementById('incrementBtn')
-          .addEventListener('click', increment);
-        document
-          .getElementById('decrementBtn')
-          .addEventListener('click', decrement);
+      document
+        .getElementById('incrementBtn')
+        .addEventListener('click', increment);
+      document
+        .getElementById('decrementBtn')
+        .addEventListener('click', decrement);
 
-        const updateCountDisplay = () => {
-          document.getElementById(
-            'countDisplay'
-          ).innerText = `Current count: ${count}`;
-        };
-      })();
+      const updateCountDisplay = () => {
+        document.getElementById(
+          'countDisplay'
+        ).innerText = `Current count: ${count}`;
+      };
     </script>
   </body>
 </html>
