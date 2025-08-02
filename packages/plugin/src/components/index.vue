@@ -282,8 +282,8 @@ function setHTMLWithScript() {
 
 watch(
   () => props.htmlCode,
-  (val?: string) => {
-    if (val) {
+  (val, prevVal) => {
+    if (val && val !== prevVal) {
       setHTMLWithScript();
     }
   },
@@ -324,8 +324,8 @@ watch(
 
 watch(
   () => props.reactCode,
-  (val) => {
-    if (val && root) {
+  (val, prevVal) => {
+    if (val && val !== prevVal && root) {
       root.render(props.reactCreateElement(props.reactComponent, {}, null));
     }
   },
