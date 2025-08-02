@@ -233,6 +233,19 @@ my-docs
 
 <demo html="demo-link.html" />
 
+## 写入 html 的方式
+
+对于 html 类型的 demo，`vitepress-demo-plugin` 有两种代码写入方式，可以通过 `htmlWriteWay` 属性来指定:
+
+- `write` 方式：使用 `document.write` 写入 html 内容，这种写入比较丝滑，可以避免在多 demo 模式切换代码时闪烁的问题。
+- `srcdoc` 方式：使用 `iframe.srcdoc` 写入 html 内容，可以避免因为 `document.write` 弃用导致的控制台 warning 问题。
+
+示例：
+
+```ts
+<demo html="demo.html" htmlWriteWay="srcdoc" />
+```
+
 ## 样式隔离
 
 ::: tip 注意

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.7
+
+- 🐛 fix: Fixed the issue that Html Demo document is duplicated written [#97](https://github.com/zh-lx/vitepress-demo-plugin/pull/97)
+
 ## 1.4.6
 
 - 🐛 fix: Fixed the error caused by repeated initialization of demo [#96](https://github.com/zh-lx/vitepress-demo-plugin/pull/96)

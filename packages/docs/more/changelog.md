@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.4.7
+
+- 🐛 fix: 修复了 Html Demo 文档重复写入的问题 [#97](https://github.com/zh-lx/vitepress-demo-plugin/pull/97)
+
 ## 1.4.6
 
 - 🐛 fix: 修复了 demo 重复初始化导致的报错问题 [#96](https://github.com/zh-lx/vitepress-demo-plugin/pull/96)

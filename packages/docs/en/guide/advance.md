@@ -233,6 +233,20 @@ my-docs
 
 <demo html="demo-link.html" />
 
+## Write Html Way
+
+For html type of demo, `vitepress-demo-plugin` has two ways to write the code, you can specify the way through the `htmlWriteWay` property:
+
+- `write` way: use `document.write` to write the html content, this way is more smooth, can avoid the problem of flashing when switching code in multiple demo mode.
+- `srcdoc` way: use `iframe.srcdoc` to write the html content, can avoid the console warning problem caused by the deprecation of `document.write`.
+
+
+Example:
+
+```html
+<demo html="demo.html" htmlWriteWay="srcdoc" />
+```
+
 ## Style Isolation
 
 ::: tip Tip
