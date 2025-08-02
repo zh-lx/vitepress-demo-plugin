@@ -27,3 +27,4 @@ dist.zip
 
 *.gz
 *.tgz
+deploy.sh
