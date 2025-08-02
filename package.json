@@ -22,7 +22,8 @@
   "license": "MIT",
   "author": "zhoulixiang",
   "scripts": {
-    "release": "pnpm --dir ./packages/plugin release"
+    "release": "pnpm --dir ./packages/plugin release",
+    "deploy:docs": "bash ./deploy.sh"
   },
   "devDependencies": {
     "@varlet/release": "^0.3.2"
