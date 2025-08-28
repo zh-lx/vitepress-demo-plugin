@@ -132,7 +132,6 @@ npm install react react-dom -D
   html="../demos/demo.html"
   title="混合语法 DEMO"
   description="这是一个混合 demo 的示例，你可以使用 title 和 description 来指定 demo 的标题和描述"
-  background="rgb(240, 242, 245)"
 />
 
 ## 打开 Github 和 Gitlab
