@@ -25,6 +25,7 @@ const reactFilesRegex = /reactFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const htmlFilesRegex = /htmlFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const ssgRegex = /ssg="(.*?)"/;
 const htmlWriteWayRegex = /htmlWriteWay="(.*?)"/;
+const backgroundRegex = /background="(.*?)"/
 
 export interface DefaultProps {
   title?: string;
@@ -179,6 +180,7 @@ export const transformPreview = (
   const ssgValue = !!token.content.match(ssgRegex)?.[1];
   const htmlWriteWayValue =
     token.content.match(htmlWriteWayRegex)?.[1] || 'write';
+  const backgroundValue = token.content.match(backgroundRegex)?.[1];
   const dirPath = demoDir || path.dirname(mdFile.path);
 
   if (orderValue?.[1]) {
@@ -440,6 +442,7 @@ export const transformPreview = (
       files="${encodeURIComponent(JSON.stringify(files))}"
       scope="${scopeValue || ''}"
       htmlWriteWay="${htmlWriteWayValue}"
+      background="${backgroundValue}"
       :visible="!!${visible}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
