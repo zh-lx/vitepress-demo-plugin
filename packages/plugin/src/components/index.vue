@@ -523,11 +523,14 @@ html.dark .shiki span {
 
 .#{$defaultPrefix}__container > .#{$defaultPrefix}-description {
   position: relative;
+  &:has(.#{$defaultPrefix}-description__title) {
+    border-top: 1px solid var(--coot-demo-box-border);
+  }
   .#{$defaultPrefix}-description__title {
     position: absolute;
     top: -12px;
     padding-inline: 8px;
-    background: #fff;
+    background: var(--coot-demo-box-title-bg);
     font-weight: 500;
     margin-inline-start: 12px;
     border-radius: 6px 6px 0 0;
@@ -535,7 +538,6 @@ html.dark .shiki span {
 
   .#{$defaultPrefix}-description__content {
     padding: 20px 20px 8px;
-    border-top: 1px solid var(--coot-demo-box-border);
   }
 
   .#{$defaultPrefix}-description__split-line {
