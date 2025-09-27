@@ -43,4 +43,3 @@ const props = defineProps<{
   display: none;
 }
 </style>
-../utils/namespace
