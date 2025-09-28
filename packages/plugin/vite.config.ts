@@ -6,7 +6,7 @@ import dts from 'vite-plugin-dts';
 export default defineConfig(() => {
   // 判断是否是 --watch 模式
   const isWatchMode = process.argv.includes('--watch');
-  
+
   return {
     build: {
       lib: {
@@ -15,11 +15,22 @@ export default defineConfig(() => {
         fileName: 'index',
       },
       rollupOptions: {
-        external: ['vue', 'markdown-it', 'fs', 'path', 'react', 'react-dom', 'sass', 'shiki'],
+        external: [
+          'vue',
+          'markdown-it',
+          'fs',
+          'path',
+          'react',
+          'react-dom',
+          'sass',
+          'shiki',
+        ],
         output: {
           globals: {
             vue: 'Vue',
             fs: 'fs',
+            path: 'path',
+            shiki: 'shiki',
           },
         },
       },

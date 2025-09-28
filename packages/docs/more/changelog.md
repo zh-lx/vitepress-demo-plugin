@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.5.0
+
+- 🎉 feat: 支持自定义 demo 容器背景 [#98](https://github.com/zh-lx/vitepress-demo-plugin/pull/98)
+- 🐛 fix: 修复了重写路由时 demo 相对路径不生效的问题 [#99](https://github.com/zh-lx/vitepress-demo-plugin/pull/99)
+
 ## 1.4.7
 
 - 🐛 fix: 修复了 Html Demo 文档重复写入的问题 [#97](https://github.com/zh-lx/vitepress-demo-plugin/pull/97)

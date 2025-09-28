@@ -58,6 +58,16 @@ export default defineConfig({
 <demo vue="demo.vue" react="demo.tsx" html="base/demo.html" />
 ```
 
+## 自定义 demo 容器背景
+
+你可以通过 `background` 属性来指定 demo 容器的背景颜色。
+
+```html
+<demo vue="demo.vue" background="#f0ffff" />
+```
+
+<demo vue="demo.vue" background="#f0ffff" />
+
 ## 展示顺序和默认选中
 
 ### 局部配置

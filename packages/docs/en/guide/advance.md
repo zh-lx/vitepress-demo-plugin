@@ -58,6 +58,16 @@ After configuring the specified directory, in `start.md`, we can simplify the im
 <demo vue="demo.vue" react="demo.tsx" html="base/demo.html" />
 ```
 
+## Custom Demo Container Background
+
+You can specify the background color of the demo container through the `background` attribute.
+
+```html
+<demo vue="demo.vue" background="#f0ffff" />
+```
+
+<demo vue="demo.vue" background="#f0ffff" />
+
 ## Display Order And Default Selection
 
 ### Local Configuration

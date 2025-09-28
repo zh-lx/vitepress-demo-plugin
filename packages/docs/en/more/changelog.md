@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+
+- 🎉 feat: Support custom demo container background [#98](https://github.com/zh-lx/vitepress-demo-plugin/pull/98)
+- 🐛 fix: Fixed the issue that the demo relative path does not take effect when rewriting the route [#99](https://github.com/zh-lx/vitepress-demo-plugin/pull/99)
+
 ## 1.4.7
 
 - 🐛 fix: Fixed the issue that Html Demo document is duplicated written [#97](https://github.com/zh-lx/vitepress-demo-plugin/pull/97)
