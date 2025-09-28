@@ -53,6 +53,7 @@ interface VitepressDemoBoxProps {
   theme?: string;
   locale?: string;
   htmlWriteWay?: 'write' | 'srcdoc';
+  background?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -378,7 +379,7 @@ watch(
 <template>
   <div :class="[ns.e('container')]">
     <!-- 预览区 -->
-    <section :class="[ns.bem('preview'), 'vp-raw']">
+    <section :class="[ns.bem('preview'), 'vp-raw']" :style="{ background: props.background }">
       <slot name="vue" v-if="type === 'vue'"></slot>
       <div ref="htmlContainerRef" v-else-if="type === 'html'">
         <iframe style="width: 100%; height: auto; border: none"></iframe>
@@ -511,8 +512,9 @@ html.dark .shiki span {
 }
 
 .#{$defaultPrefix}__container > .#{$defaultPrefix}-preview {
+  box-sizing: border-box;
   padding: 20px 20px 30px 20px;
-
+  border-radius: 4px 4px 0 0;;
   & > p {
     margin: 0;
     padding: 0;
@@ -520,28 +522,22 @@ html.dark .shiki span {
 }
 
 .#{$defaultPrefix}__container > .#{$defaultPrefix}-description {
+  position: relative;
+  &:has(.#{$defaultPrefix}-description__title) {
+    border-top: 1px solid var(--coot-demo-box-border);
+  }
   .#{$defaultPrefix}-description__title {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
+    position: absolute;
+    top: -12px;
+    padding-inline: 8px;
+    background: var(--coot-demo-box-title-bg);
     font-weight: 500;
-
-    &::before {
-      content: '';
-      width: 12px;
-      border-top: 1px solid var(--coot-demo-box-border);
-    }
-
-    &::after {
-      content: '';
-      flex: 1;
-      border-top: 1px solid var(--coot-demo-box-border);
-    }
+    margin-inline-start: 12px;
+    border-radius: 6px 6px 0 0;
   }
 
   .#{$defaultPrefix}-description__content {
-    padding: 8px 20px;
+    padding: 20px 20px 8px;
   }
 
   .#{$defaultPrefix}-description__split-line {
