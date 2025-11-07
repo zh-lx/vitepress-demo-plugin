@@ -127,7 +127,7 @@ export interface VitepressDemoBoxConfig {
    * @cn 自定义包裹组件的组件名称，需自行注册
    * @en The custom component name of the preview component
    */
-  customComponentName?: string;
+  wrapperComponentName?: string;
 }
 
 /**
@@ -431,7 +431,7 @@ export const transformPreview = (
       : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`
   }
   ${ssgValue ? '' : '<ClientOnly>'}
-    <${ config?.customComponentName ? config?.customComponentName : 'vitepress-demo-box'} 
+    <${ config?.wrapperComponentName ? config?.wrapperComponentName : 'vitepress-demo-box'} 
       title="${componentProps.title}"
       description="${componentProps.description}"
       locale="${locale}"
@@ -485,7 +485,7 @@ export const transformPreview = (
             `
           : ''
       }
-    </${ config?.customComponentName ? config?.customComponentName : 'vitepress-demo-box'} >
+    </${ config?.wrapperComponentName ? config?.wrapperComponentName : 'vitepress-demo-box'} >
   ${ssgValue ? '' : '</ClientOnly>'}`.trim();
 
   return sourceCode;
