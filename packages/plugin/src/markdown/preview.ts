@@ -123,6 +123,7 @@ export interface VitepressDemoBoxConfig {
    * @en The locale configuration 'zh-CN' | 'en-US'
    */
   locale?: Locale;
+  customComponentName?: string;
 }
 
 /**
@@ -426,7 +427,7 @@ export const transformPreview = (
       : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`
   }
   ${ssgValue ? '' : '<ClientOnly>'}
-    <vitepress-demo-box 
+    <${ config?.customComponentName ? config?.customComponentName : 'vitepress-demo-box'} 
       title="${componentProps.title}"
       description="${componentProps.description}"
       locale="${locale}"
@@ -480,7 +481,7 @@ export const transformPreview = (
             `
           : ''
       }
-    </vitepress-demo-box>
+    </${ config?.customComponentName ? config?.customComponentName : 'vitepress-demo-box'} >
   ${ssgValue ? '' : '</ClientOnly>'}`.trim();
 
   return sourceCode;
