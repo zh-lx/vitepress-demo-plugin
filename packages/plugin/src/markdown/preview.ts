@@ -123,6 +123,10 @@ export interface VitepressDemoBoxConfig {
    * @en The locale configuration 'zh-CN' | 'en-US'
    */
   locale?: Locale;
+  /**
+   * @cn 自定义包裹组件的组件名称，需自行注册
+   * @en The custom component name of the preview component
+   */
   customComponentName?: string;
 }
 
