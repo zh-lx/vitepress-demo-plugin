@@ -150,6 +150,7 @@ export const transformPreview = (
     stackblitz = { show: false },
     codesandbox = { show: false },
     codeplayer = { show: false },
+    wrapperComponentName = 'vitepress-demo-box',
   } = config || {};
   let {
     order = 'vue,react,html',
@@ -431,7 +432,7 @@ export const transformPreview = (
       : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`
   }
   ${ssgValue ? '' : '<ClientOnly>'}
-    <${ config?.wrapperComponentName ? config?.wrapperComponentName : 'vitepress-demo-box'} 
+    <${wrapperComponentName} 
       title="${componentProps.title}"
       description="${componentProps.description}"
       locale="${locale}"
@@ -485,7 +486,7 @@ export const transformPreview = (
             `
           : ''
       }
-    </${ config?.wrapperComponentName ? config?.wrapperComponentName : 'vitepress-demo-box'} >
+    </${wrapperComponentName}>
   ${ssgValue ? '' : '</ClientOnly>'}`.trim();
 
   return sourceCode;
