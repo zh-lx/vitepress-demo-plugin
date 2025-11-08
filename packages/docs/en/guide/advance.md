@@ -369,3 +369,39 @@ export default defineConfig({
 ```
 
 For the `LocaleText` type definition that needs to be configured, please refer to [text.ts](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/plugin/src/locales/text.ts)
+
+## Custom Container Components
+
+The plugin's built-in container component styles might not align with your site's visual language. When you need full control, set the `wrapperComponentName` option to point to your own component and make sure it is registered before the plugin renders it. Check the [default container component](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/plugin/src/components/index.vue) for the props you need to implement.
+
+Example:
+
+```ts
+import { defineConfig } from 'vitepress';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+export default defineConfig({
+  markdown: {
+    config(md) {
+      md.use(vitepressDemoPlugin, {
+        wrapperComponentName: 'vitepress-element-plus-demo-box'
+      });
+    },
+  },
+});
+```
+
+Then register the component with the same name inside your VitePress theme configuration, for example:
+
+```ts
+import Theme from 'vitepress/theme';
+import VitepressElementPlusDemoBox from './vitepress-element-plus-demo-box.vue'
+
+export default {
+  ...Theme,
+  enhanceApp({ app }) {
+    app.component('vitepress-element-plus-demo-box', VitepressElementPlusDemoBox);
+  },
+};
+
+```

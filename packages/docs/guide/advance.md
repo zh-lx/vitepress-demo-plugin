@@ -368,3 +368,40 @@ export default defineConfig({
 ```
 
 需要配置的 `LocaleText` 类型定义请参考 [text.ts](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/plugin/src/locales/text.ts)
+
+## 自定义容器组件
+
+插件提供的标准容器组件样式可能与文档的样式风格差异较大，若确有必要可以自己实现容器组件。你可以通过`wrapperComponentName`配置相应的组件名替换插件内部的实现，并在加载时提前注册相应的组件。自定义组件的实现请参考[默认容器组件](https://github.com/zh-lx/vitepress-demo-plugin/blob/main/packages/plugin/src/components/index.vue)
+
+示例如下:
+
+```ts
+import { defineConfig } from 'vitepress';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import path from 'path';
+
+export default defineConfig({
+  markdown: {
+    config(md) {
+      md.use(vitepressDemoPlugin, {
+        wrapperComponentName: 'vitepress-element-plus-demo-box'
+      });
+    },
+  },
+});
+```
+
+同时在Vitepress主题配置中注册对应名称的组件，参考例子如下：
+
+```ts
+import Theme from 'vitepress/theme';
+import VitepressElementPlusDemoBox from './vitepress-element-plus-demo-box.vue'
+
+export default {
+  ...Theme,
+  enhanceApp({ app }) {
+    app.component('vitepress-element-plus-demo-box', VitepressElementPlusDemoBox);
+  },
+};
+
+```
