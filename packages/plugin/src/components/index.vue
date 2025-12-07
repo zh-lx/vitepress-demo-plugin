@@ -212,9 +212,12 @@ watch(
   }
 );
 
-const clickCodeCopy = () => {
-  clickCopy(currentCode.value || '');
-  MessageService.open(i18n.value.copySuccess);
+const clickCodeCopy = async () => {
+  const successful = await clickCopy(currentCode.value || '');
+  MessageService.open(
+    successful ? i18n.value.copySuccess : i18n.value.copyFail,
+    successful
+  );
 };
 
 const htmlContainerRef = ref();
@@ -379,7 +382,10 @@ watch(
 <template>
   <div :class="[ns.e('container')]">
     <!-- 预览区 -->
-    <section :class="[ns.bem('preview'), 'vp-raw']" :style="{ background: props.background }">
+    <section
+      :class="[ns.bem('preview'), 'vp-raw']"
+      :style="{ background: props.background }"
+    >
       <slot name="vue" v-if="type === 'vue'"></slot>
       <div ref="htmlContainerRef" v-else-if="type === 'html'">
         <iframe style="width: 100%; height: auto; border: none"></iframe>
@@ -514,7 +520,7 @@ html.dark .shiki span {
 .#{$defaultPrefix}__container > .#{$defaultPrefix}-preview {
   box-sizing: border-box;
   padding: 20px 20px 30px 20px;
-  border-radius: 4px 4px 0 0;;
+  border-radius: 4px 4px 0 0;
   & > p {
     margin: 0;
     padding: 0;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import SuccessIcon from '../icons/success.vue';
+import FailIcon from '../icons/fail.vue';
 import { useNameSpace } from '../utils/namespace';
 
 const Duration = 3000;
@@ -10,10 +11,12 @@ const ns = useNameSpace();
 interface message {
   content: string;
   close: () => void;
+  success: boolean;
 }
 
 const props = withDefaults(defineProps<message>(), {
   content: '复制成功！',
+  success: true,
 });
 
 const visible = ref(false);
@@ -50,7 +53,8 @@ defineExpose({
       :class="[ns.bem('message-notice', 'container')]"
       :style="{ top: topHeight + 'px' }"
     >
-      <SuccessIcon />
+      <SuccessIcon v-if="success" />
+      <FailIcon style="color: var(--vp-c-danger-2)" v-else />
       <span style="color: var(--vp-c-text-1)">{{ content }}</span>
     </div>
   </transition>
@@ -94,4 +98,3 @@ defineExpose({
   opacity: 0;
 }
 </style>
-../utils/namespace
