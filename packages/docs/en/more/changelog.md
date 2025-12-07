@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1
+
+- 🐛 fix: Improved browser compatibility for copying code [#103](https://github.com/zh-lx/vitepress-demo-plugin/pull/103)
+
 ## 1.5.0
 
 - 🎉 feat: Support custom demo container background [#98](https://github.com/zh-lx/vitepress-demo-plugin/pull/98)

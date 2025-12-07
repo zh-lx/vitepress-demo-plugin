@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.5.1
+
+- 🐛 fix: 提升了复制代码的浏览器兼容性 [#103](https://github.com/zh-lx/vitepress-demo-plugin/pull/103)
+
 ## 1.5.0
 
 - 🎉 feat: 支持自定义 demo 容器背景 [#98](https://github.com/zh-lx/vitepress-demo-plugin/pull/98)
