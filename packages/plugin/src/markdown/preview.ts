@@ -123,6 +123,11 @@ export interface VitepressDemoBoxConfig {
    * @en The locale configuration 'zh-CN' | 'en-US'
    */
   locale?: Locale;
+  /**
+   * @cn 自定义包裹组件的组件名称，需自行注册
+   * @en The custom component name of the preview component
+   */
+  wrapperComponentName?: string;
 }
 
 /**
@@ -145,6 +150,7 @@ export const transformPreview = (
     stackblitz = { show: false },
     codesandbox = { show: false },
     codeplayer = { show: false },
+    wrapperComponentName = 'vitepress-demo-box',
   } = config || {};
   let {
     order = 'vue,react,html',
@@ -426,7 +432,7 @@ export const transformPreview = (
       : `<vitepress-demo-placeholder v-show="${placeholderVisibleKey}" />`
   }
   ${ssgValue ? '' : '<ClientOnly>'}
-    <vitepress-demo-box 
+    <${wrapperComponentName} 
       title="${componentProps.title}"
       description="${componentProps.description}"
       locale="${locale}"
@@ -480,7 +486,7 @@ export const transformPreview = (
             `
           : ''
       }
-    </vitepress-demo-box>
+    </${wrapperComponentName}>
   ${ssgValue ? '' : '</ClientOnly>'}`.trim();
 
   return sourceCode;
