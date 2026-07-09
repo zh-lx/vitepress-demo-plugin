@@ -12,6 +12,7 @@ import {
 } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
+import PlaygroundIcon from './icons/playground.vue'
 import CopyIcon from './icons/copy.vue';
 import FoldIcon from './icons/fold.vue';
 import CodeSandboxIcon from './icons/codesandbox.vue';
@@ -54,6 +55,7 @@ interface VitepressDemoBoxProps {
   locale?: string;
   htmlWriteWay?: 'write' | 'srcdoc';
   background?: string;
+  playgroundUrl?: string,
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -65,6 +67,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
+  playgroundUrl:'',
 });
 
 const emit = defineEmits(['mount']);
@@ -218,6 +221,10 @@ const clickCodeCopy = async () => {
     successful ? i18n.value.copySuccess : i18n.value.copyFail,
     successful
   );
+};
+
+const openPlayground = () => {
+  window.open(props.playgroundUrl, '_blank');
 };
 
 const htmlContainerRef = ref();
@@ -447,6 +454,9 @@ watch(
         </Tooltip>
         <Tooltip :content="i18n.copyCode">
           <CopyIcon @click="clickCodeCopy" />
+        </Tooltip>
+        <Tooltip :content="i18n.openInPlayground" v-if="playgroundUrl">
+          <PlaygroundIcon @click="openPlayground" />
         </Tooltip>
       </div>
     </section>

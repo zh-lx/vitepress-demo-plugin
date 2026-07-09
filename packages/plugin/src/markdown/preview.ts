@@ -25,8 +25,8 @@ const reactFilesRegex = /reactFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const htmlFilesRegex = /htmlFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const ssgRegex = /ssg="(.*?)"/;
 const htmlWriteWayRegex = /htmlWriteWay="(.*?)"/;
-const backgroundRegex = /background="(.*?)"/
-
+const backgroundRegex = /background="(.*?)"/;
+const playgroundRegex = /playgroundUrl="(.*?)"/;
 export interface DefaultProps {
   title?: string;
   description?: string;
@@ -183,6 +183,7 @@ export const transformPreview = (
   const backgroundValue = token.content.match(backgroundRegex)?.[1];
   const mdFilePath = mdFile.realPath ?? mdFile.path;
   const dirPath = demoDir || path.dirname(mdFilePath);
+  const playgroundUrl = token.content.match(playgroundRegex)?.[1];
 
   if (orderValue?.[1]) {
     order = orderValue[1];
@@ -419,6 +420,19 @@ export const transformPreview = (
     locale = encodeURIComponent(JSON.stringify(config.locale));
   }
 
+  // Helper functions for base64 encoding/decoding
+  const utoa = (data: string): string => btoa(unescape(encodeURIComponent(data)));
+  const getPlaygroundUrl = (() => {
+    if (!playgroundUrl || !componentVuePath || !fs.existsSync(componentVuePath)) return '';
+    try {
+      const content = fs.readFileSync(componentVuePath, 'utf-8');
+      const base64Content = utoa(JSON.stringify({ 'App.vue': content }));
+      return `${playgroundUrl}/#${base64Content}`;
+    } catch (e) {
+      return '';
+    }
+  })();
+  
   const sourceCode = `
   ${
     ssgValue
@@ -445,6 +459,7 @@ export const transformPreview = (
       htmlWriteWay="${htmlWriteWayValue}"
       background="${backgroundValue}"
       :visible="!!${visible}"
+      playgroundUrl = "${getPlaygroundUrl}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
         componentProps.html
