@@ -4,10 +4,60 @@ export const demoReg = [
   /<demo(\s|\n)((.|\n)*)\/>/,
 ];
 
-const scriptLangTsReg = /<\s*script[^>]*\blang=['"]ts['"][^>]*/;
 const scriptSetupReg = /<\s*script[^>]*\bsetup\b[^>]*/;
-const scriptSetupCommonReg =
-  /<\s*script\s+(setup|lang='ts'|lang="ts")?\s*(setup|lang='ts'|lang="ts")?\s*>/;
+const scriptSetupOpenTagReg = /<\s*script\b[^>]*\bsetup\b[^>]*>/i;
+const pendingScriptSetupTokenKey = '__vitepress_demo_plugin_script_setup_token__';
+
+type MarkdownToken = {
+  type?: string;
+  content?: string;
+  children?: MarkdownToken[];
+};
+
+const hasOwn = (target: Record<string, any>, key: string) =>
+  Object.prototype.hasOwnProperty.call(target, key);
+
+const findPendingScriptSetupToken = (
+  tokens: MarkdownToken[]
+): MarkdownToken | null => {
+  for (const token of tokens) {
+    if (
+      token?.type === 'html_block' &&
+      token.content &&
+      scriptSetupReg.test(token.content)
+    ) {
+      return token;
+    }
+    const children = token?.children;
+    if (Array.isArray(children)) {
+      const child = findPendingScriptSetupToken(children);
+      if (child) {
+        return child;
+      }
+    }
+  }
+  return null;
+};
+
+const includesInjectedCode = (
+  content: string,
+  path: string,
+  componentName?: string
+) => content.includes(path) && (!componentName || content.includes(componentName));
+
+const injectIntoScriptSetupContent = (content: string, importCode: string) =>
+  content.replace(
+    scriptSetupOpenTagReg,
+    (tagOpen) => `${tagOpen}\n${importCode}`
+  );
+
+export const prepareScriptSetupToken = (env: any, tokens: any[]) => {
+  if (!env || hasOwn(env, pendingScriptSetupTokenKey)) {
+    return;
+  }
+
+  env[pendingScriptSetupTokenKey] = findPendingScriptSetupToken(tokens);
+};
 
 /**
  * 注入 script 脚本
@@ -24,14 +74,10 @@ export const injectComponentImportScript = (
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
   // 判断MD文件内部是否本身就存在 <script setup> 脚本
-  const scriptsSetupIndex = scriptsCode.findIndex((script: any) => {
-    if (
-      scriptSetupReg.test(script.tagOpen) ||
-      scriptLangTsReg.test(script.tagOpen)
-    )
-      return true;
-    return false;
-  });
+  const scriptSetupBlock =
+    env.sfcBlocks.scriptSetup ||
+    scriptsCode.find((script: any) => scriptSetupReg.test(script.tagOpen));
+  const pendingScriptSetupToken = env[pendingScriptSetupTokenKey];
 
   // 统一处理组件名称为驼峰命名
   const componentName = name || '';
@@ -60,8 +106,39 @@ export const injectComponentImportScript = (
       : `import '${path}'`;
   }
 
+  // MD文件中已经处理过 <script setup> 或 <script setup lang='ts'> 脚本文件
+  if (scriptSetupBlock) {
+    if (includesInjectedCode(scriptSetupBlock.content, path, componentName)) {
+      return;
+    }
+
+    scriptSetupBlock.content = injectIntoScriptSetupContent(
+      scriptSetupBlock.content,
+      importCode
+    );
+    scriptSetupBlock.contentStripped = `${importCode}\n${
+      scriptSetupBlock.contentStripped || ''
+    }`;
+    return;
+  }
+
+  // MD文件后续存在 <script setup>，提前向 token 中注入，避免生成第二个 setup
+  if (pendingScriptSetupToken) {
+    if (
+      includesInjectedCode(pendingScriptSetupToken.content, path, componentName)
+    ) {
+      return;
+    }
+
+    pendingScriptSetupToken.content = injectIntoScriptSetupContent(
+      pendingScriptSetupToken.content,
+      importCode
+    );
+    return;
+  }
+
   // MD文件中没有 <script setup> 或 <script setup lang='ts'> 脚本文件
-  if (scriptsSetupIndex === -1) {
+  if (!scriptSetupBlock) {
     const scriptBlockObj = {
       type: 'script',
       tagClose: '</script>',
@@ -72,29 +149,7 @@ export const injectComponentImportScript = (
       contentStripped: importCode,
     };
     scriptsCode.push(scriptBlockObj);
-  } else {
-    // MD文件注入了 <script setup> 或 <script setup lang='ts'> 脚本
-    const oldScriptsSetup = scriptsCode[0];
-    // MD文件中存在已经引入了组件，直接替换组件的内容
-    if (
-      oldScriptsSetup.content.includes(path) &&
-      (!name || oldScriptsSetup.content.includes(componentName))
-    ) {
-      scriptsCode[0].content = oldScriptsSetup.content;
-    } else {
-      // MD文件中不存在组件 添加组件 import ${_componentName} from '${path}'\n
-      // 如果MD文件中存在 <script setup lang="ts">、<script lang="ts" setup>  或 <script setup> 代码块, 那么统一转换为 <script setup lang="ts">
-      const scriptCodeBlock = '<script lang="ts" setup>\n';
-      scriptsCode[0].content = scriptsCode[0].content.replace(
-        scriptSetupCommonReg,
-        scriptCodeBlock
-      );
-      scriptsCode[0].content = scriptsCode[0].content.replace(
-        scriptCodeBlock,
-        `<script setup>\n
-      ${importCode}\n`
-      );
-    }
+    env.sfcBlocks.scriptSetup = scriptBlockObj;
   }
 };
 

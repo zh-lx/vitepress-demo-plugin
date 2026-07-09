@@ -1,13 +1,17 @@
 import MarkdownIt from 'markdown-it';
 import Renderer from 'markdown-it/lib/renderer';
 import Token from 'markdown-it/lib/token';
-import { demoReg } from './utils';
+import { demoReg, prepareScriptSetupToken } from './utils';
 import { transformPreview, VitepressDemoBoxConfig } from './preview';
 
 export const vitepressDemoPlugin = (
   md: MarkdownIt & any,
   params?: VitepressDemoBoxConfig
 ) => {
+  md.core.ruler.push('vitepress-demo-prepare-script-setup', (state: any) => {
+    prepareScriptSetupToken(state.env, state.tokens);
+  });
+
   const defaultHtmlInlineRender = md.renderer.rules.html_inline!;
   const defaultHtmlBlockRender = md.renderer.rules.html_block!;
   md.renderer.rules.html_inline = (
