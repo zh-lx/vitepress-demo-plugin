@@ -4,8 +4,9 @@ export const demoReg = [
   /<demo(\s|\n)((.|\n)*)\/>/,
 ];
 
-const scriptSetupReg = /<\s*script[^>]*\bsetup\b[^>]*/;
-const scriptSetupOpenTagReg = /<\s*script\b[^>]*\bsetup\b[^>]*>/i;
+const htmlCommentReg = /<!--[\s\S]*?-->/g;
+const scriptSetupOpenTagReg =
+  /<\s*script\b(?=[^>]*\ssetup(?:[\s=>/]|>))[^>]*>/i;
 const pendingScriptSetupTokenKey = '__vitepress_demo_plugin_script_setup_token__';
 
 type MarkdownToken = {
@@ -17,15 +18,17 @@ type MarkdownToken = {
 const hasOwn = (target: Record<string, any>, key: string) =>
   Object.prototype.hasOwnProperty.call(target, key);
 
+const stripHtmlComments = (content: string) =>
+  content.replace(htmlCommentReg, '');
+
+const hasScriptSetupOpenTag = (content?: string) =>
+  !!content && scriptSetupOpenTagReg.test(stripHtmlComments(content));
+
 const findPendingScriptSetupToken = (
   tokens: MarkdownToken[]
 ): MarkdownToken | null => {
   for (const token of tokens) {
-    if (
-      token?.type === 'html_block' &&
-      token.content &&
-      scriptSetupReg.test(token.content)
-    ) {
+    if (token?.type === 'html_block' && hasScriptSetupOpenTag(token.content)) {
       return token;
     }
     const children = token?.children;
@@ -74,10 +77,16 @@ export const injectComponentImportScript = (
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
   // 判断MD文件内部是否本身就存在 <script setup> 脚本
-  const scriptSetupBlock =
-    env.sfcBlocks.scriptSetup ||
-    scriptsCode.find((script: any) => scriptSetupReg.test(script.tagOpen));
-  const pendingScriptSetupToken = env[pendingScriptSetupTokenKey];
+  const scriptSetupBlock = hasScriptSetupOpenTag(
+    env.sfcBlocks.scriptSetup?.tagOpen
+  )
+    ? env.sfcBlocks.scriptSetup
+    : scriptsCode.find((script: any) => hasScriptSetupOpenTag(script.tagOpen));
+  const pendingScriptSetupToken = hasScriptSetupOpenTag(
+    env[pendingScriptSetupTokenKey]?.content
+  )
+    ? env[pendingScriptSetupTokenKey]
+    : null;
 
   // 统一处理组件名称为驼峰命名
   const componentName = name || '';
