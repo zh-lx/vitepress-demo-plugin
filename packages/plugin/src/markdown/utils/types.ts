@@ -1,4 +1,4 @@
-import { PlatformTemplate } from '../../constant/type';
+import { PlatformTemplate, PreviewFile } from '../../constant/type';
 import { Locale } from '@/locales/text';
 
 export interface DefaultProps {
@@ -27,7 +27,7 @@ export interface TabConfig {
   select?: string;
 }
 
-export type Files = Record<string, { code: string; filename: string }>;
+export type Files = Record<string, PreviewFile>;
 
 export type PreviewFiles = Record<'vue' | 'react' | 'html', Files>;
 

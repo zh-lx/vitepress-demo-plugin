@@ -47,15 +47,15 @@ export default defineConfig({
 ::: details 展开查看 stackblitz 平台 Vue 预设文件及代码
 ::: code-group
 
-```html [src/Demo.vue]
+```html [src/App.vue]
 <!-- 会动态替换为你的 demo 代码 -->
 ```
 
 ```ts [src/main.ts]
 import { createApp } from "vue";
-import Demo from "./Demo.vue";
+import App from "./App.vue";
 
-const app = createApp(Demo);
+const app = createApp(App);
 app.mount("#app");
 ```
 
@@ -141,17 +141,17 @@ export default defineConfig({
 ::: details 展开查看 stackblitz 平台 React 预设文件及代码
 ::: code-group
 
-```html [src/Demo.tsx]
+```html [src/App.tsx]
 <!-- 会动态替换为你的 demo 代码 -->
 ```
 
 ```ts [src/main.tsx]
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Demo from "./Demo.tsx";
+import App from "./App.tsx";
 
 const root = createRoot(document.querySelector("#app"));
-root.render(<Demo />);
+root.render(<App />);
 ```
 
 ```json [.stackblitzrc]
@@ -248,15 +248,15 @@ export default defineConfig({
 ::: details 展开查看 codesandbox 平台 Vue 预设文件及代码
 ::: code-group
 
-```html [Demo.vue]
+```html [App.vue]
 <!-- 会动态替换为你的 demo 代码 -->
 ```
 
 ```ts [main.ts]
 import { createApp } from "vue";
-import Demo from "./Demo.vue";
+import App from "./App.vue";
 
-const app = createApp(Demo);
+const app = createApp(App);
 app.mount("#app");
 ```
 
@@ -317,17 +317,17 @@ app.mount("#app");
 ::: details 展开查看 codesandbox 平台 React 预设文件及代码
 ::: code-group
 
-```html [Demo.tsx]
+```html [App.tsx]
 <!-- 会动态替换为你的 demo 代码 -->
 ```
 
 ```ts [main.tsx]
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Demo from "./Demo.tsx";
+import App from "./App.tsx";
 
 const root = createRoot(document.querySelector("#app"));
-root.render(<Demo />);
+root.render(<App />);
 ```
 
 ```html [index.html]
@@ -475,7 +475,7 @@ export default defineConfig({
               scope: 'vue', // 仅针对 Vue 类型的 demo 组件生效 // [!code ++]
               files: { // [!code ++]
                 // 替换预设的 main.ts 文件 // [!code ++]
-                'src/main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, // [!code ++]
+                'src/main.ts': `import { createApp } from "vue";\nimport App from "./App.vue";\nconst app = createApp(App);\napp.mount("#app");`, // [!code ++]
               } // [!code ++]
             }, // [!code ++]
           ]
@@ -515,7 +515,7 @@ export default defineConfig({
               scope: 'vue', // 仅针对 Vue 类型的 demo 组件生效
               files: { 
                 // 替换预设的 main.ts 文件
-                'src/main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, 
+                'src/main.ts': `import { createApp } from "vue";\nimport App from "./App.vue";\nconst app = createApp(App);\napp.mount("#app");`,
               } 
             },
             { // [!code ++]
@@ -817,6 +817,7 @@ export default defineConfig({
 <demo
   vue="../demos/multiple.vue"
   :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']" playground="codeplayer"
+  scope="codeplayer"
 />
 ```
 

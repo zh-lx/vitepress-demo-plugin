@@ -47,6 +47,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   PlatformTemplate,
+  PreviewFile,
 } from '@/constant/type';
 
 const props = defineProps<{
@@ -56,6 +57,7 @@ const props = defineProps<{
   description?: string;
   scope?: string;
   templates: PlatformTemplate[];
+  files: Record<string, PreviewFile>;
 }>();
 
 const parameters = computed(() =>
@@ -66,6 +68,7 @@ const parameters = computed(() =>
     description: props.description || DEFAULT_DESCRIPTION,
     scope: props.scope,
     templates: props.templates,
+    files: props.files,
   })
 );
 

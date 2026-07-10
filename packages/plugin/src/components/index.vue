@@ -140,6 +140,10 @@ const currentCode = computed(() => {
   return props[`${type.value}Code` as keyof VitepressDemoBoxProps];
 });
 
+const demoCode = computed(() => {
+  return props[`${type.value}Code` as keyof VitepressDemoBoxProps] as string;
+});
+
 const displayCode = ref('');
 watchEffect(async () => {
   await updatetDisplayCode();
@@ -427,18 +431,20 @@ watch(
       <div :class="[ns.bem('description', 'handle-btn')]">
         <Tooltip :content="i18n.openInStackblitz" v-if="stackblitz.show">
           <StackblitzIcon
-            :code="currentCode"
+            :code="demoCode"
             :type="type"
             :scope="scope || ''"
             :templates="stackblitz.templates || []"
+            :files="currentFiles"
           />
         </Tooltip>
         <Tooltip :content="i18n.openInCodeSandbox" v-if="codesandbox.show">
           <CodeSandboxIcon
-            :code="currentCode"
+            :code="demoCode"
             :type="type"
             :scope="scope || ''"
             :templates="codesandbox.templates || []"
+            :files="currentFiles"
           />
         </Tooltip>
         <Tooltip

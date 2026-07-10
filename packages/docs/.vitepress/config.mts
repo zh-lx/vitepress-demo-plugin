@@ -18,10 +18,10 @@ function fileURLToPath(fileURL: string) {
 
 const srcMain = `
 import { createApp } from "vue";
-import Demo from "./Demo.vue";
+import App from "./App.vue";
 import 'element-plus/dist/index.css'
 
-const app = createApp(Demo);
+const app = createApp(App);
 app.mount("#app");`.trim();
 
 const indexHtml = `

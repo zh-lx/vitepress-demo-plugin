@@ -22,6 +22,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   PlatformTemplate,
+  PreviewFile,
 } from '@/constant/type';
 
 const props = defineProps<{
@@ -31,6 +32,7 @@ const props = defineProps<{
   description?: string;
   templates: PlatformTemplate[];
   scope?: string;
+  files: Record<string, PreviewFile>;
 }>();
 
 function open() {
@@ -41,6 +43,7 @@ function open() {
     description: props.description || DEFAULT_DESCRIPTION,
     templates: props.templates || [],
     scope: props.scope,
+    files: props.files,
   });
 }
 </script>

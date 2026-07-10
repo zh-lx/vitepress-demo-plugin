@@ -7,16 +7,19 @@ import {
   genMainTs,
   genPackageJson,
 } from '../templates';
+import { toCodeSandboxFiles } from './files';
 
 export function getVueCodeSandboxParams(params: PlatformParams) {
   const { code } = params;
+  const sourceCodes = Object.values(params.sourceFiles || {});
   return (getParameters as any)({
     files: {
+      ...toCodeSandboxFiles(params.sourceFiles),
       'package.json': {
         content: genPackageJson({
           type: ComponentType.VUE,
           platform: PlatformType.CODESANDBOX,
-          code,
+          codes: [code, ...sourceCodes],
         }),
       },
       'tsconfig.json': {
@@ -28,10 +31,10 @@ export function getVueCodeSandboxParams(params: PlatformParams) {
       'src/main.ts': {
         content: genMainTs(ComponentType.VUE),
       },
-      'src/Demo.vue': {
+      'src/App.vue': {
         content: code,
       },
-      ...params.customFiles,
+      ...toCodeSandboxFiles(params.customFiles),
     },
   });
 }

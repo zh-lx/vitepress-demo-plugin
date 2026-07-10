@@ -11,6 +11,7 @@ import {
 
 export const openVueStackblitz = (params: PlatformParams) => {
   const { code, title, description } = params;
+  const sourceCodes = Object.values(params.sourceFiles || {});
 
   stackblitz.openProject(
     {
@@ -18,13 +19,14 @@ export const openVueStackblitz = (params: PlatformParams) => {
       description: description!,
       template: 'node',
       files: {
-        'src/Demo.vue': code,
+        ...params.sourceFiles,
+        'src/App.vue': code,
         'src/main.ts': genMainTs(ComponentType.VUE),
         'index.html': genHtmlTemplate({ src: '/src/main.ts' }),
         'package.json': genPackageJson({
           type: ComponentType.VUE,
           platform: PlatformType.STACKBLITZ,
-          code,
+          codes: [code, ...sourceCodes],
         }),
         'vite.config.js': genViteConfig(ComponentType.VUE),
         '.stackblitzrc': genStackblitzRc(),
@@ -33,7 +35,7 @@ export const openVueStackblitz = (params: PlatformParams) => {
       },
     },
     {
-      openFile: 'src/Demo.vue',
-    }
+      openFile: 'src/App.vue',
+    },
   );
 };

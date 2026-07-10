@@ -11,6 +11,7 @@ import {
 
 export const openReactStackblitz = (params: PlatformParams) => {
   const { code, title, description } = params;
+  const sourceCodes = Object.values(params.sourceFiles || {});
 
   stackblitz.openProject(
     {
@@ -18,13 +19,14 @@ export const openReactStackblitz = (params: PlatformParams) => {
       description: description!,
       template: 'node',
       files: {
-        'src/Demo.tsx': code,
+        ...params.sourceFiles,
+        'src/App.tsx': code,
         'src/main.tsx': genMainTs(ComponentType.REACT),
         'index.html': genHtmlTemplate({ src: '/src/main.tsx' }),
         'package.json': genPackageJson({
           type: ComponentType.REACT,
           platform: PlatformType.STACKBLITZ,
-          code,
+          codes: [code, ...sourceCodes],
         }),
         'vite.config.js': genViteConfig(ComponentType.REACT),
         '.stackblitzrc': genStackblitzRc(),
@@ -33,7 +35,7 @@ export const openReactStackblitz = (params: PlatformParams) => {
       },
     },
     {
-      openFile: 'src/Demo.tsx',
-    }
+      openFile: 'src/App.tsx',
+    },
   );
 };
