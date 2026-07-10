@@ -18,14 +18,17 @@ const githubRegex = /github="(.*?)"/;
 const gitlabRegex = /gitlab="(.*?)"/;
 const stackblitzRegex = /stackblitz="(.*?)"/;
 const codesandboxRegex = /codesandbox="(.*?)"/;
-const codeplayerRegex = /codeplayer="(.*?)"/;
 const scopeRegex = /scope="(.*?)"/;
 const vueFilesRegex = /vueFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const reactFilesRegex = /reactFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const htmlFilesRegex = /htmlFiles=("\{((.|\n)*?)\}"|"\[((.|\n)*?)\]")/;
 const ssgRegex = /ssg="(.*?)"/;
 const htmlWriteWayRegex = /htmlWriteWay="(.*?)"/;
-const backgroundRegex = /background="(.*?)"/
+const backgroundRegex = /background="(.*?)"/;
+const playgroundRegex = /playground="(.*?)"/;
+
+const getRelativePath = (from: string, to: string) =>
+  path.relative(from, to).replace(/\\/g, '/');
 
 export interface DefaultProps {
   title?: string;
@@ -62,6 +65,22 @@ export type Platform = {
 
 export type CodeFiles = string[] | Record<string, string>;
 
+export type PlaygroundConfig = {
+  url: string | ((content: string) => string);
+  fn?: (files: Record<string, string>) => string;
+  entryName?: {
+    vue?: string;
+    react?: string;
+    html?: string;
+  };
+};
+
+export type Playground = {
+  show: boolean;
+  templates?: PlatformTemplate[];
+  config: PlaygroundConfig | (PlaygroundConfig & { name: string })[];
+};
+
 export interface VitepressDemoBoxConfig {
   /**
    * @cn demo所在目录
@@ -83,11 +102,6 @@ export interface VitepressDemoBoxConfig {
    * @en The configuration of the codesandbox platform
    */
   codesandbox?: Platform;
-  /**
-   * @cn codeplayer 平台配置
-   * @en The configuration of the codeplayer platform
-   */
-  codeplayer?: Platform;
   /**
    * @cn vue 展示的代码文件
    * @en The code files of the vue
@@ -123,6 +137,11 @@ export interface VitepressDemoBoxConfig {
    * @en The locale configuration 'zh-CN' | 'en-US'
    */
   locale?: Locale;
+  /**
+   * @cn 自定义 playground 平台配置
+   * @en The configuration of the custom playground platform
+   */
+  playground?: Playground;
 }
 
 /**
@@ -137,14 +156,14 @@ export const transformPreview = (
   md: MarkdownIt,
   token: Token,
   mdFile: any,
-  config?: VitepressDemoBoxConfig
+  config?: VitepressDemoBoxConfig,
 ) => {
   const {
     demoDir,
     tab = {},
     stackblitz = { show: false },
     codesandbox = { show: false },
-    codeplayer = { show: false },
+    playground = { show: false } as Playground,
   } = config || {};
   let {
     order = 'vue,react,html',
@@ -172,7 +191,6 @@ export const transformPreview = (
   const gitlabValue = token.content.match(gitlabRegex);
   const stackblitzValue = token.content.match(stackblitzRegex);
   const codesandboxValue = token.content.match(codesandboxRegex);
-  const codeplayerValue = token.content.match(codeplayerRegex);
   const scopeValue = token.content.match(scopeRegex)?.[1] || '';
   const vueFilesValue = token.content.match(vueFilesRegex);
   const reactFilesValue = token.content.match(reactFilesRegex);
@@ -183,6 +201,7 @@ export const transformPreview = (
   const backgroundValue = token.content.match(backgroundRegex)?.[1];
   const mdFilePath = mdFile.realPath ?? mdFile.path;
   const dirPath = demoDir || path.dirname(mdFilePath);
+  const playgroundValue = token.content.match(playgroundRegex);
 
   if (orderValue?.[1]) {
     order = orderValue[1];
@@ -204,8 +223,8 @@ export const transformPreview = (
   if (codesandboxValue?.[1]) {
     codesandbox.show = codesandboxValue[1] === 'true';
   }
-  if (codeplayerValue?.[1]) {
-    codeplayer.show = codeplayerValue[1] === 'true';
+  if (playgroundValue?.[1]) {
+    playground.show = playgroundValue[1] !== 'false';
   }
 
   if (vuePathRegexValue?.[1]) {
@@ -230,29 +249,20 @@ export const transformPreview = (
     ? descriptionRegexValue[1]
     : '';
 
+  const getAbsPath = (demoPath?: string) => {
+    return path
+      .resolve(demoDir || path.dirname(mdFilePath), demoPath || '.')
+      .replace(/\\/g, '/');
+  };
+
   const componentVuePath = componentProps.vue
-    ? path
-        .resolve(
-          demoDir || path.dirname(mdFilePath),
-          vuePathRegexValue?.[1] || '.'
-        )
-        .replace(/\\/g, '/')
+    ? getAbsPath(vuePathRegexValue?.[1])
     : '';
   const componentHtmlPath = componentProps.html
-    ? path
-        .resolve(
-          demoDir || path.dirname(mdFilePath),
-          htmlPathRegexValue?.[1] || '.'
-        )
-        .replace(/\\/g, '/')
+    ? getAbsPath(htmlPathRegexValue?.[1])
     : '';
   const componentReactPath = componentProps.react
-    ? path
-        .resolve(
-          demoDir || path.dirname(mdFilePath),
-          reactPathRegexValue?.[1] || '.'
-        )
-        .replace(/\\/g, '/')
+    ? getAbsPath(reactPathRegexValue?.[1])
     : '';
 
   // 组件名
@@ -260,7 +270,7 @@ export const transformPreview = (
   const absolutePath = path
     .resolve(
       dirPath,
-      componentProps.vue || componentProps.react || componentProps.html || '.'
+      componentProps.vue || componentProps.react || componentProps.html || '.',
     )
     .replace(/\\/g, '/');
 
@@ -271,7 +281,7 @@ export const transformPreview = (
   injectComponentImportScript(
     mdFile,
     'vitepress-demo-plugin',
-    `{ VitepressDemoBox, VitepressDemoPlaceholder }`
+    `{ VitepressDemoBox, VitepressDemoPlaceholder }`,
   );
   injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
   injectComponentImportScript(mdFile, 'vue', '{ ref, shallowRef, onMounted }');
@@ -282,25 +292,25 @@ export const transformPreview = (
       mdFile,
       componentVuePath,
       componentName,
-      ssgValue ? undefined : 'dynamicImport'
+      ssgValue ? undefined : 'dynamicImport',
     );
   }
   if (componentProps.react) {
     injectComponentImportScript(
       mdFile,
       'react',
-      '{ createElement as reactCreateElement }'
+      '{ createElement as reactCreateElement }',
     );
     injectComponentImportScript(
       mdFile,
       'react-dom/client',
-      '{ createRoot as reactCreateRoot }'
+      '{ createRoot as reactCreateRoot }',
     );
     injectComponentImportScript(
       mdFile,
       componentReactPath,
       reactComponentName,
-      'dynamicImport'
+      'dynamicImport',
     );
   }
 
@@ -311,7 +321,7 @@ export const transformPreview = (
     mdFile,
     placeholderVisibleKey,
     `const ${placeholderVisibleKey} = ref(true);`,
-    'inject'
+    'inject',
   );
 
   // 组件代码，动态引入以便实时更新
@@ -328,21 +338,21 @@ export const transformPreview = (
     injectComponentImportScript(
       mdFile,
       `${componentHtmlPath}?raw`,
-      htmlCodeTempVariable
+      htmlCodeTempVariable,
     );
   }
   if (componentProps.react) {
     injectComponentImportScript(
       mdFile,
       `${componentReactPath}?raw`,
-      reactCodeTempVariable
+      reactCodeTempVariable,
     );
   }
   if (componentProps.vue) {
     injectComponentImportScript(
       mdFile,
       `${componentVuePath}?raw`,
-      vueCodeTempVariable
+      vueCodeTempVariable,
     );
   }
 
@@ -377,7 +387,16 @@ export const transformPreview = (
         const codeFiles = JSON.parse(value);
         if (Array.isArray(codeFiles)) {
           (codeFiles as string[]).forEach((file) => {
-            const fileName = path.basename(file);
+            const filePath = getAbsPath(file);
+            const componentMap = {
+              html: componentHtmlPath,
+              vue: componentVuePath,
+              react: componentReactPath,
+            };
+            const fileName = getRelativePath(
+              path.dirname(componentMap[key as keyof typeof componentMap]),
+              filePath,
+            );
             files[key as keyof typeof files][fileName] = {
               filename: file,
               code: '',
@@ -419,6 +438,127 @@ export const transformPreview = (
     locale = encodeURIComponent(JSON.stringify(config.locale));
   }
 
+  let htmlPlayground = '';
+  let vuePlayground = '';
+  let reactPlayground = '';
+  // Helper functions for base64 encoding/decoding
+  const utoa = (data: string): string =>
+    btoa(unescape(encodeURIComponent(data)));
+
+  (() => {
+    try {
+      if (!playground?.show) {
+        return;
+      }
+      const globalFiles = (playground.templates || []).find(
+        (item) => item.scope === 'global',
+      )?.files;
+      const scopeFiles = (playground.templates || []).find(
+        (item) => item.scope === scopeValue,
+      )?.files;
+      const htmlFiles = {
+        ...(playground.templates || []).find((item) => item.scope === 'html')
+          ?.files,
+      };
+      const vueFiles = {
+        ...(playground.templates || []).find((item) => item.scope === 'vue')
+          ?.files,
+      };
+      const reactFiles = {
+        ...(playground.templates || []).find((item) => item.scope === 'react')
+          ?.files,
+      };
+      if (htmlFilesValue) {
+        Object.entries(files.html || {}).forEach(([_, item]) => {
+          const filePath = getAbsPath(item.filename);
+          if (filePath === componentHtmlPath) {
+            return;
+          }
+          const dir = path.dirname(componentHtmlPath);
+          const filename = getRelativePath(dir, filePath);
+          htmlFiles[filename] = item.code;
+        });
+      }
+      if (vueFilesValue) {
+        Object.entries(files.vue || {}).forEach(([_, item]) => {
+          const filePath = getAbsPath(item.filename);
+          if (filePath === componentVuePath) {
+            return;
+          }
+          const dir = path.dirname(componentVuePath);
+          const filename = getRelativePath(dir, filePath);
+          vueFiles[filename] = item.code;
+        });
+      }
+      if (reactFilesValue) {
+        Object.entries(files.react || {}).forEach(([_, item]) => {
+          const filePath = getAbsPath(item.filename);
+          if (filePath === componentReactPath) {
+            return;
+          }
+          const dir = path.dirname(componentReactPath);
+          const filename = getRelativePath(dir, filePath);
+          reactFiles[filename] = item.code;
+        });
+      }
+
+      const playgroundConfig = Array.isArray(playground.config)
+        ? playground.config.find(
+            (config) => config.name === playgroundValue?.[1],
+          )
+        : playground.config;
+      if (!playgroundConfig || !playgroundConfig.url) {
+        return;
+      }
+
+      if (componentHtmlPath) {
+        htmlFiles[playgroundConfig.entryName?.html || 'index.html'] =
+          fs.readFileSync(componentHtmlPath, 'utf-8');
+      }
+      if (componentVuePath) {
+        vueFiles[playgroundConfig.entryName?.vue || 'App.vue'] =
+          fs.readFileSync(componentVuePath, 'utf-8');
+      }
+      if (componentReactPath) {
+        reactFiles[playgroundConfig.entryName?.react || 'App.tsx'] =
+          fs.readFileSync(componentReactPath, 'utf-8');
+      }
+
+      const finalHtmlFiles = {
+        ...globalFiles,
+        ...htmlFiles,
+        ...scopeFiles,
+      };
+      const finalVueFiles = {
+        ...globalFiles,
+        ...vueFiles,
+        ...scopeFiles,
+      };
+      const finalReactFiles = {
+        ...globalFiles,
+        ...reactFiles,
+        ...scopeFiles,
+      };
+
+      const getUrl =
+        typeof playgroundConfig.url === 'function'
+          ? playgroundConfig.url
+          : (content: string) => `${playgroundConfig.url}#${content}`;
+
+      const convert =
+        playgroundConfig.fn ||
+        ((files: Record<string, string>) => utoa(JSON.stringify(files)));
+      const htmlBase64Content = convert(finalHtmlFiles);
+      const vueBase64Content = convert(finalVueFiles);
+      const reactBase64Content = convert(finalReactFiles);
+      htmlPlayground = getUrl(htmlBase64Content);
+      vuePlayground = getUrl(vueBase64Content);
+      reactPlayground = getUrl(reactBase64Content);
+    } catch (error) {
+      console.warn('[vitepress-demo-plugin] Get playground url error:', error);
+    }
+  })();
+
   const sourceCode = `
   ${
     ssgValue
@@ -439,11 +579,14 @@ export const transformPreview = (
       darkTheme="${config?.darkTheme || ''}"
       stackblitz="${encodeURIComponent(JSON.stringify(stackblitz))}"
       codesandbox="${encodeURIComponent(JSON.stringify(codesandbox))}"
-      codeplayer="${encodeURIComponent(JSON.stringify(codeplayer))}"
+      playground="${encodeURIComponent(JSON.stringify(playground))}"
       files="${encodeURIComponent(JSON.stringify(files))}"
       scope="${scopeValue || ''}"
       htmlWriteWay="${htmlWriteWayValue}"
       background="${backgroundValue}"
+      htmlPlayground="${htmlPlayground}"
+      vuePlayground="${vuePlayground}"
+      reactPlayground="${reactPlayground}"
       :visible="!!${visible}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${

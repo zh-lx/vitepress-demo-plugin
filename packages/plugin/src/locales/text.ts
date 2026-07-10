@@ -8,6 +8,7 @@ export interface LocaleText {
   copyCode: string;
   copySuccess: string;
   copyFail: string;
+  openInPlayground: string;
 }
 
 export type Locale = {
@@ -24,6 +25,7 @@ export const CN: LocaleText = {
   copyCode: '复制代码',
   copySuccess: '已将代码复制至剪切板！',
   copyFail: '复制失败！',
+  openInPlayground: '在 Playground 中打开',
 };
 
 export const EN: LocaleText = {
@@ -36,4 +38,5 @@ export const EN: LocaleText = {
   copyCode: 'Copy Code',
   copySuccess: 'The code has been copied to the clipboard!',
   copyFail: 'Failed to copy the code!',
+  openInPlayground: 'Open in Playground'
 };
