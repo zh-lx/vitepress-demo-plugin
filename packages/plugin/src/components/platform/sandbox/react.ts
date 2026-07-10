@@ -28,7 +28,7 @@ export function getReactCodeSandboxParams(params: PlatformParams) {
       'src/main.tsx': {
         content: genMainTs(ComponentType.REACT),
       },
-      'src/Demo.tsx': {
+      'src/App.tsx': {
         content: code,
       },
       ...params.customFiles,

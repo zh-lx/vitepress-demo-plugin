@@ -2,6 +2,7 @@ import { ComponentType, PlatformParams } from '@/constant/type';
 import { openHtmlStackblitz } from './html';
 import { openReactStackblitz } from './react';
 import { openVueStackblitz } from './vue';
+import { getSourceFiles } from '..';
 
 export function openStackblitz(params: PlatformParams) {
   const globalFiles = (params.templates || []).find(
@@ -14,6 +15,7 @@ export function openStackblitz(params: PlatformParams) {
     (item) => item.scope === params.scope
   )?.files;
   params.customFiles = {
+    ...getSourceFiles(params),
     ...globalFiles,
     ...typeFiles,
     ...scopeFiles,

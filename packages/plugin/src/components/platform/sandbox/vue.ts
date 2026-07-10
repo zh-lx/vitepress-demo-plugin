@@ -28,7 +28,7 @@ export function getVueCodeSandboxParams(params: PlatformParams) {
       'src/main.ts': {
         content: genMainTs(ComponentType.VUE),
       },
-      'src/Demo.vue': {
+      'src/App.vue': {
         content: code,
       },
       ...params.customFiles,

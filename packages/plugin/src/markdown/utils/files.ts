@@ -60,6 +60,11 @@ export const readPreviewFiles = (
         const absolutePath = getAbsolutePath(baseDir, filename);
         if (filename && fs.existsSync(absolutePath)) {
           files[type][file].code = fs.readFileSync(absolutePath, 'utf-8');
+          files[type][file].entry = absolutePath === componentPaths[type];
+          files[type][file].path = getRelativePath(
+            path.dirname(componentPaths[type]),
+            absolutePath,
+          );
         } else {
           delete files[type][file];
         }

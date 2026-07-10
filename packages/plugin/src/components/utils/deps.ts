@@ -20,7 +20,9 @@ export function getDeps(code: string) {
       }
       return dep;
     })
-    .filter((dep) => dep !== '')
+    .filter(
+      (dep) => dep !== '' && !dep.startsWith('.') && !dep.startsWith('/'),
+    )
     .reduce((prevV: any, dep: string) => {
       prevV[dep] = 'latest';
       return prevV;

@@ -18,7 +18,7 @@ export const openVueStackblitz = (params: PlatformParams) => {
       description: description!,
       template: 'node',
       files: {
-        'src/Demo.vue': code,
+        'src/App.vue': code,
         'src/main.ts': genMainTs(ComponentType.VUE),
         'index.html': genHtmlTemplate({ src: '/src/main.ts' }),
         'package.json': genPackageJson({
@@ -33,7 +33,7 @@ export const openVueStackblitz = (params: PlatformParams) => {
       },
     },
     {
-      openFile: 'src/Demo.vue',
-    }
+      openFile: 'src/App.vue',
+    },
   );
 };

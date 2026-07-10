@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
 import path from 'path';
@@ -10,11 +9,7 @@ import {
   parsePreviewAttributes,
   readPreviewFiles,
 } from './utils';
-import type {
-  DefaultProps,
-  Playground,
-  VitepressDemoBoxConfig,
-} from './utils';
+import type { DefaultProps, Playground, VitepressDemoBoxConfig } from './utils';
 
 export type {
   CodeFiles,
@@ -44,9 +39,9 @@ export const transformPreview = (
   const {
     demoDir,
     tab = {},
-    stackblitz = { show: false },
-    codesandbox = { show: false },
-    playground = { show: false } as Playground,
+    stackblitz: globalStackblitz = { show: false },
+    codesandbox: globalCodesandbox = { show: false },
+    playground: globalPlayground = { show: false } as Playground,
   } = config || {};
   let {
     order = 'vue,react,html',
@@ -71,15 +66,24 @@ export const transformPreview = (
   if (attributes.select) {
     select = attributes.select;
   }
-  if (attributes.stackblitz) {
-    stackblitz.show = attributes.stackblitz === 'true';
-  }
-  if (attributes.codesandbox) {
-    codesandbox.show = attributes.codesandbox === 'true';
-  }
-  if (attributes.playground) {
-    playground.show = attributes.playground !== 'false';
-  }
+  const stackblitz = {
+    ...globalStackblitz,
+    show: attributes.stackblitz
+      ? attributes.stackblitz === 'true'
+      : globalStackblitz.show,
+  };
+  const codesandbox = {
+    ...globalCodesandbox,
+    show: attributes.codesandbox
+      ? attributes.codesandbox === 'true'
+      : globalCodesandbox.show,
+  };
+  const playground = {
+    ...globalPlayground,
+    show: attributes.playground
+      ? attributes.playground !== 'false'
+      : globalPlayground.show,
+  };
 
   const componentProps: DefaultProps = {
     title: attributes.title,

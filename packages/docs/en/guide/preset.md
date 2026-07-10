@@ -47,15 +47,15 @@ export default defineConfig({
 ::: details Expand to view the stackblitz platform Vue preset files and codes
 ::: code-group
 
-```html [src/Demo.vue]
+```html [src/App.vue]
 <!-- Will be dynamically replaced with your demo code -->
 ```
 
 ```ts [src/main.ts]
 import { createApp } from "vue";
-import Demo from "./Demo.vue";
+import App from "./App.vue";
 
-const app = createApp(Demo);
+const app = createApp(App);
 app.mount("#app");
 ```
 
@@ -141,17 +141,17 @@ export default defineConfig({
 ::: details Expand to view the stackblitz platform React preset files and code
 ::: code-group
 
-```html [src/Demo.tsx]
+```html [src/App.tsx]
 <!-- Will be dynamically replaced with your demo code -->
 ```
 
 ```ts [src/main.tsx]
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Demo from "./Demo.tsx";
+import App from "./App.tsx";
 
 const root = createRoot(document.querySelector("#app"));
-root.render(<Demo />);
+root.render(<App />);
 ```
 
 ```json [.stackblitzrc]
@@ -248,15 +248,15 @@ export default defineConfig({
 ::: details Expand to view codesandbox platform Vue preset files and codes
 ::: code-group
 
-```html [Demo.vue]
+```html [App.vue]
 <!-- Expand to view codesandbox platform Vue preset files and codes -->
 ```
 
 ```ts [main.ts]
 import { createApp } from "vue";
-import Demo from "./Demo.vue";
+import App from "./App.vue";
 
-const app = createApp(Demo);
+const app = createApp(App);
 app.mount("#app");
 ```
 
@@ -317,17 +317,17 @@ app.mount("#app");
 ::: details Expand to view the codesandbox platform React preset files and codes
 ::: code-group
 
-```html [Demo.tsx]
+```html [App.tsx]
 <!-- Expand to view the stackblitz platform Html preset files and codes -->
 ```
 
 ```ts [main.tsx]
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Demo from "./Demo.tsx";
+import App from "./App.tsx";
 
 const root = createRoot(document.querySelector("#app"));
-root.render(<Demo />);
+root.render(<App />);
 ```
 
 ```html [index.html]
@@ -475,7 +475,7 @@ export default defineConfig({
               scope: 'vue', // Only valid for Vue demo components // [!code ++]
               files: { // [!code ++]
                 // Replace the default main.ts file // [!code ++]
-                'main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, // [!code ++]
+                'main.ts': `import { createApp } from "vue";\nimport App from "./App.vue";\nconst app = createApp(App);\napp.mount("#app");`, // [!code ++]
               } // [!code ++]
             }, // [!code ++]
           ]
@@ -515,7 +515,7 @@ export default defineConfig({
               scope: 'vue', // Only valid for Vue demo components
               files: { 
                 // Replace the default main.ts file
-                'main.ts': `import { createApp } from "vue";\nimport Demo from "./Demo.vue";\nconst app = createApp(Demo);\napp.mount("#app");`, 
+                'main.ts': `import { createApp } from "vue";\nimport App from "./App.vue";\nconst app = createApp(App);\napp.mount("#app");`,
               } 
             },
             { // [!code ++]
@@ -821,6 +821,7 @@ You can now open each demo in a different playground:
 <demo
   vue="../demos/multiple.vue"
   :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']" playground="codeplayer"
+  scope="codeplayer"
 />
 ```
 

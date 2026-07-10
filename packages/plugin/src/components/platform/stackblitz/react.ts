@@ -18,7 +18,7 @@ export const openReactStackblitz = (params: PlatformParams) => {
       description: description!,
       template: 'node',
       files: {
-        'src/Demo.tsx': code,
+        'src/App.tsx': code,
         'src/main.tsx': genMainTs(ComponentType.REACT),
         'index.html': genHtmlTemplate({ src: '/src/main.tsx' }),
         'package.json': genPackageJson({
@@ -33,7 +33,7 @@ export const openReactStackblitz = (params: PlatformParams) => {
       },
     },
     {
-      openFile: 'src/Demo.tsx',
-    }
+      openFile: 'src/App.tsx',
+    },
   );
 };

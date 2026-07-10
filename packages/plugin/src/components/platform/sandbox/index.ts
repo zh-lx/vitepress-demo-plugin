@@ -2,6 +2,7 @@ import { ComponentType, PlatformParams } from '@/constant/type';
 import { getVueCodeSandboxParams } from './vue';
 import { getReactCodeSandboxParams } from './react';
 import { getHtmlCodeSandboxParams } from './html';
+import { getSourceFiles } from '..';
 
 export function getCodeSandboxParams(params: PlatformParams) {
   const globalFiles = (params.templates || []).find(
@@ -14,6 +15,7 @@ export function getCodeSandboxParams(params: PlatformParams) {
     (item) => item.scope === params.scope
   )?.files;
   params.customFiles = {
+    ...getSourceFiles(params),
     ...globalFiles,
     ...typeFiles,
     ...scopeFiles,

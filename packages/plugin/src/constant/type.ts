@@ -22,7 +22,15 @@ export interface PlatformParams {
   platform?: PlatformType;
   templates?: PlatformTemplate[];
   scope?: string;
+  files?: Record<string, PreviewFile>;
   customFiles?: Record<string, string> | Record<string, { content: string }>;
+}
+
+export interface PreviewFile {
+  code: string;
+  filename: string;
+  entry?: boolean;
+  path?: string;
 }
 
 export const DEFAULT_TITLE = 'vitepress-demo';
