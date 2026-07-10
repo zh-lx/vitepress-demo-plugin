@@ -4,7 +4,7 @@ import { ComponentType, PlatformType } from '@/constant/type';
 interface PackageJsonParams {
   type: ComponentType;
   platform: PlatformType;
-  code: string;
+  codes: string[];
   title?: string;
   description?: string;
 }
@@ -42,7 +42,7 @@ export const getDepsByType = (type: ComponentType, platform: PlatformType) => {
 };
 
 export function genPackageJson(params: PackageJsonParams): string {
-  const { type, platform, code, title, description } = params;
+  const { type, platform, codes, title, description } = params;
 
   const scripts =
     platform === PlatformType.STACKBLITZ
@@ -64,7 +64,7 @@ export function genPackageJson(params: PackageJsonParams): string {
     private: true,
     ...scripts,
     dependencies: {
-      ...getDeps(code),
+      ...getDeps(`${codes.join('\n')}\n`),
       ...dependencies,
     },
     devDependencies: {

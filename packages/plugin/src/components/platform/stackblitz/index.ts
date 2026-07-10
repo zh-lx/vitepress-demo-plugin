@@ -14,20 +14,23 @@ export function openStackblitz(params: PlatformParams) {
   const scopeFiles = (params.templates || []).find(
     (item) => item.scope === params.scope
   )?.files;
-  params.customFiles = {
-    ...getSourceFiles(params),
-    ...globalFiles,
-    ...typeFiles,
-    ...scopeFiles,
+  const platformParams = {
+    ...params,
+    sourceFiles: getSourceFiles(params),
+    customFiles: {
+      ...globalFiles,
+      ...typeFiles,
+      ...scopeFiles,
+    },
   };
 
   if (params.type === ComponentType.VUE) {
-    return openVueStackblitz(params);
+    return openVueStackblitz(platformParams);
   }
   if (params.type === ComponentType.REACT) {
-    return openReactStackblitz(params);
+    return openReactStackblitz(platformParams);
   }
   if (params.type === ComponentType.HTML) {
-    return openHtmlStackblitz(params);
+    return openHtmlStackblitz(platformParams);
   }
 }

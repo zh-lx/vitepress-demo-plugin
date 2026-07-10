@@ -7,16 +7,19 @@ import {
   genMainTs,
   genPackageJson,
 } from '../templates';
+import { toCodeSandboxFiles } from './files';
 
 export function getReactCodeSandboxParams(params: PlatformParams) {
   const { code } = params;
+  const sourceCodes = Object.values(params.sourceFiles || {});
   return (getParameters as any)({
     files: {
+      ...toCodeSandboxFiles(params.sourceFiles),
       'package.json': {
         content: genPackageJson({
           type: ComponentType.REACT,
           platform: PlatformType.CODESANDBOX,
-          code,
+          codes: [code, ...sourceCodes],
         }),
       },
       'tsconfig.json': {
@@ -31,7 +34,7 @@ export function getReactCodeSandboxParams(params: PlatformParams) {
       'src/App.tsx': {
         content: code,
       },
-      ...params.customFiles,
+      ...toCodeSandboxFiles(params.customFiles),
     },
   });
 }

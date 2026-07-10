@@ -14,26 +14,23 @@ export function getCodeSandboxParams(params: PlatformParams) {
   const scopeFiles = (params.templates || []).find(
     (item) => item.scope === params.scope
   )?.files;
-  params.customFiles = {
-    ...getSourceFiles(params),
-    ...globalFiles,
-    ...typeFiles,
-    ...scopeFiles,
+  const platformParams = {
+    ...params,
+    sourceFiles: getSourceFiles(params),
+    customFiles: {
+      ...globalFiles,
+      ...typeFiles,
+      ...scopeFiles,
+    },
   };
-  for (let file in params.customFiles) {
-    // @ts-ignore
-    params.customFiles[file] = {
-      content: params.customFiles[file] || '',
-    };
-  }
 
   if (params.type === ComponentType.VUE) {
-    return getVueCodeSandboxParams(params);
+    return getVueCodeSandboxParams(platformParams);
   }
   if (params.type === ComponentType.REACT) {
-    return getReactCodeSandboxParams(params);
+    return getReactCodeSandboxParams(platformParams);
   }
   if (params.type === ComponentType.HTML) {
-    return getHtmlCodeSandboxParams(params);
+    return getHtmlCodeSandboxParams(platformParams);
   }
 }

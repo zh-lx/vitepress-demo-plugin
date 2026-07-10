@@ -23,6 +23,7 @@ export interface PlatformParams {
   templates?: PlatformTemplate[];
   scope?: string;
   files?: Record<string, PreviewFile>;
+  sourceFiles?: Record<string, string>;
   customFiles?: Record<string, string> | Record<string, { content: string }>;
 }
 

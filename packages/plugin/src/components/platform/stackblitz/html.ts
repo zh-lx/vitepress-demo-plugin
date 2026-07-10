@@ -11,12 +11,13 @@ export const openHtmlStackblitz = (params: PlatformParams) => {
       description: description!,
       template: 'html',
       files: {
+        ...params.sourceFiles,
         'index.html': genHtmlTemplate({ code }),
         ...params.customFiles,
       },
     },
     {
       openFile: 'index.html',
-    }
+    },
   );
 };
