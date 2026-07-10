@@ -538,3 +538,259 @@ export default defineConfig({
 ```html
 <demo vue="../demos/demo.vue" scope="myScope" />
 ```
+
+## 自定义 playground
+
+除了 `codesandbox` 和 `stackblitz` 之外，也支持你自定义跳转至其他的 playground 平台，`playground` 配置项如下：
+
+```ts
+export type PlaygroundConfig = {
+  // 要跳转的 url
+  url: string | ((content: string) => string);
+  // 自定义文件处理逻辑
+  fn?: (files: Record<string, string>) => string;
+  // 部分 playground 对于入口文件名有要求，如 element-plus playground 要求 App.vue
+  // vitepress 会为对应的 demo 替换你设置的入口文件名
+  entryName?: {
+    vue?: string; // 默认为 App.vue
+    react?: string; // 默认为 App.tsx
+    html?: string; // 默认为 index.html
+  };
+};
+
+export type Playground = {
+  // 是否对全局 demo 显示 playground 按钮
+  show: boolean;
+  // 平台模板
+  templates?: PlatformTemplate[];
+  // playground 配置，Array 格式时必须指定 name
+  config: PlaygroundConfig | (PlaygroundConfig & { name: string })[];
+};
+```
+
+### 最简配置
+
+`vitepress-demo-plugin` 内置了一份对于 playground 的代码参数处理逻辑，它适用于很多 playground 平台如 [vue sfc playground](https://play.vuejs.org/)、[element-plus playground](https://element-plus.run/) 等。你只需要设置 `url`:
+
+```ts
+import { defineConfig } from 'vitepress';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+export default defineConfig({
+  // other configs...
+  markdown: {
+    config(md) {
+      md.use(vitepressDemoPlugin, {
+        playground: { // [!code ++]
+          config: { // [!code ++]
+            url: 'https://element-plus.run', // [!code ++]
+          }, // [!code ++]
+        }, // [!code ++]
+      });
+    },
+  }
+});
+```
+
+设置 `playground` 为 `true`，即可使用内置的 playground 处理逻辑。
+
+```html
+<demo vue="../demos/ele.vue" playground="true" />
+```
+<demo vue="../demos/ele.vue" playground="elementPlus" />
+
+### 配置多个 playground
+
+如果你有多个 demo 想打开不同的 playground，可以配置多个 `config`，以我要添加一个 codeplayer 的 playground 为例。
+
+- 首先将 `playground.config` 改成数组形式并且设置 `name`:
+
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: { // [!code --]
+              url: 'https://element-plus.run', // [!code --]
+            }, // [!code --]
+            config: [ // [!code ++]
+              { // [!code ++]
+                name: 'elementPlus', // [!code ++]
+                url: 'https://element-plus.run', // [!code ++]
+              }, // [!code ++]
+            ], // [!code ++]
+          },
+        });
+      },
+    }
+  });
+  ```
+
+- 新增加一个名为 `codeplayer` 的 config，并且自定义 `url`
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: [
+              {
+                name: 'elementPlus',
+                url: 'https://element-plus.run',
+              },
+              { // [!code ++]
+                name: 'codeplayer', // [!code ++]
+                url: (content: string) => `https://play.fe-dev.cn/?entry=index.html#${content}`, // [!code ++]
+              }, // [!code ++]
+            ],
+          },
+        });
+      },
+    }
+  });
+  ```
+
+- 按照 [codeplayer](https://play.fe-dev.cn/) 平台的格式，增加 `codeplayer` 的 scope 以及 `entryName`:
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: [
+              {
+                name: 'elementPlus',
+                url: 'https://element-plus.run',
+              },
+              {
+                name: 'codeplayer',
+                url: (content: string) => `https://play.fe-dev.cn/?entry=index.html#${content}`,
+              },
+            ],
+            templates: [ // [!code ++]
+              {  // [!code ++]
+                scope: 'codeplayer', // [!code ++]
+                files: {  // [!code ++]
+                  'main.ts': `import { createApp } from 'vue';import App from './App.vue';const app = createApp(App);app.mount('#app');`,  // [!code ++]
+                  'index.html': `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>CodePlayer</title></head><body><div id="app"></div></body><script type="module">import './main.ts';</script></html>`,  // [!code ++]
+                  'import-map.json': '{"imports": {"vue": "https://esm.sh/vue@latest"}}'  // [!code ++]
+                }  // [!code ++]
+              },  // [!code ++]
+            ] // [!code ++]
+          },
+        });
+      },
+    }
+  });
+  ```
+
+- 按照 [codeplayer 平台的序列化格式](https://play.fe-dev.cn/docs/guide/start.html)，自定义 `fn` 函数：
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  const indexHtml = `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>CodePlayer</title>
+    </head>
+    <body>
+      <div id="app"></div>
+    </body>
+    <script type="module">
+      import './main.ts';
+    </script>
+  </html>
+  `.trim();
+
+  const mainTs = `
+  import { createApp } from 'vue';
+  import App from './App.vue';
+  const app = createApp(App);
+  app.mount('#app');
+  `.trim();
+
+  const importJson = `
+  {
+    "imports": {
+      "vue": "https://esm.sh/vue@latest"
+    }
+  }`.trim();
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: [
+              {
+                name: 'elementPlus',
+                url: 'https://element-plus.run',
+              },
+              {
+                name: 'codeplayer',
+                url: (content: string) => `https://play.fe-dev.cn/?entry=index.html&activeFile=App.vue#${content}`,
+                fn: (files: Record<string, string>) => { // [!code ++]
+                  return btoa(JSON.stringify(files)); // [!code ++]
+                }, // [!code ++]
+              },
+            ],
+            templates: [ // [!code ++]
+              { // [!code ++]
+                scope: 'codeplayer', // [!code ++]
+                files: { // [!code ++]
+                  'main.ts': mainTs, // [!code ++]
+                  'index.html': indexHtml, // [!code ++]
+                  'import-map.json': importJson, // [!code ++]
+                } // [!code ++]
+              }, // [!code ++]
+            ] // [!code ++]
+          },
+        });
+      },
+    }
+  });
+  ```
+
+这样就可以跳转不同的 playground 了：
+
+- 跳转到 elementPlus
+
+```html
+<demo vue="../demos/ele.vue" playground="elementPlus" />
+```
+<demo vue="../demos/ele.vue" playground="elementPlus" />
+
+- 跳转到 codeplayer
+
+```html
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']" playground="codeplayer"
+/>
+```
+
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']"
+  playground="codeplayer"
+  scope="codeplayer"
+/>

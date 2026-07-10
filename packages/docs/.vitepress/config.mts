@@ -16,12 +16,45 @@ function fileURLToPath(fileURL: string) {
   return filePath;
 }
 
-const srcMain = `import { createApp } from "vue";
+const srcMain = `
+import { createApp } from "vue";
 import Demo from "./Demo.vue";
 import 'element-plus/dist/index.css'
 
 const app = createApp(Demo);
-app.mount("#app");`;
+app.mount("#app");`.trim();
+
+const indexHtml = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodePlayer</title>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+  <script type="module">
+    import './main.ts';
+  </script>
+</html>
+`.trim();
+
+const mainTs = `
+import { createApp } from 'vue';
+import App from './App.vue';
+const app = createApp(App);
+app.mount('#app');
+`.trim();
+
+const importJson = `
+{
+  "imports": {
+    "vue": "https://esm.sh/vue@latest"
+  }
+}`.trim();
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -135,7 +168,7 @@ export default defineConfig({
       md.use(vitepressDemoPlugin, {
         demoDir: path.resolve(
           dirname(fileURLToPath(import.meta.url)),
-          '../demos'
+          '../demos',
         ),
         stackblitz: {
           show: true,
@@ -155,6 +188,32 @@ export default defineConfig({
               scope: 'element',
               files: {
                 'src/main.ts': srcMain,
+              },
+            },
+          ],
+        },
+        playground: {
+          config: [
+            {
+              name: 'elementPlus',
+              url: 'https://element-plus.run',
+            },
+            {
+              name: 'codeplayer',
+              url: (content: string) =>
+                `https://play.fe-dev.cn/?entry=index.html&activeFile=App.vue#${content}`,
+              fn: (files: Record<string, string>) => {
+                return btoa(JSON.stringify(files));
+              },
+            },
+          ],
+          templates: [
+            {
+              scope: 'codeplayer',
+              files: {
+                'main.ts': mainTs,
+                'index.html': indexHtml,
+                'import-map.json': importJson,
               },
             },
           ],

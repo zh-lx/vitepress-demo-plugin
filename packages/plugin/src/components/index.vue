@@ -12,7 +12,7 @@ import {
 } from 'vue';
 import CodeOpenIcon from './icons/code-open.vue';
 import CodeCloseIcon from './icons/code-close.vue';
-import PlaygroundIcon from './icons/playground.vue'
+import PlaygroundIcon from './icons/playground.vue';
 import CopyIcon from './icons/copy.vue';
 import FoldIcon from './icons/fold.vue';
 import CodeSandboxIcon from './icons/codesandbox.vue';
@@ -46,7 +46,6 @@ interface VitepressDemoBoxProps {
   reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
   stackblitz?: string;
   codesandbox?: string;
-  codeplayer?: string;
   scope?: string;
   files: string;
   lightTheme?: string;
@@ -55,7 +54,9 @@ interface VitepressDemoBoxProps {
   locale?: string;
   htmlWriteWay?: 'write' | 'srcdoc';
   background?: string;
-  playgroundUrl?: string,
+  htmlPlayground?: string;
+  vuePlayground?: string;
+  reactPlayground?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -67,7 +68,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
-  playgroundUrl:'',
+  playgroundUrl: '',
 });
 
 const emit = defineEmits(['mount']);
@@ -96,9 +97,6 @@ const stackblitz = computed<Platform>(() => {
 const codesandbox = computed<Platform>(() => {
   return JSON.parse(decodeURIComponent(props.codesandbox || '{}'));
 });
-const codeplayer = computed<Platform>(() => {
-  return JSON.parse(decodeURIComponent(props.codeplayer || '{}'));
-});
 
 const activeFile = ref<string>('');
 const currentFiles = computed<
@@ -118,7 +116,7 @@ const tabOrders = computed(() => {
 const injectType = inject('coot-code-type', {} as any);
 const setInjectType = inject<(type: string) => void>(
   'set-coot-code-type',
-  (type: string) => {}
+  (type: string) => {},
 );
 
 const type = ref<ComponentType>(ComponentType.VUE);
@@ -185,7 +183,7 @@ watch(
       type.value = val;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const openGithub = () => {
@@ -212,19 +210,23 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 
 const clickCodeCopy = async () => {
   const successful = await clickCopy(currentCode.value || '');
   MessageService.open(
     successful ? i18n.value.copySuccess : i18n.value.copyFail,
-    successful
+    successful,
   );
 };
 
+const activePlaygroundContent = computed(() => {
+  return props[`${type.value}Playground` as keyof VitepressDemoBoxProps];
+});
+
 const openPlayground = () => {
-  window.open(props.playgroundUrl, '_blank');
+  window.open(activePlaygroundContent.value, '_blank');
 };
 
 const htmlContainerRef = ref();
@@ -260,7 +262,7 @@ function setHTMLWithScript() {
           code: props.htmlCode || '',
           styles: styleString,
           links: styleLinkString + '\n' + fontLinkString,
-        })
+        }),
       );
       iframeDocument.close();
     } else {
@@ -325,7 +327,7 @@ watch(
       root = null;
     }
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 );
 
 watch(
@@ -335,7 +337,7 @@ watch(
       root.render(props.reactCreateElement(props.reactComponent, {}, null));
     }
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 );
 
 watch(
@@ -347,7 +349,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 
 watch(
@@ -357,7 +359,7 @@ watch(
       type.value = tabs.value[0];
     }
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 );
 
 function handleFileClick(file: string) {
@@ -382,7 +384,7 @@ watch(
         }
       }
     });
-  }
+  },
 );
 </script>
 
@@ -440,6 +442,12 @@ watch(
             :templates="codesandbox.templates || []"
           />
         </Tooltip>
+        <Tooltip
+          :content="i18n.openInPlayground"
+          v-if="activePlaygroundContent"
+        >
+          <PlaygroundIcon @click="openPlayground" />
+        </Tooltip>
         <Tooltip :content="i18n.openInGithub" v-if="github">
           <GithubIcon @click="openGithub" />
         </Tooltip>
@@ -454,9 +462,6 @@ watch(
         </Tooltip>
         <Tooltip :content="i18n.copyCode">
           <CopyIcon @click="clickCodeCopy" />
-        </Tooltip>
-        <Tooltip :content="i18n.openInPlayground" v-if="playgroundUrl">
-          <PlaygroundIcon @click="openPlayground" />
         </Tooltip>
       </div>
     </section>
@@ -599,8 +604,15 @@ html.dark .shiki span {
     }
 
     code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        Liberation Mono, Courier New, monospace;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        Liberation Mono,
+        Courier New,
+        monospace;
       padding: 0 24px;
     }
   }
