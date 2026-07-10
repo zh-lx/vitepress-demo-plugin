@@ -1,5 +1,12 @@
 # 更新日志
 
+## 1.6.0
+
+- 🎉 feat: 支持自定义 playground 跳转 [#108](https://github.com/zh-lx/vitepress-demo-plugin/pull/108)
+- 🐛 fix: 修复同一个 `markdown` 文件中同时使用 vue demo 和 `<script setup />` 语法报错的问题 [#107](https://github.com/zh-lx/vitepress-demo-plugin/pull/107)
+- 🐛 fix: 修复多文件 demo 打开 stackblitz 和 codesandbox 失败的问题 [#110](https://github.com/zh-lx/vitepress-demo-plugin/pull/110)
+- 🐛 fix: 修复 codesandbox、stackblitz 是否开启在多个 demo 中互相污染的问题 [#110](https://github.com/zh-lx/vitepress-demo-plugin/pull/110)
+
 ## 1.5.1
 
 - 🐛 fix: 提升了复制代码的浏览器兼容性 [#103](https://github.com/zh-lx/vitepress-demo-plugin/pull/103)
