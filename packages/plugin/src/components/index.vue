@@ -68,7 +68,6 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
-  playgroundUrl: '',
 });
 
 const emit = defineEmits(['mount']);

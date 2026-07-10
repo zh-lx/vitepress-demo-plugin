@@ -26,6 +26,10 @@ const ssgRegex = /ssg="(.*?)"/;
 const htmlWriteWayRegex = /htmlWriteWay="(.*?)"/;
 const backgroundRegex = /background="(.*?)"/;
 const playgroundRegex = /playground="(.*?)"/;
+
+const getRelativePath = (from: string, to: string) =>
+  path.relative(from, to).replace(/\\/g, '/');
+
 export interface DefaultProps {
   title?: string;
   description?: string;
@@ -220,7 +224,7 @@ export const transformPreview = (
     codesandbox.show = codesandboxValue[1] === 'true';
   }
   if (playgroundValue?.[1]) {
-    playground.show = !!playgroundValue[1];
+    playground.show = playgroundValue[1] !== 'false';
   }
 
   if (vuePathRegexValue?.[1]) {
@@ -389,7 +393,7 @@ export const transformPreview = (
               vue: componentVuePath,
               react: componentReactPath,
             };
-            const fileName = path.relative(
+            const fileName = getRelativePath(
               path.dirname(componentMap[key as keyof typeof componentMap]),
               filePath,
             );
@@ -457,11 +461,11 @@ export const transformPreview = (
           ?.files,
       };
       const vueFiles = {
-        ...(playground.templates || []).find((item) => item.scope === 'html')
+        ...(playground.templates || []).find((item) => item.scope === 'vue')
           ?.files,
       };
       const reactFiles = {
-        ...(playground.templates || []).find((item) => item.scope === 'html')
+        ...(playground.templates || []).find((item) => item.scope === 'react')
           ?.files,
       };
       if (htmlFilesValue) {
@@ -471,7 +475,7 @@ export const transformPreview = (
             return;
           }
           const dir = path.dirname(componentHtmlPath);
-          const filename = path.relative(dir, filePath);
+          const filename = getRelativePath(dir, filePath);
           htmlFiles[filename] = item.code;
         });
       }
@@ -482,7 +486,7 @@ export const transformPreview = (
             return;
           }
           const dir = path.dirname(componentVuePath);
-          const filename = path.relative(dir, filePath);
+          const filename = getRelativePath(dir, filePath);
           vueFiles[filename] = item.code;
         });
       }
@@ -493,7 +497,7 @@ export const transformPreview = (
             return;
           }
           const dir = path.dirname(componentReactPath);
-          const filename = path.relative(dir, filePath);
+          const filename = getRelativePath(dir, filePath);
           reactFiles[filename] = item.code;
         });
       }
