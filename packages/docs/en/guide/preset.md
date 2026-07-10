@@ -538,3 +538,295 @@ Now that you have defined a template named `myScope`, you can use the `scope` pr
 ```html
 <demo vue="../demos/demo.vue" scope="myScope" />
 ```
+
+## Custom Playground <Badge type="tip" text="1.6.0+" vertical="middle" />
+
+In addition to `codesandbox` and `stackblitz`, you can configure links to other playground platforms. The `playground` configuration is defined as follows:
+
+```ts
+export type PlaygroundConfig = {
+  // The URL to open
+  url: string | ((content: string) => string);
+  // Custom file processing logic
+  fn?: (files: Record<string, string>) => string;
+  // Some playgrounds require a specific entry file name. For example,
+  // the Element Plus playground requires App.vue. VitePress replaces the
+  // corresponding demo entry file name with the value configured here.
+  entryName?: {
+    vue?: string; // Defaults to App.vue
+    react?: string; // Defaults to App.tsx
+    html?: string; // Defaults to index.html
+  };
+};
+
+export type Playground = {
+  // Whether to show the playground button for all demos
+  show: boolean;
+  // Platform templates
+  templates?: PlatformTemplate[];
+  // Playground configuration. A name is required when using the array form.
+  config: PlaygroundConfig | (PlaygroundConfig & { name: string })[];
+};
+```
+
+### Basic Configuration
+
+`vitepress-demo-plugin` provides built-in logic for processing playground code parameters. It works with many playground platforms, such as the [Vue SFC Playground](https://play.vuejs.org/) and [Element Plus Playground](https://element-plus.run/). You only need to configure the `url`:
+
+```ts
+import { defineConfig } from 'vitepress';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+export default defineConfig({
+  // other configs...
+  markdown: {
+    config(md) {
+      md.use(vitepressDemoPlugin, {
+        playground: { // [!code ++]
+          config: { // [!code ++]
+            url: 'https://element-plus.run', // [!code ++]
+          }, // [!code ++]
+        }, // [!code ++]
+      });
+    },
+  }
+});
+```
+
+Set `playground` to `true` to use the built-in playground processing logic.
+
+```html
+<demo vue="../demos/ele.vue" playground="true" />
+```
+<demo vue="../demos/ele.vue" playground="elementPlus" />
+
+### Configure Multiple Playgrounds
+
+If you want different demos to open in different playgrounds, you can provide multiple `config` entries. The following example adds CodePlayer as a second playground.
+
+- First, change `playground.config` to an array and set a `name`:
+
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: { // [!code --]
+              url: 'https://element-plus.run', // [!code --]
+            }, // [!code --]
+            config: [ // [!code ++]
+              { // [!code ++]
+                name: 'elementPlus', // [!code ++]
+                url: 'https://element-plus.run', // [!code ++]
+              }, // [!code ++]
+            ], // [!code ++]
+          },
+        });
+      },
+    }
+  });
+  ```
+
+- Add a config named `codeplayer` and customize its `url`:
+
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: [
+              {
+                name: 'elementPlus',
+                url: 'https://element-plus.run',
+              },
+              { // [!code ++]
+                name: 'codeplayer', // [!code ++]
+                url: (content: string) => `https://play.fe-dev.cn/?entry=index.html#${content}`, // [!code ++]
+              }, // [!code ++]
+            ],
+          },
+        });
+      },
+    }
+  });
+  ```
+
+- Add the `codeplayer` scope using the format required by [CodePlayer](https://play.fe-dev.cn/):
+
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  const indexHtml = `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>CodePlayer</title>
+    </head>
+    <body>
+      <div id="app"></div>
+    </body>
+    <script type="module">
+      import './main.ts';
+    </script>
+  </html>
+  `.trim();
+
+  const mainTs = `
+  import { createApp } from 'vue';
+  import App from './App.vue';
+  const app = createApp(App);
+  app.mount('#app');
+  `.trim();
+
+  const importJson = `
+  {
+    "imports": {
+      "vue": "https://esm.sh/vue@latest"
+    }
+  }`.trim();
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: [
+              {
+                name: 'elementPlus',
+                url: 'https://element-plus.run',
+              },
+              {
+                name: 'codeplayer',
+                url: (content: string) => `https://play.fe-dev.cn/?entry=index.html#${content}`,
+              },
+            ],
+            templates: [ // [!code ++]
+              {  // [!code ++]
+                scope: 'codeplayer', // [!code ++]
+                files: {  // [!code ++]
+                  'main.ts': mainTs, // [!code ++]
+                  'index.html': indexHtml, // [!code ++]
+                  'import-map.json': importJson, // [!code ++]
+                }  // [!code ++]
+              },  // [!code ++]
+            ] // [!code ++]
+          },
+        });
+      },
+    }
+  });
+  ```
+
+- Customize the `fn` function according to [CodePlayer's serialization format](https://play.fe-dev.cn/docs/guide/start.html):
+
+  ```ts
+  import { defineConfig } from 'vitepress';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  const indexHtml = `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>CodePlayer</title>
+    </head>
+    <body>
+      <div id="app"></div>
+    </body>
+    <script type="module">
+      import './main.ts';
+    </script>
+  </html>
+  `.trim();
+
+  const mainTs = `
+  import { createApp } from 'vue';
+  import App from './App.vue';
+  const app = createApp(App);
+  app.mount('#app');
+  `.trim();
+
+  const importJson = `
+  {
+    "imports": {
+      "vue": "https://esm.sh/vue@latest"
+    }
+  }`.trim();
+
+  export default defineConfig({
+    // other configs...
+    markdown: {
+      config(md) {
+        md.use(vitepressDemoPlugin, {
+          playground: {
+            config: [
+              {
+                name: 'elementPlus',
+                url: 'https://element-plus.run',
+              },
+              {
+                name: 'codeplayer',
+                url: (content: string) => `https://play.fe-dev.cn/?entry=index.html&activeFile=App.vue#${content}`,
+                fn: (files: Record<string, string>) => { // [!code ++]
+                  return btoa(JSON.stringify(files)); // [!code ++]
+                }, // [!code ++]
+              },
+            ],
+            templates: [
+              {
+                scope: 'codeplayer',
+                files: {
+                  'main.ts': mainTs,
+                  'index.html': indexHtml,
+                  'import-map.json': importJson,
+                },
+              },
+            ],
+          },
+        });
+      },
+    }
+  });
+  ```
+
+You can now open each demo in a different playground:
+
+- Open in Element Plus Playground
+
+```html
+<demo vue="../demos/ele.vue" playground="elementPlus" />
+```
+<demo vue="../demos/ele.vue" playground="elementPlus" />
+
+- Open in CodePlayer
+
+```html
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']" playground="codeplayer"
+/>
+```
+
+<demo
+  vue="../demos/multiple.vue"
+  :vueFiles="['../demos/multiple.vue', '../demos/constant/students.ts']"
+  playground="codeplayer"
+  scope="codeplayer"
+/>

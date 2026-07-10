@@ -144,14 +144,14 @@ The corresponding rendering result is as follows:
 
 ### Object
 
-By default, `vitepress-demo-plugin` takes the `basename` of the file path as the file name when displaying multiple files. You can also specify the file name through the `vueFiles/reactFiles/htmlFiles` property of the `Object` type. For example, if you want to use `constant/students.ts` to reflect the directory hierarchy of the file, you can do it as follows:
+You can also specify file names by passing an `Object` to the `vueFiles/reactFiles/htmlFiles` property. For example, if you only want to display each file's `basename` without its directory hierarchy, you can do it as follows:
 
 ```html
 <demo
   vue="../demos/multiple.vue"
   :vueFiles="{
     'multiple.vue': '../demos/multiple.vue',
-    'constant/students.ts': '../demos/constant/students.ts',
+    'students.ts': '../demos/constant/students.ts',
   }"
 />
 ```
@@ -162,7 +162,7 @@ The corresponding rendering result is as follows:
   vue="../demos/multiple.vue"
   :vueFiles="{
     'multiple.vue': '../demos/multiple.vue',
-    'constant/students.ts': '../demos/constant/students.ts',
+    'students.ts': '../demos/constant/students.ts',
   }"
 />
 
