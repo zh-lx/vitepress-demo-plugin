@@ -1,9 +1,4 @@
-// <demo></demo> or <demo />
-export const demoReg = [
-  /<demo(\s|\n)((.|\n)*)><\/demo>/,
-  /<demo(\s|\n)((.|\n)*)\/>/,
-];
-
+/* eslint-disable no-param-reassign */
 const htmlCommentReg = /<!--[\s\S]*?-->/g;
 const scriptSetupOpenTagReg =
   /<\s*script\b(?=[^>]*\ssetup(?:[\s=>/]|>))[^>]*>/i;
@@ -25,7 +20,7 @@ const hasScriptSetupOpenTag = (content?: string) =>
   !!content && scriptSetupOpenTagReg.test(stripHtmlComments(content));
 
 const findPendingScriptSetupToken = (
-  tokens: MarkdownToken[]
+  tokens: MarkdownToken[],
 ): MarkdownToken | null => {
   for (const token of tokens) {
     if (token?.type === 'html_block' && hasScriptSetupOpenTag(token.content)) {
@@ -45,13 +40,13 @@ const findPendingScriptSetupToken = (
 const includesInjectedCode = (
   content: string,
   path: string,
-  componentName?: string
+  componentName?: string,
 ) => content.includes(path) && (!componentName || content.includes(componentName));
 
 const injectIntoScriptSetupContent = (content: string, importCode: string) =>
   content.replace(
     scriptSetupOpenTagReg,
-    (tagOpen) => `${tagOpen}\n${importCode}`
+    (tagOpen) => `${tagOpen}\n${importCode}`,
   );
 
 export const prepareScriptSetupToken = (env: any, tokens: any[]) => {
@@ -64,26 +59,26 @@ export const prepareScriptSetupToken = (env: any, tokens: any[]) => {
 
 /**
  * 注入 script 脚本
- * @param mdInstance
+ * @param env
  * @param path
- * @param componentName
+ * @param name
  */
 export const injectComponentImportScript = (
   env: any,
   path: string,
   name?: string,
-  type?: 'dynamicImport' | 'inject'
+  type?: 'dynamicImport' | 'inject',
 ) => {
   const scriptsCode = env.sfcBlocks.scripts as any[];
 
   // 判断MD文件内部是否本身就存在 <script setup> 脚本
   const scriptSetupBlock = hasScriptSetupOpenTag(
-    env.sfcBlocks.scriptSetup?.tagOpen
+    env.sfcBlocks.scriptSetup?.tagOpen,
   )
     ? env.sfcBlocks.scriptSetup
     : scriptsCode.find((script: any) => hasScriptSetupOpenTag(script.tagOpen));
   const pendingScriptSetupToken = hasScriptSetupOpenTag(
-    env[pendingScriptSetupTokenKey]?.content
+    env[pendingScriptSetupTokenKey]?.content,
   )
     ? env[pendingScriptSetupTokenKey]
     : null;
@@ -123,7 +118,7 @@ export const injectComponentImportScript = (
 
     scriptSetupBlock.content = injectIntoScriptSetupContent(
       scriptSetupBlock.content,
-      importCode
+      importCode,
     );
     scriptSetupBlock.contentStripped = `${importCode}\n${
       scriptSetupBlock.contentStripped || ''
@@ -141,7 +136,7 @@ export const injectComponentImportScript = (
 
     pendingScriptSetupToken.content = injectIntoScriptSetupContent(
       pendingScriptSetupToken.content,
-      importCode
+      importCode,
     );
     return;
   }
@@ -184,8 +179,8 @@ export const composeComponentName = (path: string) => {
     'Temp' +
     btoa(
       encodeURIComponent(
-        componentList.join('-').split('.').slice(0, -1).join('.')
-      )
+        componentList.join('-').split('.').slice(0, -1).join('.'),
+      ),
     ).replace(/=/g, 'Equal')
   );
 };
