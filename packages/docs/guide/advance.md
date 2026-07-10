@@ -144,14 +144,14 @@ export default defineConfig({
 
 ### 对象方式
 
-默认情况下，`vitepress-demo-plugin` 多文件展示时会取文件路径的 `basename` 作为文件名，你也可以通过 `Object` 类型的 `vueFiles/reactFiles/htmlFiles` 属性来指定文件名。例如，你想通过 `constant/students.ts` 来体现出文件所在的目录层级，你可以通过如下方式：
+你也可以通过 `Object` 类型的 `vueFiles/reactFiles/htmlFiles` 属性来指定文件名。例如，你不需要体现出文件所在的目录层级，只需要展示文件的 `basename`，你可以通过如下方式：
 
 ```html
 <demo
   vue="../demos/multiple.vue"
   :vueFiles="{
     'multiple.vue': '../demos/multiple.vue',
-    'constant/students.ts': '../demos/constant/students.ts',
+    'students.ts': '../demos/constant/students.ts',
   }"
 />
 ```
@@ -162,7 +162,7 @@ export default defineConfig({
   vue="../demos/multiple.vue"
   :vueFiles="{
     'multiple.vue': '../demos/multiple.vue',
-    'constant/students.ts': '../demos/constant/students.ts',
+    'students.ts': '../demos/constant/students.ts',
   }"
 />
 

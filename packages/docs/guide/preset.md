@@ -659,10 +659,42 @@ export default defineConfig({
   });
   ```
 
-- 按照 [codeplayer](https://play.fe-dev.cn/) 平台的格式，增加 `codeplayer` 的 scope 以及 `entryName`:
+- 按照 [codeplayer](https://play.fe-dev.cn/) 平台的格式，增加 `codeplayer` 的 scope:
   ```ts
   import { defineConfig } from 'vitepress';
   import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+
+  const indexHtml = `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>CodePlayer</title>
+    </head>
+    <body>
+      <div id="app"></div>
+    </body>
+    <script type="module">
+      import './main.ts';
+    </script>
+  </html>
+  `.trim();
+
+  const mainTs = `
+  import { createApp } from 'vue';
+  import App from './App.vue';
+  const app = createApp(App);
+  app.mount('#app');
+  `.trim();
+
+  const importJson = `
+  {
+    "imports": {
+      "vue": "https://esm.sh/vue@latest"
+    }
+  }`.trim();
 
   export default defineConfig({
     // other configs...
@@ -684,9 +716,9 @@ export default defineConfig({
               {  // [!code ++]
                 scope: 'codeplayer', // [!code ++]
                 files: {  // [!code ++]
-                  'main.ts': `import { createApp } from 'vue';import App from './App.vue';const app = createApp(App);app.mount('#app');`,  // [!code ++]
-                  'index.html': `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>CodePlayer</title></head><body><div id="app"></div></body><script type="module">import './main.ts';</script></html>`,  // [!code ++]
-                  'import-map.json': '{"imports": {"vue": "https://esm.sh/vue@latest"}}'  // [!code ++]
+                  'main.ts': mainTs, // [!code ++]
+                  'index.html': indexHtml, // [!code ++]
+                  'import-map.json': importJson, // [!code ++]
                 }  // [!code ++]
               },  // [!code ++]
             ] // [!code ++]
@@ -753,16 +785,16 @@ export default defineConfig({
                 }, // [!code ++]
               },
             ],
-            templates: [ // [!code ++]
-              { // [!code ++]
-                scope: 'codeplayer', // [!code ++]
-                files: { // [!code ++]
-                  'main.ts': mainTs, // [!code ++]
-                  'index.html': indexHtml, // [!code ++]
-                  'import-map.json': importJson, // [!code ++]
-                } // [!code ++]
-              }, // [!code ++]
-            ] // [!code ++]
+            templates: [
+              {
+                scope: 'codeplayer',
+                files: {
+                  'main.ts': mainTs,
+                  'index.html': indexHtml,
+                  'import-map.json': importJson,
+                },
+              },
+            ],
           },
         });
       },
