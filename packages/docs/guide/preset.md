@@ -539,7 +539,7 @@ export default defineConfig({
 <demo vue="../demos/demo.vue" scope="myScope" />
 ```
 
-## 自定义 playground
+## 自定义 playground <Badge type="tip" text="1.6.0+" vertical="middle" />
 
 除了 `codesandbox` 和 `stackblitz` 之外，也支持你自定义跳转至其他的 playground 平台，`playground` 配置项如下：
 
