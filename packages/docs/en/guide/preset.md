@@ -22,7 +22,7 @@ Add the following configuration in `.vitepress/config.ts` to take effect on all 
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -419,7 +419,7 @@ When `scope` is set to `global`, it means that the template is effective for all
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -452,7 +452,7 @@ When `scope` is set to `vue/react/html`, it means that the template is only vali
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -492,7 +492,7 @@ You can also customize the name of `scope` to indicate that the template is only
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -575,7 +575,7 @@ export type Playground = {
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -608,7 +608,7 @@ If you want different demos to open in different playgrounds, you can provide mu
 
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   export default defineConfig({
     // other configs...
@@ -636,7 +636,7 @@ If you want different demos to open in different playgrounds, you can provide mu
 
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   export default defineConfig({
     // other configs...
@@ -665,7 +665,7 @@ If you want different demos to open in different playgrounds, you can provide mu
 
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   const indexHtml = `
   <!DOCTYPE html>
@@ -736,7 +736,7 @@ If you want different demos to open in different playgrounds, you can provide mu
 
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   const indexHtml = `
   <!DOCTYPE html>

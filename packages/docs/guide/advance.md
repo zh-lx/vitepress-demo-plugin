@@ -23,8 +23,8 @@ docs
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
@@ -102,8 +102,8 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
@@ -300,8 +300,8 @@ export default {
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
@@ -324,8 +324,8 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
