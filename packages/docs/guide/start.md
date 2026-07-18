@@ -22,8 +22,8 @@ pnpm add vitepress-demo-plugin -D
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin'; // [!code ++]
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown'; // [!code ++]
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...

@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path, { dirname } from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path, { dirname } from 'node:path';
 import { codeInspectorPlugin } from 'code-inspector-plugin';
 
 function fileURLToPath(fileURL: string) {

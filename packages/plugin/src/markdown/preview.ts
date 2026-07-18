@@ -1,6 +1,6 @@
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
-import path from 'path';
+import path from 'node:path';
 import {
   composeComponentName,
   createPlaygroundUrls,
@@ -126,10 +126,10 @@ export const transformPreview = (
   // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
     mdFile,
-    'vitepress-demo-plugin',
+    'vitepress-demo-plugin/client',
     `{ VitepressDemoBox, VitepressDemoPlaceholder }`,
   );
-  injectComponentImportScript(mdFile, 'vitepress-demo-plugin/dist/style.css');
+  injectComponentImportScript(mdFile, 'vitepress-demo-plugin/style.css');
   injectComponentImportScript(mdFile, 'vue', '{ ref, shallowRef, onMounted }');
 
   // 注入组件导入语句

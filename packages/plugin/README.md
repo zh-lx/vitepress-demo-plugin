@@ -13,6 +13,7 @@
 
 </div>
 
+
 <hr />
 
 ## 📖 介绍
@@ -45,8 +46,8 @@ pnpm add vitepress-demo-plugin -D
 
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin'; 
-  import path from 'path';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+  import path from 'node:path';
 
   export default defineConfig({
     // other configs...
@@ -81,4 +82,3 @@ pnpm add vitepress-demo-plugin -D
   <img src="https://cdn.jsdelivr.net/gh/zh-lx/static-img/vitepress-demo-plugin/wx-group.jpg" width="200" height="272" />
   <img src="https://cdn.jsdelivr.net/gh/zh-lx/static-img/code-inspector/wx-qrcode.jpg" width="200" height="272" />
 </div>
-

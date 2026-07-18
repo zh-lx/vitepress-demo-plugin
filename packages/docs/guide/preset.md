@@ -22,7 +22,7 @@
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -419,7 +419,7 @@ type Templates = Template[];
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -452,7 +452,7 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -492,7 +492,7 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -574,7 +574,7 @@ export type Playground = {
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
 export default defineConfig({
   // other configs...
@@ -607,7 +607,7 @@ export default defineConfig({
 
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   export default defineConfig({
     // other configs...
@@ -634,7 +634,7 @@ export default defineConfig({
 - 新增加一个名为 `codeplayer` 的 config，并且自定义 `url`
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   export default defineConfig({
     // other configs...
@@ -662,7 +662,7 @@ export default defineConfig({
 - 按照 [codeplayer](https://play.fe-dev.cn/) 平台的格式，增加 `codeplayer` 的 scope:
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   const indexHtml = `
   <!DOCTYPE html>
@@ -732,7 +732,7 @@ export default defineConfig({
 - 按照 [codeplayer 平台的序列化格式](https://play.fe-dev.cn/docs/guide/start.html)，自定义 `fn` 函数：
   ```ts
   import { defineConfig } from 'vitepress';
-  import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
+  import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 
   const indexHtml = `
   <!DOCTYPE html>

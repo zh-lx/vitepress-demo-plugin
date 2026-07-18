@@ -23,13 +23,30 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
+      "browser": {
+        "import": "./dist/browser.js",
+        "require": "./dist/browser.cjs"
+      },
       "import": "./dist/index.js",
       "require": "./dist/index.umd.cjs"
     },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js",
+      "require": "./dist/client.cjs"
+    },
+    "./markdown": {
+      "types": "./dist/markdown.d.ts",
+      "import": "./dist/markdown.js",
+      "require": "./dist/markdown.cjs"
+    },
+    "./style.css": "./dist/style.css",
     "./dist/style.css": "./dist/style.css"
   },
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
+  "browser": "./dist/browser.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"

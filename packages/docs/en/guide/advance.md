@@ -23,8 +23,8 @@ Add following code into `config.ts`：
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
@@ -102,8 +102,8 @@ If you want to make it effective for the global `<demo />` component, add the `t
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
@@ -301,8 +301,8 @@ You can specify the code block themes in light mode and dark mode respectively t
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
@@ -325,8 +325,8 @@ Example:
 
 ```ts
 import { defineConfig } from 'vitepress';
-import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
-import path from 'path';
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
+import path from 'node:path';
 
 export default defineConfig({
   // other configs...
