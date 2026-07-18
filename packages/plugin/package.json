@@ -25,8 +25,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "browser": {
-        "import": "./dist/client.js",
-        "require": "./dist/client.cjs"
+        "import": "./dist/browser.js",
+        "require": "./dist/browser.cjs"
       },
       "import": "./dist/index.js",
       "require": "./dist/index.umd.cjs"
@@ -46,7 +46,7 @@
   },
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
-  "browser": "./dist/client.js",
+  "browser": "./dist/browser.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"

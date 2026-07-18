@@ -6,15 +6,6 @@ import dts from 'vite-plugin-dts';
 const assertClientBoundary = (): Plugin => ({
   name: 'assert-client-boundary',
   generateBundle(_, bundle) {
-    const clientEntry = Object.values(bundle).find(
-      (output) =>
-        output.type === 'chunk' &&
-        output.facadeModuleId?.replace(/\\/g, '/').endsWith('/src/client.ts'),
-    );
-    if (!clientEntry || clientEntry.type !== 'chunk') {
-      this.error('Unable to find the client entry chunk.');
-    }
-
     const forbiddenImports = new Set([
       'fs',
       'path',
@@ -22,7 +13,32 @@ const assertClientBoundary = (): Plugin => ({
       'node:path',
       'markdown-it',
     ]);
-    const pending = [clientEntry!.fileName];
+    const isForbiddenModule = (moduleId: string) => {
+      const normalizedId = moduleId.replace(/\\/g, '/');
+      return (
+        forbiddenImports.has(normalizedId) ||
+        normalizedId.includes('/src/markdown/') ||
+        /\/node_modules\/(fs|path|markdown-it)(\/|$)/.test(normalizedId)
+      );
+    };
+
+    const browserEntries = ['/src/client.ts', '/src/browser.ts'].map(
+      (entrySuffix) => {
+        const entry = Object.values(bundle).find(
+          (output) =>
+            output.type === 'chunk' &&
+            output.facadeModuleId
+              ?.replace(/\\/g, '/')
+              .endsWith(entrySuffix),
+        );
+        if (!entry || entry.type !== 'chunk') {
+          this.error(`Unable to find the ${entrySuffix} entry chunk.`);
+        }
+        return entry.fileName;
+      },
+    );
+
+    const pending = [...browserEntries];
     const visited = new Set<string>();
     while (pending.length) {
       const fileName = pending.pop()!;
@@ -35,9 +51,14 @@ const assertClientBoundary = (): Plugin => ({
       if (!output || output.type !== 'chunk') {
         continue;
       }
+      for (const moduleId of Object.keys(output.modules)) {
+        if (isForbiddenModule(moduleId)) {
+          this.error(`Browser output must not include "${moduleId}".`);
+        }
+      }
       for (const imported of [...output.imports, ...output.dynamicImports]) {
         if (forbiddenImports.has(imported)) {
-          this.error(`Client output must not import "${imported}".`);
+          this.error(`Browser output must not import "${imported}".`);
         }
         if (bundle[imported]?.type === 'chunk') {
           pending.push(imported);
@@ -57,6 +78,7 @@ export default defineConfig(() => {
         entry: {
           index: resolve(__dirname, './src/index.ts'),
           client: resolve(__dirname, './src/client.ts'),
+          browser: resolve(__dirname, './src/browser.ts'),
           markdown: resolve(__dirname, './src/markdown/index.ts'),
         },
         name: 'demoBox',
