@@ -1,0 +1,69 @@
+name: Publish npm package and deploy docs
+
+on:
+  workflow_dispatch:
+    inputs:
+      dist_tag:
+        description: npm dist-tag
+        required: true
+        default: latest
+        type: choice
+        options:
+          - latest
+          - beta
+      dry_run:
+        description: Run publish in dry-run mode
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.20.8
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build package
+        run: pnpm --filter vitepress-demo-plugin run build
+
+      - name: Publish package
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            pnpm --filter vitepress-demo-plugin publish --dry-run --no-git-checks --access public --tag "${{ inputs.dist_tag }}"
+          else
+            pnpm --filter vitepress-demo-plugin publish --no-git-checks --access public --tag "${{ inputs.dist_tag }}"
+          fi
+
+      - name: Install deploy dependencies
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Deploy docs
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: pnpm deploy:docs
