@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.7.0
+
+- 🐛 fix: Isolated browser entry from Node modules [#112](https://github.com/zh-lx/vitepress-demo-plugin/pull/112)
+
+## 1.6.0
+
+- 🎉 feat: Support custom playground jump [#108](https://github.com/zh-lx/vitepress-demo-plugin/pull/108)
+- 🐛 fix: Fixed the issue that the same `markdown` file uses vue demo and `<script setup />` syntax at the same time and reports an error [#107](https://github.com/zh-lx/vitepress-demo-plugin/pull/107)
+- 🐛 fix: Fixed the issue that multi-file demo fails to open stackblitz and codesandbox [#110](https://github.com/zh-lx/vitepress-demo-plugin/pull/110)
+- 🐛 fix: Fixed the issue that codesandbox, stackblitz open status is mutually polluted in multiple demos [#110](https://github.com/zh-lx/vitepress-demo-plugin/pull/110)
+
+
 ## 1.5.1
 
 - 🐛 fix: Improved browser compatibility for copying code [#103](https://github.com/zh-lx/vitepress-demo-plugin/pull/103)

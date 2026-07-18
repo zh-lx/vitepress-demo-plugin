@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.7.0
+
+- 🐛 fix: 隔离浏览器入口与 Node 模块 [#112](https://github.com/zh-lx/vitepress-demo-plugin/pull/112)
+
 ## 1.6.0
 
 - 🎉 feat: 支持自定义 playground 跳转 [#108](https://github.com/zh-lx/vitepress-demo-plugin/pull/108)
