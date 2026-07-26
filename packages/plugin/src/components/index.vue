@@ -383,6 +383,9 @@ watch(
   () => {
     if (svelteContainerRef.value && type.value === 'svelte') {
       renderSvelteComponent();
+    } else if (!svelteContainerRef.value && svelteInstance && svelteUnmount) {
+      svelteUnmount(svelteInstance);
+      svelteInstance = null;
     }
   },
   { immediate: true, deep: true },
