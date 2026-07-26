@@ -19,6 +19,10 @@ import CodeSandboxIcon from './icons/codesandbox.vue';
 import StackblitzIcon from './icons/stackblitz.vue';
 import GithubIcon from './icons/github.vue';
 import GitlabIcon from './icons/gitlab.vue';
+import VueLogoIcon from './icons/vue.vue';
+import ReactLogoIcon from './icons/react.vue';
+import SvelteLogoIcon from './icons/svelte.vue';
+import HtmlLogoIcon from './icons/html.vue';
 import { MessageService } from './message';
 import Tooltip from './tooltip/index.vue';
 import { useNameSpace } from './utils/namespace';
@@ -186,6 +190,13 @@ const tabs = computed<ComponentType[]>(() => {
       return tabOrders.value.indexOf(a) - tabOrders.value.indexOf(b);
     });
 });
+
+const tabIcons: Record<string, any> = {
+  [ComponentType.VUE]: VueLogoIcon,
+  [ComponentType.REACT]: ReactLogoIcon,
+  [ComponentType.SVELTE]: SvelteLogoIcon,
+  [ComponentType.HTML]: HtmlLogoIcon,
+};
 
 watch(
   () => (injectType as Ref<ComponentType>)?.value,
@@ -493,6 +504,7 @@ watch(
           :class="[ns.bem('tab'), type === tab && ns.bem('active-tab')]"
           @click="setCodeType?.(tab)"
         >
+          <component :is="tabIcons[tab]" :class="ns.bem('tab-icon')" />
           {{ tab }}
         </div>
       </div>
@@ -720,6 +732,14 @@ html.dark .shiki span {
 
   .#{$defaultPrefix}-tab {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+  }
+
+  .#{$defaultPrefix}-tab-icon {
+    width: 1em;
+    height: 1em;
   }
 
   .#{$defaultPrefix}-active-tab {

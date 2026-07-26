@@ -3,18 +3,17 @@
 </script>
 
 <div class="svelte-demo">
-  <h3>Svelte Counter</h3>
+  <h2>This is a Svelte Counter</h2>
+  <button onclick={() => count++}>+1</button>
+  <button onclick={() => count--}>-1</button>
   <p>Current count: {count}</p>
-  <button onclick={() => count++}>Increment</button>
-  <button onclick={() => count--}>Decrement</button>
 </div>
 
 <style>
   .svelte-demo {
-    padding: 12px;
     font-family: sans-serif;
   }
-  .svelte-demo h3 {
+  .svelte-demo h2 {
     color: #ff3e00;
   }
   .svelte-demo button {
