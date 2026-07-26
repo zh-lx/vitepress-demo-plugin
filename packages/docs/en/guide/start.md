@@ -80,25 +80,60 @@ The corresponding rendering result is as follows:
 
 <demo react="../demos/demo.tsx" />
 
+## Svelte Demo
+
+::: tip Tip
+If you want to display Svelte Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
+
+```bash
+npm install svelte @sveltejs/vite-plugin-svelte -D
+```
+
+And import the svelte plugin in `vite.plugins` of `.vitepress/config.ts`:
+
+```ts
+import { svelte } from '@sveltejs/vite-plugin-svelte'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [svelte()], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+You can set path of `.svelte` file by `<demo svelte="xxx/path" />` in `.md` file, render this svelte component and display source code.
+
+```html
+<demo svelte="../demos/demo.svelte" />
+```
+
+The corresponding rendering result is as follows:
+
+<demo svelte="../demos/demo.svelte" />
+
 <hr />
 
 ## Mixed Demo
 
 ::: tip Tip
-Same as above, if you want to display React Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
+Same as above, if you want to display React Demo or Svelte Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
 
 ```bash
 npm install react react-dom -D
+npm install svelte @sveltejs/vite-plugin-svelte -D
 ```
 
 :::
 
-You can specify multiple `vue/react/html` in `<demo />` at the same time to display demos with different syntaxes in one block.
+You can specify multiple `vue/react/svelte/html` in `<demo />` at the same time to display demos with different syntaxes in one block.
 
 ```html
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
+  svelte="../demos/demo.svelte"
   html="../demos/demo.html"
 />
 ```
@@ -108,6 +143,7 @@ The corresponding rendering result is as follows:
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
+  svelte="../demos/demo.svelte"
   html="../demos/demo.html"
 />
 
