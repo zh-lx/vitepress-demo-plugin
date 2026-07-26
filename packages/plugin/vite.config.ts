@@ -100,6 +100,7 @@ export default defineConfig(() => {
           'react-dom',
           'sass',
           'shiki',
+          'svelte',
         ],
       },
       emptyOutDir: !isWatchMode,

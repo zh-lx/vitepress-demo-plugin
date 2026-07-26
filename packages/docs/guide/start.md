@@ -79,25 +79,60 @@ npm install react react-dom -D
 
 <demo react="../demos/demo.tsx" />
 
+## 展示 Svelte Demo
+
+::: tip 提示
+如果要在你的 vitepress 站点中展示 Svelte Demo，需要执行如下命令安装对应的依赖：
+
+```bash
+npm install svelte @sveltejs/vite-plugin-svelte -D
+```
+
+并在 `.vitepress/config.ts` 的 `vite.plugins` 中引入 svelte 插件：
+
+```ts
+import { svelte } from '@sveltejs/vite-plugin-svelte'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [svelte()], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+通过 `<demo svelte="xxx/path" />` 指定一个 `.svelte` 文件的路径，渲染该 svelte 组件并展示其代码：
+
+```html
+<demo svelte="../demos/demo.svelte" />
+```
+
+其对应的渲染效果如下：
+
+<demo svelte="../demos/demo.svelte" />
+
 <hr />
 
 ## 展示多语法混合 Demo
 
 ::: tip 提示
-同上，如果要在你的 vitepress 站点中展示 React Demo，需要执行如下命令安装相应的依赖：
+同上，如果要在你的 vitepress 站点中展示 React Demo 或 Svelte Demo，需要执行如下命令安装相应的依赖：
 
 ```bash
 npm install react react-dom -D
+npm install svelte @sveltejs/vite-plugin-svelte -D
 ```
 
 :::
 
-可以同时在 `<demo />` 中指定 `vue/react/html` 中的多个，以将不同语法的 Demo 展示在一个块中。
+可以同时在 `<demo />` 中指定 `vue/react/svelte/html` 中的多个，以将不同语法的 Demo 展示在一个块中。
 
 ```html
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
+  svelte="../demos/demo.svelte"
   html="../demos/demo.html"
 />
 ```
@@ -107,6 +142,7 @@ npm install react react-dom -D
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
+  svelte="../demos/demo.svelte"
   html="../demos/demo.html"
 />
 

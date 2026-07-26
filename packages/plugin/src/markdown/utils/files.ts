@@ -29,6 +29,7 @@ export const readPreviewFiles = (
   const files: PreviewFiles = {
     vue: {},
     react: {},
+    svelte: {},
     html: {},
   };
 

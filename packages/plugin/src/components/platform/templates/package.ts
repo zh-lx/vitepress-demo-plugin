@@ -37,6 +37,12 @@ export const getDepsByType = (type: ComponentType, platform: PlatformType) => {
       deps.devDependencies.vite = 'latest';
       deps.devDependencies['@vitejs/plugin-react'] = 'latest';
     }
+  } else if (type === ComponentType.SVELTE) {
+    deps.dependencies.svelte = 'latest';
+    if (platform === PlatformType.STACKBLITZ) {
+      deps.devDependencies.vite = 'latest';
+      deps.devDependencies['@sveltejs/vite-plugin-svelte'] = 'latest';
+    }
   }
   return deps;
 };

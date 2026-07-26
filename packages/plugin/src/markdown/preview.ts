@@ -44,9 +44,9 @@ export const transformPreview = (
     playground: globalPlayground = { show: false } as Playground,
   } = config || {};
   let {
-    order = 'vue,react,html',
+    order = 'vue,react,svelte,html',
     visible = true,
-    select = (tab.order || 'vue,react,html').split(',')[0] || 'vue',
+    select = (tab.order || 'vue,react,svelte,html').split(',')[0] || 'vue',
   } = tab;
   const attributes = parsePreviewAttributes(token.content);
   const {
@@ -97,6 +97,9 @@ export const transformPreview = (
     react: attributes.reactPath
       ? path.join(dirPath, attributes.reactPath).replace(/\\/g, '/')
       : '',
+    svelte: attributes.sveltePath
+      ? path.join(dirPath, attributes.sveltePath).replace(/\\/g, '/')
+      : '',
   };
 
   const getAbsPath = (demoPath?: string) =>
@@ -110,18 +113,26 @@ export const transformPreview = (
   const componentReactPath = componentProps.react
     ? getAbsPath(attributes.reactPath)
     : '';
+  const componentSveltePath = componentProps.svelte
+    ? getAbsPath(attributes.sveltePath)
+    : '';
 
   // 组件名
   // eslint-disable-next-line prefer-destructuring
   const absolutePath = path
     .resolve(
       dirPath,
-      componentProps.vue || componentProps.react || componentProps.html || '.',
+      componentProps.vue ||
+        componentProps.react ||
+        componentProps.svelte ||
+        componentProps.html ||
+        '.',
     )
     .replace(/\\/g, '/');
 
   const componentName = composeComponentName(absolutePath);
   const reactComponentName = `react${componentName}`;
+  const svelteComponentName = `svelte${componentName}`;
 
   // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
@@ -159,6 +170,14 @@ export const transformPreview = (
       'dynamicImport',
     );
   }
+  if (componentProps.svelte) {
+    injectComponentImportScript(
+      mdFile,
+      componentSveltePath,
+      svelteComponentName,
+      'dynamicImport',
+    );
+  }
 
   const placeholderVisibleKey = `__placeholder_visible_key__`;
 
@@ -177,6 +196,9 @@ export const transformPreview = (
   const reactCodeTempVariable = componentProps.react
     ? `TempCodeReact${componentName}`
     : `''`;
+  const svelteCodeTempVariable = componentProps.svelte
+    ? `TempCodeSvelte${componentName}`
+    : `''`;
   const vueCodeTempVariable = componentProps.vue
     ? `TempCodeVue${componentName}`
     : `''`;
@@ -194,6 +216,13 @@ export const transformPreview = (
       reactCodeTempVariable,
     );
   }
+  if (componentProps.svelte) {
+    injectComponentImportScript(
+      mdFile,
+      `${componentSveltePath}?raw`,
+      svelteCodeTempVariable,
+    );
+  }
   if (componentProps.vue) {
     injectComponentImportScript(
       mdFile,
@@ -205,11 +234,13 @@ export const transformPreview = (
   const inputFiles = {
     vue: attributes.vueFiles,
     react: attributes.reactFiles,
+    svelte: attributes.svelteFiles,
     html: attributes.htmlFiles,
   };
   const componentPaths = {
     vue: componentVuePath,
     react: componentReactPath,
+    svelte: componentSveltePath,
     html: componentHtmlPath,
   };
   const files = readPreviewFiles(inputFiles, componentPaths, dirPath);
@@ -224,6 +255,7 @@ export const transformPreview = (
     html: htmlPlayground,
     vue: vuePlayground,
     react: reactPlayground,
+    svelte: sveltePlayground,
   } = createPlaygroundUrls({
     playground,
     playgroundName: attributes.playground,
@@ -262,6 +294,7 @@ export const transformPreview = (
       htmlPlayground="${htmlPlayground}"
       vuePlayground="${vuePlayground}"
       reactPlayground="${reactPlayground}"
+      sveltePlayground="${sveltePlayground}"
       :visible="!!${visible}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
@@ -285,6 +318,14 @@ export const transformPreview = (
             :reactComponent="${reactComponentName}"
             :reactCreateRoot="reactCreateRoot"
             :reactCreateElement="reactCreateElement"
+            `
+          : ''
+      }
+      ${
+        componentProps.svelte
+          ? `
+            :svelteCode="${svelteCodeTempVariable}"
+            :svelteComponent="${svelteComponentName}"
             `
           : ''
       }

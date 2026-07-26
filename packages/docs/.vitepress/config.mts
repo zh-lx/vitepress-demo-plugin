@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress';
 import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 import path, { dirname } from 'node:path';
 import { codeInspectorPlugin } from 'code-inspector-plugin';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 function fileURLToPath(fileURL: string) {
   let filePath = fileURL;
@@ -223,6 +224,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      svelte(),
       codeInspectorPlugin({
         bundler: 'vite',
       }),

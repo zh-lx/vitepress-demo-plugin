@@ -1,6 +1,7 @@
 export enum ComponentType {
   VUE = 'vue',
   REACT = 'react',
+  SVELTE = 'svelte',
   HTML = 'html',
 }
 
@@ -10,7 +11,7 @@ export enum PlatformType {
 }
 
 export interface PlatformTemplate {
-  scope: 'global' | 'vue' | 'react' | 'html' | string;
+  scope: 'global' | 'vue' | 'react' | 'svelte' | 'html' | string;
   files: Record<string, string>;
 }
 

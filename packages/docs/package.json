@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "@emotion/styled": "^11.13.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "antd": "^5.21.2",
@@ -14,6 +15,7 @@
     "postcss": "^8.4.49",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "svelte": "^5.56.8",
     "vitepress": "^1.6.3",
     "vitepress-demo-plugin": "workspace:^"
   }

@@ -15,6 +15,14 @@ const root = createRoot(document.querySelector("#app"));
 root.render(<App />);
 `;
 
+const mainSvelte = `import { mount } from "svelte";
+import App from "./App.svelte";
+
+const app = mount(App, { target: document.querySelector("#app") });
+
+export default app;
+`;
+
 export function genMainTs(type: ComponentType): string {
   if (type === ComponentType.VUE) {
     return mainVue;
@@ -22,6 +30,10 @@ export function genMainTs(type: ComponentType): string {
 
   if (type === ComponentType.REACT) {
     return mainReact;
+  }
+
+  if (type === ComponentType.SVELTE) {
+    return mainSvelte;
   }
 
   return '';

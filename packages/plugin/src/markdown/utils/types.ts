@@ -7,6 +7,7 @@ export interface DefaultProps {
   vue?: string;
   html?: string;
   react?: string;
+  svelte?: string;
 }
 
 export interface TabConfig {
@@ -29,7 +30,7 @@ export interface TabConfig {
 
 export type Files = Record<string, PreviewFile>;
 
-export type PreviewFiles = Record<'vue' | 'react' | 'html', Files>;
+export type PreviewFiles = Record<'vue' | 'react' | 'svelte' | 'html', Files>;
 
 export type Platform = {
   show: boolean;
@@ -44,6 +45,7 @@ export type PlaygroundConfig = {
   entryName?: {
     vue?: string;
     react?: string;
+    svelte?: string;
     html?: string;
   };
 };
@@ -85,6 +87,11 @@ export interface VitepressDemoBoxConfig {
    * @en The code files of the react
    */
   reactFiles?: CodeFiles;
+  /**
+   * @cn svelte 展示的代码文件
+   * @en The code files of the svelte
+   */
+  svelteFiles?: CodeFiles;
   /**
    * @cn html 展示的代码文件
    * @en The code files of the html

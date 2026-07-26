@@ -34,8 +34,10 @@ interface VitepressDemoBoxProps {
   title?: string;
   description?: string;
   reactComponent?: any;
+  svelteComponent?: any;
   vueCode?: string;
   reactCode?: string;
+  svelteCode?: string;
   htmlCode?: string;
   order: string;
   visible?: boolean;
@@ -57,6 +59,7 @@ interface VitepressDemoBoxProps {
   htmlPlayground?: string;
   vuePlayground?: string;
   reactPlayground?: string;
+  sveltePlayground?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -64,7 +67,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   description: '描述内容',
   visible: true,
   select: ComponentType.VUE,
-  order: 'vue,react,html',
+  order: 'vue,react,svelte,html',
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
@@ -172,7 +175,12 @@ function updateCodeBlockHeight() {
 }
 
 const tabs = computed<ComponentType[]>(() => {
-  return [ComponentType.VUE, ComponentType.REACT, ComponentType.HTML]
+  return [
+    ComponentType.VUE,
+    ComponentType.REACT,
+    ComponentType.SVELTE,
+    ComponentType.HTML,
+  ]
     .filter((item) => props[`${item}Code` as keyof VitepressDemoBoxProps])
     .sort((a: string, b: string) => {
       return tabOrders.value.indexOf(a) - tabOrders.value.indexOf(b);
@@ -209,6 +217,8 @@ watch(
       setHTMLWithScript();
     } else if (val === 'react') {
       renderReactComponent();
+    } else if (val === 'svelte') {
+      renderSvelteComponent();
     }
   },
   {
@@ -320,6 +330,63 @@ onUnmounted(() => {
   }
 });
 
+const svelteContainerRef = ref();
+let svelteInstance: any = null;
+let svelteUnmount: ((instance: any) => void) | null = null;
+async function renderSvelteComponent() {
+  await nextTick();
+  if (
+    props.svelteComponent &&
+    type.value === 'svelte' &&
+    props.svelteCode &&
+    svelteContainerRef.value
+  ) {
+    try {
+      // @ts-ignore svelte is an optional peer dependency
+      const svelte = await import('svelte');
+      if (svelteInstance) {
+        svelte.unmount(svelteInstance);
+        svelteInstance = null;
+      }
+      svelteUnmount = svelte.unmount;
+      svelteInstance = svelte.mount(props.svelteComponent, {
+        target: svelteContainerRef.value,
+      });
+    } catch (error) {
+      console.error(
+        '[vitepress-demo-plugin] Failed to mount Svelte component. Please make sure svelte(v5+) is installed.',
+        error,
+      );
+    }
+  }
+}
+onUnmounted(() => {
+  if (svelteInstance && svelteUnmount) {
+    svelteUnmount(svelteInstance);
+    svelteInstance = null;
+  }
+});
+
+watch(
+  () => [svelteContainerRef.value, props.svelteComponent],
+  () => {
+    if (svelteContainerRef.value && type.value === 'svelte') {
+      renderSvelteComponent();
+    }
+  },
+  { immediate: true, deep: true },
+);
+
+watch(
+  () => props.svelteCode,
+  (val: string | undefined, prevVal: string | undefined) => {
+    if (val && val !== prevVal && svelteInstance) {
+      renderSvelteComponent();
+    }
+  },
+  { immediate: true, deep: true },
+);
+
 watch(
   () => [reactContainerRef.value, props.reactComponent],
   (val) => {
@@ -403,6 +470,7 @@ watch(
         <iframe style="width: 100%; height: auto; border: none"></iframe>
       </div>
       <div ref="reactContainerRef" v-else-if="type === 'react'"></div>
+      <div ref="svelteContainerRef" v-else-if="type === 'svelte'"></div>
     </section>
     <!-- 描述及切换 -->
     <section :class="[ns.bem('description')]">

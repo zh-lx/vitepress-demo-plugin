@@ -15,12 +15,22 @@ export default defineConfig({
 });
 `;
 
+const svelteViteConfig = `import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+export default defineConfig({
+  plugins: [svelte()],
+});
+`;
+
 export function genViteConfig(type: ComponentType) {
   if (type === ComponentType.VUE) {
     return vueViteConfig;
   }
   if (type === ComponentType.REACT) {
     return reactViteConfig;
+  }
+  if (type === ComponentType.SVELTE) {
+    return svelteViteConfig;
   }
   return '';
 }
