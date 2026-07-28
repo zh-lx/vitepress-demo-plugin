@@ -30,6 +30,7 @@ export const readPreviewFiles = (
     vue: {},
     react: {},
     svelte: {},
+    solid: {},
     html: {},
   };
 

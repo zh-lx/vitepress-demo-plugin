@@ -101,6 +101,8 @@ export default defineConfig(() => {
           'sass',
           'shiki',
           'svelte',
+          'solid-js',
+          'solid-js/web',
         ],
       },
       emptyOutDir: !isWatchMode,

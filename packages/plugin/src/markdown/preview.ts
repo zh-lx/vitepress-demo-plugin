@@ -100,6 +100,9 @@ export const transformPreview = (
     svelte: attributes.sveltePath
       ? path.join(dirPath, attributes.sveltePath).replace(/\\/g, '/')
       : '',
+    solid: attributes.solidPath
+      ? path.join(dirPath, attributes.solidPath).replace(/\\/g, '/')
+      : '',
   };
 
   const getAbsPath = (demoPath?: string) =>
@@ -116,6 +119,9 @@ export const transformPreview = (
   const componentSveltePath = componentProps.svelte
     ? getAbsPath(attributes.sveltePath)
     : '';
+  const componentSolidPath = componentProps.solid
+    ? getAbsPath(attributes.solidPath)
+    : '';
 
   // 组件名
   // eslint-disable-next-line prefer-destructuring
@@ -125,6 +131,7 @@ export const transformPreview = (
       componentProps.vue ||
         componentProps.react ||
         componentProps.svelte ||
+        componentProps.solid ||
         componentProps.html ||
         '.',
     )
@@ -133,6 +140,7 @@ export const transformPreview = (
   const componentName = composeComponentName(absolutePath);
   const reactComponentName = `react${componentName}`;
   const svelteComponentName = `svelte${componentName}`;
+  const solidComponentName = `solid${componentName}`;
 
   // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
@@ -173,8 +181,31 @@ export const transformPreview = (
   if (componentProps.svelte) {
     injectComponentImportScript(
       mdFile,
+      'svelte',
+      '{ mount as svelteMount, unmount as svelteUnmount }',
+    );
+    injectComponentImportScript(
+      mdFile,
       componentSveltePath,
       svelteComponentName,
+      'dynamicImport',
+    );
+  }
+  if (componentProps.solid) {
+    injectComponentImportScript(
+      mdFile,
+      'solid-js/web',
+      '{ render as solidRender }',
+    );
+    injectComponentImportScript(
+      mdFile,
+      'solid-js',
+      '{ createComponent as solidCreateComponent }',
+    );
+    injectComponentImportScript(
+      mdFile,
+      componentSolidPath,
+      solidComponentName,
       'dynamicImport',
     );
   }
@@ -198,6 +229,9 @@ export const transformPreview = (
     : `''`;
   const svelteCodeTempVariable = componentProps.svelte
     ? `TempCodeSvelte${componentName}`
+    : `''`;
+  const solidCodeTempVariable = componentProps.solid
+    ? `TempCodeSolid${componentName}`
     : `''`;
   const vueCodeTempVariable = componentProps.vue
     ? `TempCodeVue${componentName}`
@@ -223,6 +257,13 @@ export const transformPreview = (
       svelteCodeTempVariable,
     );
   }
+  if (componentProps.solid) {
+    injectComponentImportScript(
+      mdFile,
+      `${componentSolidPath}?raw`,
+      solidCodeTempVariable,
+    );
+  }
   if (componentProps.vue) {
     injectComponentImportScript(
       mdFile,
@@ -235,12 +276,14 @@ export const transformPreview = (
     vue: attributes.vueFiles,
     react: attributes.reactFiles,
     svelte: attributes.svelteFiles,
+    solid: attributes.solidFiles,
     html: attributes.htmlFiles,
   };
   const componentPaths = {
     vue: componentVuePath,
     react: componentReactPath,
     svelte: componentSveltePath,
+    solid: componentSolidPath,
     html: componentHtmlPath,
   };
   const files = readPreviewFiles(inputFiles, componentPaths, dirPath);
@@ -256,6 +299,7 @@ export const transformPreview = (
     vue: vuePlayground,
     react: reactPlayground,
     svelte: sveltePlayground,
+    solid: solidPlayground,
   } = createPlaygroundUrls({
     playground,
     playgroundName: attributes.playground,
@@ -295,6 +339,7 @@ export const transformPreview = (
       vuePlayground="${vuePlayground}"
       reactPlayground="${reactPlayground}"
       sveltePlayground="${sveltePlayground}"
+      solidPlayground="${solidPlayground}"
       :visible="!!${visible}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
@@ -326,6 +371,18 @@ export const transformPreview = (
           ? `
             :svelteCode="${svelteCodeTempVariable}"
             :svelteComponent="${svelteComponentName}"
+            :svelteMount="svelteMount"
+            :svelteUnmount="svelteUnmount"
+            `
+          : ''
+      }
+      ${
+        componentProps.solid
+          ? `
+            :solidCode="${solidCodeTempVariable}"
+            :solidComponent="${solidComponentName}"
+            :solidRender="solidRender"
+            :solidCreateComponent="solidCreateComponent"
             `
           : ''
       }
