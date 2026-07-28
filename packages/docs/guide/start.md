@@ -112,27 +112,62 @@ export default defineConfig({
 
 <demo svelte="../demos/demo.svelte" />
 
+## 展示 Solid Demo
+
+::: tip 提示
+如果要在你的 vitepress 站点中展示 Solid Demo，需要执行如下命令安装对应的依赖：
+
+```bash
+npm install solid-js vite-plugin-solid -D
+```
+
+并在 `.vitepress/config.ts` 的 `vite.plugins` 中引入 solid 插件。由于 Solid 和 React 都使用 `.jsx/.tsx` 扩展名，建议将 Solid 组件命名为 `*.solid.tsx`，并通过 `include` 限定 solid 插件只处理这些文件，避免影响 React 组件的编译：
+
+```ts
+import solid from 'vite-plugin-solid'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [solid({ include: [/\.solid\.tsx$/] })], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+通过 `<demo solid="xxx/path" />` 指定一个 solid 组件文件的路径，渲染该 solid 组件并展示其代码：
+
+```html
+<demo solid="../demos/demo.solid.tsx" />
+```
+
+其对应的渲染效果如下：
+
+<demo solid="../demos/demo.solid.tsx" />
+
 <hr />
 
 ## 展示多语法混合 Demo
 
 ::: tip 提示
-同上，如果要在你的 vitepress 站点中展示 React Demo 或 Svelte Demo，需要执行如下命令安装相应的依赖：
+同上，如果要在你的 vitepress 站点中展示 React Demo、Svelte Demo 或 Solid Demo，需要执行如下命令安装相应的依赖：
 
 ```bash
 npm install react react-dom -D
 npm install svelte @sveltejs/vite-plugin-svelte -D
+npm install solid-js vite-plugin-solid -D
 ```
 
 :::
 
-可以同时在 `<demo />` 中指定 `vue/react/svelte/html` 中的多个，以将不同语法的 Demo 展示在一个块中。
+可以同时在 `<demo />` 中指定 `vue/react/svelte/solid/html` 中的多个，以将不同语法的 Demo 展示在一个块中。
 
 ```html
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
   svelte="../demos/demo.svelte"
+  solid="../demos/demo.solid.tsx"
   html="../demos/demo.html"
 />
 ```
@@ -143,6 +178,7 @@ npm install svelte @sveltejs/vite-plugin-svelte -D
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
   svelte="../demos/demo.svelte"
+  solid="../demos/demo.solid.tsx"
   html="../demos/demo.html"
 />
 

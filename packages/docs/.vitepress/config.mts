@@ -3,6 +3,7 @@ import { vitepressDemoPlugin } from 'vitepress-demo-plugin/markdown';
 import path, { dirname } from 'node:path';
 import { codeInspectorPlugin } from 'code-inspector-plugin';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import solid from 'vite-plugin-solid';
 
 function fileURLToPath(fileURL: string) {
   let filePath = fileURL;
@@ -225,6 +226,8 @@ export default defineConfig({
   vite: {
     plugins: [
       svelte(),
+      // 仅处理 *.solid.tsx 文件，避免影响 React 的 .tsx demo
+      solid({ include: [/\.solid\.tsx$/] }),
       codeInspectorPlugin({
         bundler: 'vite',
       }),

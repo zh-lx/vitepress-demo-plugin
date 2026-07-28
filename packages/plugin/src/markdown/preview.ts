@@ -44,9 +44,9 @@ export const transformPreview = (
     playground: globalPlayground = { show: false } as Playground,
   } = config || {};
   let {
-    order = 'vue,react,svelte,html',
+    order = 'vue,react,svelte,solid,html',
     visible = true,
-    select = (tab.order || 'vue,react,svelte,html').split(',')[0] || 'vue',
+    select = (tab.order || 'vue,react,svelte,solid,html').split(',')[0] || 'vue',
   } = tab;
   const attributes = parsePreviewAttributes(token.content);
   const {

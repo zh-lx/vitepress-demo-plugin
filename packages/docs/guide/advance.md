@@ -72,7 +72,7 @@ export default defineConfig({
 
 ### 局部配置
 
-当在一个 `<demo />` 组件中同时展示多种语法时，默认的展示顺序为 `vue,react,svelte,html` 且默认选中展示顺序中的第一种语法。
+当在一个 `<demo />` 组件中同时展示多种语法时，默认的展示顺序为 `vue,react,svelte,solid,html` 且默认选中展示顺序中的第一种语法。
 
 你可以通过 `order` 属性来指定 demo 的展示顺序，以及通过 `select` 属性来指定默认选中的 demo。
 
@@ -126,7 +126,7 @@ export default defineConfig({
 
 ### 数组方式
 
-如果你的 demo 中包含多个文件，你可以通过 `vueFiles/reactFiles/svelteFiles/htmlFiles` 属性来指定需要展示对应类型 demo 的文件及代码。例如：
+如果你的 demo 中包含多个文件，你可以通过 `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` 属性来指定需要展示对应类型 demo 的文件及代码。例如：
 
 ```html
 <demo
@@ -144,7 +144,7 @@ export default defineConfig({
 
 ### 对象方式
 
-你也可以通过 `Object` 类型的 `vueFiles/reactFiles/svelteFiles/htmlFiles` 属性来指定文件名。例如，你不需要体现出文件所在的目录层级，只需要展示文件的 `basename`，你可以通过如下方式：
+你也可以通过 `Object` 类型的 `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` 属性来指定文件名。例如，你不需要体现出文件所在的目录层级，只需要展示文件的 `basename`，你可以通过如下方式：
 
 ```html
 <demo
@@ -168,7 +168,7 @@ export default defineConfig({
 
 ### 自定义展示
 
-你也可以通过 `vueFiles/reactFiles/svelteFiles/htmlFiles` 属性去完全自定义要展示的文件及代码，例如你要展示一份代码的 `typescript` 和 `javascript` 的两种格式，你可以通过如下方式：
+你也可以通过 `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` 属性去完全自定义要展示的文件及代码，例如你要展示一份代码的 `typescript` 和 `javascript` 的两种格式，你可以通过如下方式：
 
 ```html
 <demo
@@ -192,7 +192,7 @@ export default defineConfig({
 
 ### 🚨 注意事项
 
-`vitepress-demo-plugin` 内部会将 `vueFiles/reactFiles/svelteFiles/htmlFiles` 作为一个类型为 `string[] | Record<string, string>` 的字符串来处理，所以你只能直接声明 `vueFiles/reactFiles/svelteFiles/htmlFiles` 的值，不能通过引用变量的方式来代替。
+`vitepress-demo-plugin` 内部会将 `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` 作为一个类型为 `string[] | Record<string, string>` 的字符串来处理，所以你只能直接声明 `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` 的值，不能通过引用变量的方式来代替。
 
 - ❌ 错误示例
 

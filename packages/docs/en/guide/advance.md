@@ -72,7 +72,7 @@ You can specify the background color of the demo container through the `backgrou
 
 ### Local Configuration
 
-When multiple syntaxes are displayed in a `<demo />` component, the default display order is `vue,react,svelte,html` and the first syntax in the display order is selected by default.
+When multiple syntaxes are displayed in a `<demo />` component, the default display order is `vue,react,svelte,solid,html` and the first syntax in the display order is selected by default.
 
 You can specify the display order of demos through the `order` attribute, and specify the default selected demo through the `select` attribute.
 
@@ -126,7 +126,7 @@ export default defineConfig({
 
 ### Array
 
-If your demo contains multiple files, you can use the `vueFiles/reactFiles/svelteFiles/htmlFiles` property to specify the files and codes of the corresponding type of demo to be displayed. For example:
+If your demo contains multiple files, you can use the `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` property to specify the files and codes of the corresponding type of demo to be displayed. For example:
 
 ```html
 <demo
@@ -144,7 +144,7 @@ The corresponding rendering result is as follows:
 
 ### Object
 
-You can also specify file names by passing an `Object` to the `vueFiles/reactFiles/svelteFiles/htmlFiles` property. For example, if you only want to display each file's `basename` without its directory hierarchy, you can do it as follows:
+You can also specify file names by passing an `Object` to the `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` property. For example, if you only want to display each file's `basename` without its directory hierarchy, you can do it as follows:
 
 ```html
 <demo
@@ -168,7 +168,7 @@ The corresponding rendering result is as follows:
 
 ### Custom
 
-You can also use the `vueFiles/reactFiles/svelteFiles/htmlFiles` property to completely customize the files and code to be displayed. For example, if you want to display two formats of a code, `typescript` and `javascript`, you can do it as follows:
+You can also use the `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` property to completely customize the files and code to be displayed. For example, if you want to display two formats of a code, `typescript` and `javascript`, you can do it as follows:
 
 ```html
 <demo
@@ -192,7 +192,7 @@ The corresponding rendering result is as follows:
 
 ### 🚨 Notice
 
-`vitepress-demo-plugin` internally treats `vueFiles/reactFiles/svelteFiles/htmlFiles` as a string of type `string[] | Record<string, string>`, so you can only declare the value of `vueFiles/reactFiles/svelteFiles/htmlFiles` directly, and cannot replace it by referencing variables.
+`vitepress-demo-plugin` internally treats `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` as a string of type `string[] | Record<string, string>`, so you can only declare the value of `vueFiles/reactFiles/svelteFiles/solidFiles/htmlFiles` directly, and cannot replace it by referencing variables.
 
 - ❌ Wrong
 

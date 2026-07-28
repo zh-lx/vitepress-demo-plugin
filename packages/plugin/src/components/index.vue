@@ -79,7 +79,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   description: '描述内容',
   visible: true,
   select: ComponentType.VUE,
-  order: 'vue,react,svelte,html',
+  order: 'vue,react,svelte,solid,html',
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
