@@ -7,6 +7,9 @@ export function getInitialFile(type: string) {
   if (type === 'react') {
     return '/src/App.tsx';
   }
+  if (type === 'svelte') {
+    return '/src/App.svelte';
+  }
   return 'index.html';
 }
 

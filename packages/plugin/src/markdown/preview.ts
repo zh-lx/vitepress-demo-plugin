@@ -44,9 +44,9 @@ export const transformPreview = (
     playground: globalPlayground = { show: false } as Playground,
   } = config || {};
   let {
-    order = 'vue,react,html',
+    order = 'vue,react,svelte,solid,html',
     visible = true,
-    select = (tab.order || 'vue,react,html').split(',')[0] || 'vue',
+    select = (tab.order || 'vue,react,svelte,solid,html').split(',')[0] || 'vue',
   } = tab;
   const attributes = parsePreviewAttributes(token.content);
   const {
@@ -97,6 +97,12 @@ export const transformPreview = (
     react: attributes.reactPath
       ? path.join(dirPath, attributes.reactPath).replace(/\\/g, '/')
       : '',
+    svelte: attributes.sveltePath
+      ? path.join(dirPath, attributes.sveltePath).replace(/\\/g, '/')
+      : '',
+    solid: attributes.solidPath
+      ? path.join(dirPath, attributes.solidPath).replace(/\\/g, '/')
+      : '',
   };
 
   const getAbsPath = (demoPath?: string) =>
@@ -110,18 +116,31 @@ export const transformPreview = (
   const componentReactPath = componentProps.react
     ? getAbsPath(attributes.reactPath)
     : '';
+  const componentSveltePath = componentProps.svelte
+    ? getAbsPath(attributes.sveltePath)
+    : '';
+  const componentSolidPath = componentProps.solid
+    ? getAbsPath(attributes.solidPath)
+    : '';
 
   // 组件名
   // eslint-disable-next-line prefer-destructuring
   const absolutePath = path
     .resolve(
       dirPath,
-      componentProps.vue || componentProps.react || componentProps.html || '.',
+      componentProps.vue ||
+        componentProps.react ||
+        componentProps.svelte ||
+        componentProps.solid ||
+        componentProps.html ||
+        '.',
     )
     .replace(/\\/g, '/');
 
   const componentName = composeComponentName(absolutePath);
   const reactComponentName = `react${componentName}`;
+  const svelteComponentName = `svelte${componentName}`;
+  const solidComponentName = `solid${componentName}`;
 
   // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
@@ -159,6 +178,37 @@ export const transformPreview = (
       'dynamicImport',
     );
   }
+  if (componentProps.svelte) {
+    injectComponentImportScript(
+      mdFile,
+      'svelte',
+      '{ mount as svelteMount, unmount as svelteUnmount }',
+    );
+    injectComponentImportScript(
+      mdFile,
+      componentSveltePath,
+      svelteComponentName,
+      'dynamicImport',
+    );
+  }
+  if (componentProps.solid) {
+    injectComponentImportScript(
+      mdFile,
+      'solid-js/web',
+      '{ render as solidRender }',
+    );
+    injectComponentImportScript(
+      mdFile,
+      'solid-js',
+      '{ createComponent as solidCreateComponent }',
+    );
+    injectComponentImportScript(
+      mdFile,
+      componentSolidPath,
+      solidComponentName,
+      'dynamicImport',
+    );
+  }
 
   const placeholderVisibleKey = `__placeholder_visible_key__`;
 
@@ -177,6 +227,12 @@ export const transformPreview = (
   const reactCodeTempVariable = componentProps.react
     ? `TempCodeReact${componentName}`
     : `''`;
+  const svelteCodeTempVariable = componentProps.svelte
+    ? `TempCodeSvelte${componentName}`
+    : `''`;
+  const solidCodeTempVariable = componentProps.solid
+    ? `TempCodeSolid${componentName}`
+    : `''`;
   const vueCodeTempVariable = componentProps.vue
     ? `TempCodeVue${componentName}`
     : `''`;
@@ -194,6 +250,20 @@ export const transformPreview = (
       reactCodeTempVariable,
     );
   }
+  if (componentProps.svelte) {
+    injectComponentImportScript(
+      mdFile,
+      `${componentSveltePath}?raw`,
+      svelteCodeTempVariable,
+    );
+  }
+  if (componentProps.solid) {
+    injectComponentImportScript(
+      mdFile,
+      `${componentSolidPath}?raw`,
+      solidCodeTempVariable,
+    );
+  }
   if (componentProps.vue) {
     injectComponentImportScript(
       mdFile,
@@ -205,11 +275,15 @@ export const transformPreview = (
   const inputFiles = {
     vue: attributes.vueFiles,
     react: attributes.reactFiles,
+    svelte: attributes.svelteFiles,
+    solid: attributes.solidFiles,
     html: attributes.htmlFiles,
   };
   const componentPaths = {
     vue: componentVuePath,
     react: componentReactPath,
+    svelte: componentSveltePath,
+    solid: componentSolidPath,
     html: componentHtmlPath,
   };
   const files = readPreviewFiles(inputFiles, componentPaths, dirPath);
@@ -224,6 +298,8 @@ export const transformPreview = (
     html: htmlPlayground,
     vue: vuePlayground,
     react: reactPlayground,
+    svelte: sveltePlayground,
+    solid: solidPlayground,
   } = createPlaygroundUrls({
     playground,
     playgroundName: attributes.playground,
@@ -262,6 +338,8 @@ export const transformPreview = (
       htmlPlayground="${htmlPlayground}"
       vuePlayground="${vuePlayground}"
       reactPlayground="${reactPlayground}"
+      sveltePlayground="${sveltePlayground}"
+      solidPlayground="${solidPlayground}"
       :visible="!!${visible}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
@@ -285,6 +363,26 @@ export const transformPreview = (
             :reactComponent="${reactComponentName}"
             :reactCreateRoot="reactCreateRoot"
             :reactCreateElement="reactCreateElement"
+            `
+          : ''
+      }
+      ${
+        componentProps.svelte
+          ? `
+            :svelteCode="${svelteCodeTempVariable}"
+            :svelteComponent="${svelteComponentName}"
+            :svelteMount="svelteMount"
+            :svelteUnmount="svelteUnmount"
+            `
+          : ''
+      }
+      ${
+        componentProps.solid
+          ? `
+            :solidCode="${solidCodeTempVariable}"
+            :solidComponent="${solidComponentName}"
+            :solidRender="solidRender"
+            :solidCreateComponent="solidCreateComponent"
             `
           : ''
       }

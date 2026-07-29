@@ -19,6 +19,11 @@ import CodeSandboxIcon from './icons/codesandbox.vue';
 import StackblitzIcon from './icons/stackblitz.vue';
 import GithubIcon from './icons/github.vue';
 import GitlabIcon from './icons/gitlab.vue';
+import VueLogoIcon from './icons/vue.vue';
+import ReactLogoIcon from './icons/react.vue';
+import SvelteLogoIcon from './icons/svelte.vue';
+import SolidLogoIcon from './icons/solid.vue';
+import HtmlLogoIcon from './icons/html.vue';
 import { MessageService } from './message';
 import Tooltip from './tooltip/index.vue';
 import { useNameSpace } from './utils/namespace';
@@ -34,8 +39,12 @@ interface VitepressDemoBoxProps {
   title?: string;
   description?: string;
   reactComponent?: any;
+  svelteComponent?: any;
+  solidComponent?: any;
   vueCode?: string;
   reactCode?: string;
+  svelteCode?: string;
+  solidCode?: string;
   htmlCode?: string;
   order: string;
   visible?: boolean;
@@ -44,6 +53,10 @@ interface VitepressDemoBoxProps {
   gitlab?: string;
   reactCreateElement?: any; // import { createElement as reactCreateElement } from 'react';
   reactCreateRoot?: any; // import { createRoot as reactCreateRoot } from 'react-dom/client';
+  svelteMount?: any; // import { mount as svelteMount } from 'svelte';
+  svelteUnmount?: any; // import { unmount as svelteUnmount } from 'svelte';
+  solidRender?: any; // import { render as solidRender } from 'solid-js/web';
+  solidCreateComponent?: any; // import { createComponent as solidCreateComponent } from 'solid-js';
   stackblitz?: string;
   codesandbox?: string;
   scope?: string;
@@ -57,6 +70,8 @@ interface VitepressDemoBoxProps {
   htmlPlayground?: string;
   vuePlayground?: string;
   reactPlayground?: string;
+  sveltePlayground?: string;
+  solidPlayground?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -64,7 +79,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   description: '描述内容',
   visible: true,
   select: ComponentType.VUE,
-  order: 'vue,react,html',
+  order: 'vue,react,svelte,solid,html',
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
@@ -126,7 +141,9 @@ function setCodeType(_type: ComponentType) {
   }
 }
 const fileType = computed(() => {
-  return type.value === 'react' ? 'tsx' : type.value;
+  return type.value === 'react' || type.value === 'solid'
+    ? 'tsx'
+    : type.value;
 });
 
 const ns = useNameSpace();
@@ -172,12 +189,26 @@ function updateCodeBlockHeight() {
 }
 
 const tabs = computed<ComponentType[]>(() => {
-  return [ComponentType.VUE, ComponentType.REACT, ComponentType.HTML]
+  return [
+    ComponentType.VUE,
+    ComponentType.REACT,
+    ComponentType.SVELTE,
+    ComponentType.SOLID,
+    ComponentType.HTML,
+  ]
     .filter((item) => props[`${item}Code` as keyof VitepressDemoBoxProps])
     .sort((a: string, b: string) => {
       return tabOrders.value.indexOf(a) - tabOrders.value.indexOf(b);
     });
 });
+
+const tabIcons: Record<string, any> = {
+  [ComponentType.VUE]: VueLogoIcon,
+  [ComponentType.REACT]: ReactLogoIcon,
+  [ComponentType.SVELTE]: SvelteLogoIcon,
+  [ComponentType.SOLID]: SolidLogoIcon,
+  [ComponentType.HTML]: HtmlLogoIcon,
+};
 
 watch(
   () => (injectType as Ref<ComponentType>)?.value,
@@ -209,6 +240,10 @@ watch(
       setHTMLWithScript();
     } else if (val === 'react') {
       renderReactComponent();
+    } else if (val === 'svelte') {
+      renderSvelteComponent();
+    } else if (val === 'solid') {
+      renderSolidComponent();
     }
   },
   {
@@ -320,6 +355,127 @@ onUnmounted(() => {
   }
 });
 
+const svelteContainerRef = ref();
+let svelteInstance: any = null;
+let svelteUnmount: ((instance: any) => void) | null = null;
+async function renderSvelteComponent() {
+  await nextTick();
+  if (
+    props.svelteComponent &&
+    type.value === 'svelte' &&
+    props.svelteCode &&
+    svelteContainerRef.value
+  ) {
+    try {
+      if (!props.svelteMount || !props.svelteUnmount) {
+        return;
+      }
+      if (svelteInstance && svelteUnmount) {
+        svelteUnmount(svelteInstance);
+        svelteInstance = null;
+      }
+      svelteUnmount = props.svelteUnmount;
+      svelteInstance = props.svelteMount(props.svelteComponent, {
+        target: svelteContainerRef.value,
+      });
+    } catch (error) {
+      console.error(
+        '[vitepress-demo-plugin] Failed to mount Svelte component. Please make sure svelte(v5+) is installed.',
+        error,
+      );
+    }
+  }
+}
+onUnmounted(() => {
+  if (svelteInstance && svelteUnmount) {
+    svelteUnmount(svelteInstance);
+    svelteInstance = null;
+  }
+});
+
+watch(
+  () => [svelteContainerRef.value, props.svelteComponent],
+  () => {
+    if (svelteContainerRef.value && type.value === 'svelte') {
+      renderSvelteComponent();
+    } else if (!svelteContainerRef.value && svelteInstance && svelteUnmount) {
+      svelteUnmount(svelteInstance);
+      svelteInstance = null;
+    }
+  },
+  { immediate: true, deep: true },
+);
+
+watch(
+  () => props.svelteCode,
+  (val: string | undefined, prevVal: string | undefined) => {
+    if (val && val !== prevVal && svelteInstance) {
+      renderSvelteComponent();
+    }
+  },
+  { immediate: true, deep: true },
+);
+
+const solidContainerRef = ref();
+let solidDispose: (() => void) | null = null;
+async function renderSolidComponent() {
+  await nextTick();
+  if (
+    props.solidComponent &&
+    type.value === 'solid' &&
+    props.solidCode &&
+    solidContainerRef.value
+  ) {
+    try {
+      if (!props.solidRender || !props.solidCreateComponent) {
+        return;
+      }
+      if (solidDispose) {
+        solidDispose();
+        solidDispose = null;
+      }
+      solidDispose = props.solidRender(
+        () => props.solidCreateComponent(props.solidComponent, {}),
+        solidContainerRef.value,
+      );
+    } catch (error) {
+      console.error(
+        '[vitepress-demo-plugin] Failed to mount Solid component. Please make sure solid-js is installed.',
+        error,
+      );
+    }
+  }
+}
+onUnmounted(() => {
+  if (solidDispose) {
+    solidDispose();
+    solidDispose = null;
+  }
+});
+
+watch(
+  () => [solidContainerRef.value, props.solidComponent],
+  () => {
+    if (solidContainerRef.value && type.value === 'solid') {
+      renderSolidComponent();
+    } else if (!solidContainerRef.value && solidDispose) {
+      solidDispose();
+      solidDispose = null;
+    }
+  },
+  { immediate: true, deep: true },
+);
+
+watch(
+  () => props.solidCode,
+  (val: string | undefined, prevVal: string | undefined) => {
+    if (val && val !== prevVal && solidDispose) {
+      renderSolidComponent();
+    }
+  },
+  { immediate: true, deep: true },
+);
+
 watch(
   () => [reactContainerRef.value, props.reactComponent],
   (val) => {
@@ -403,6 +559,8 @@ watch(
         <iframe style="width: 100%; height: auto; border: none"></iframe>
       </div>
       <div ref="reactContainerRef" v-else-if="type === 'react'"></div>
+      <div ref="svelteContainerRef" v-else-if="type === 'svelte'"></div>
+      <div ref="solidContainerRef" v-else-if="type === 'solid'"></div>
     </section>
     <!-- 描述及切换 -->
     <section :class="[ns.bem('description')]">
@@ -425,6 +583,7 @@ watch(
           :class="[ns.bem('tab'), type === tab && ns.bem('active-tab')]"
           @click="setCodeType?.(tab)"
         >
+          <component :is="tabIcons[tab]" :class="ns.bem('tab-icon')" />
           {{ tab }}
         </div>
       </div>
@@ -652,6 +811,14 @@ html.dark .shiki span {
 
   .#{$defaultPrefix}-tab {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+  }
+
+  .#{$defaultPrefix}-tab-icon {
+    width: 1em;
+    height: 1em;
   }
 
   .#{$defaultPrefix}-active-tab {

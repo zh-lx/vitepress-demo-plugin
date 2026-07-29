@@ -404,7 +404,7 @@ root.render(<App />);
 
 ```ts
 type Template = {
-  scope: 'global' | 'vue' | 'react' | 'html' | string;
+  scope: 'global' | 'vue' | 'react' | 'svelte' | 'solid' | 'html' | string;
   files: {
     [filename: string]: string; // 代码内容
   };
@@ -448,7 +448,7 @@ export default defineConfig({
 
 ### 单类别生效
 
-当设置 `scope` 为 `vue/react/html` 时，表示该模板仅对相应类型的 demo 组件生效。以下面的 demo 为例，仅对 Vue 类型的 demo 组件生效：
+当设置 `scope` 为 `vue/react/svelte/solid/html` 时，表示该模板仅对相应类型的 demo 组件生效。以下面的 demo 为例，仅对 Vue 类型的 demo 组件生效：
 
 ```ts
 import { defineConfig } from 'vitepress';

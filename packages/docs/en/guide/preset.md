@@ -404,7 +404,7 @@ root.render(<App />);
 
 ```ts
 type Template = {
-  scope: 'global' | 'vue' | 'react' | 'html' | string;
+  scope: 'global' | 'vue' | 'react' | 'svelte' | 'solid' | 'html' | string;
   files: {
     [filename: string]: string; // Code
   };
@@ -448,7 +448,7 @@ export default defineConfig({
 
 ### Single Kind
 
-When `scope` is set to `vue/react/html`, it means that the template is only valid for demo components of the corresponding type. Take the following demo as an example, it is only valid for demo components of the Vue type:
+When `scope` is set to `vue/react/svelte/solid/html`, it means that the template is only valid for demo components of the corresponding type. Take the following demo as an example, it is only valid for demo components of the Vue type:
 
 ```ts
 import { defineConfig } from 'vitepress';
