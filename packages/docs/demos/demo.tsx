@@ -12,6 +12,9 @@ const Title = styled.div`
   font-weight: 600;
   line-height: 32px;
 `;
+const Framework = styled.span`
+  color: #61DAFB;
+`;
 
 const Button = styled.button`
   cursor: pointer;
@@ -43,7 +46,9 @@ export default function Demo() {
 
   return (
     <Container>
-      <Title>This is a React counter</Title>
+      <Title>
+        This is a <Framework>React</Framework> Demo
+      </Title>
       <ButtonContainer>
         <Button onClick={increment}>+1</Button>
         <Button onClick={decrement}>-1</Button>

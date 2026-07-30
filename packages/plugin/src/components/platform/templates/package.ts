@@ -43,6 +43,14 @@ export const getDepsByType = (type: ComponentType, platform: PlatformType) => {
       deps.devDependencies.vite = 'latest';
       deps.devDependencies['@sveltejs/vite-plugin-svelte'] = 'latest';
     }
+  } else if (type === ComponentType.SOLID) {
+    deps.dependencies['solid-js'] = 'latest';
+    deps.devDependencies.vite = 'latest';
+    deps.devDependencies['vite-plugin-solid'] = 'latest';
+  } else if (type === ComponentType.PREACT) {
+    deps.dependencies['preact'] = 'latest';
+    deps.devDependencies.vite = 'latest';
+    deps.devDependencies['@preact/preset-vite'] = 'latest';
   }
   return deps;
 };
@@ -51,9 +59,12 @@ export function genPackageJson(params: PackageJsonParams): string {
   const { type, platform, codes, title, description } = params;
 
   const scripts =
-    platform === PlatformType.STACKBLITZ
+    platform === PlatformType.STACKBLITZ || type === ComponentType.SOLID || type === ComponentType.PREACT
       ? {
           scripts: {
+            ...(platform === PlatformType.CODESANDBOX
+              ? { start: 'vite --host 0.0.0.0' }
+              : {}),
             dev: 'vite',
             build: 'vite build',
             serve: 'vite preview',

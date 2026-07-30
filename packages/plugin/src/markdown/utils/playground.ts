@@ -11,6 +11,7 @@ export interface PlaygroundUrls {
   react: string;
   svelte: string;
   solid: string;
+  preact: string;
 }
 
 interface CreatePlaygroundUrlsOptions {
@@ -29,6 +30,7 @@ const emptyPlaygroundUrls = (): PlaygroundUrls => ({
   react: '',
   svelte: '',
   solid: '',
+  preact: '',
 });
 
 const encodeFiles = (files: Record<string, string>) =>
@@ -74,6 +76,7 @@ export const createPlaygroundUrls = ({
       react: { ...templates.find((item) => item.scope === 'react')?.files },
       svelte: { ...templates.find((item) => item.scope === 'svelte')?.files },
       solid: { ...templates.find((item) => item.scope === 'solid')?.files },
+      preact: { ...templates.find((item) => item.scope === 'preact')?.files },
     };
 
     (Object.keys(platformFiles) as (keyof PreviewFiles)[]).forEach((type) => {
@@ -100,6 +103,7 @@ export const createPlaygroundUrls = ({
       react: config.entryName?.react || 'App.tsx',
       svelte: config.entryName?.svelte || 'App.svelte',
       solid: config.entryName?.solid || 'App.tsx',
+      preact: config.entryName?.preact || 'App.tsx',
     };
     (Object.keys(componentPaths) as (keyof PreviewFiles)[]).forEach((type) => {
       if (componentPaths[type]) {

@@ -23,6 +23,7 @@ import VueLogoIcon from './icons/vue.vue';
 import ReactLogoIcon from './icons/react.vue';
 import SvelteLogoIcon from './icons/svelte.vue';
 import SolidLogoIcon from './icons/solid.vue';
+import PreactLogoIcon from './icons/preact.vue';
 import HtmlLogoIcon from './icons/html.vue';
 import { MessageService } from './message';
 import Tooltip from './tooltip/index.vue';
@@ -41,10 +42,12 @@ interface VitepressDemoBoxProps {
   reactComponent?: any;
   svelteComponent?: any;
   solidComponent?: any;
+  preactComponent?: any;
   vueCode?: string;
   reactCode?: string;
   svelteCode?: string;
   solidCode?: string;
+  preactCode?: string;
   htmlCode?: string;
   order: string;
   visible?: boolean;
@@ -57,6 +60,8 @@ interface VitepressDemoBoxProps {
   svelteUnmount?: any; // import { unmount as svelteUnmount } from 'svelte';
   solidRender?: any; // import { render as solidRender } from 'solid-js/web';
   solidCreateComponent?: any; // import { createComponent as solidCreateComponent } from 'solid-js';
+  preactRender?: any; // import { render as preactRender } from 'preact';
+  preactCreateElement?: any; // import { createElement as preactCreateElement } from 'preact';
   stackblitz?: string;
   codesandbox?: string;
   scope?: string;
@@ -72,6 +77,7 @@ interface VitepressDemoBoxProps {
   reactPlayground?: string;
   sveltePlayground?: string;
   solidPlayground?: string;
+  preactPlayground?: string;
 }
 
 const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
@@ -79,7 +85,7 @@ const props = withDefaults(defineProps<VitepressDemoBoxProps>(), {
   description: '描述内容',
   visible: true,
   select: ComponentType.VUE,
-  order: 'vue,react,svelte,solid,html',
+  order: 'vue,react,svelte,solid,preact,html',
   github: '',
   gitlab: '',
   htmlWriteWay: 'write',
@@ -141,7 +147,9 @@ function setCodeType(_type: ComponentType) {
   }
 }
 const fileType = computed(() => {
-  return type.value === 'react' || type.value === 'solid'
+  return type.value === 'react' ||
+    type.value === 'solid' ||
+    type.value === 'preact'
     ? 'tsx'
     : type.value;
 });
@@ -194,6 +202,7 @@ const tabs = computed<ComponentType[]>(() => {
     ComponentType.REACT,
     ComponentType.SVELTE,
     ComponentType.SOLID,
+    ComponentType.PREACT,
     ComponentType.HTML,
   ]
     .filter((item) => props[`${item}Code` as keyof VitepressDemoBoxProps])
@@ -207,6 +216,7 @@ const tabIcons: Record<string, any> = {
   [ComponentType.REACT]: ReactLogoIcon,
   [ComponentType.SVELTE]: SvelteLogoIcon,
   [ComponentType.SOLID]: SolidLogoIcon,
+  [ComponentType.PREACT]: PreactLogoIcon,
   [ComponentType.HTML]: HtmlLogoIcon,
 };
 
@@ -244,6 +254,8 @@ watch(
       renderSvelteComponent();
     } else if (val === 'solid') {
       renderSolidComponent();
+    } else if (val === 'preact') {
+      renderPreactComponent();
     }
   },
   {
@@ -476,6 +488,55 @@ watch(
   { immediate: true, deep: true },
 );
 
+const preactContainerRef = ref();
+let preactContainer: HTMLElement | null = null;
+async function renderPreactComponent() {
+  await nextTick();
+  if (
+    props.preactComponent &&
+    type.value === 'preact' &&
+    props.preactCode &&
+    props.preactRender &&
+    props.preactCreateElement &&
+    preactContainerRef.value
+  ) {
+    preactContainer = preactContainerRef.value;
+    props.preactRender(
+      props.preactCreateElement(props.preactComponent, {}),
+      preactContainer,
+    );
+  }
+}
+function unmountPreactComponent() {
+  if (props.preactRender && preactContainer) {
+    props.preactRender(null, preactContainer);
+    preactContainer = null;
+  }
+}
+onUnmounted(unmountPreactComponent);
+
+watch(
+  () => [preactContainerRef.value, props.preactComponent],
+  () => {
+    if (preactContainerRef.value && type.value === 'preact') {
+      renderPreactComponent();
+    } else if (!preactContainerRef.value) {
+      unmountPreactComponent();
+    }
+  },
+  { immediate: true, deep: true },
+);
+
+watch(
+  () => props.preactCode,
+  (val: string | undefined, prevVal: string | undefined) => {
+    if (val && val !== prevVal && preactContainerRef.value) {
+      renderPreactComponent();
+    }
+  },
+  { immediate: true, deep: true },
+);
+
 watch(
   () => [reactContainerRef.value, props.reactComponent],
   (val) => {
@@ -561,6 +622,7 @@ watch(
       <div ref="reactContainerRef" v-else-if="type === 'react'"></div>
       <div ref="svelteContainerRef" v-else-if="type === 'svelte'"></div>
       <div ref="solidContainerRef" v-else-if="type === 'solid'"></div>
+      <div ref="preactContainerRef" v-else-if="type === 'preact'"></div>
     </section>
     <!-- 描述及切换 -->
     <section :class="[ns.bem('description')]">

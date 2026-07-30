@@ -44,9 +44,9 @@ export const transformPreview = (
     playground: globalPlayground = { show: false } as Playground,
   } = config || {};
   let {
-    order = 'vue,react,svelte,solid,html',
+    order = 'vue,react,svelte,solid,preact,html',
     visible = true,
-    select = (tab.order || 'vue,react,svelte,solid,html').split(',')[0] || 'vue',
+    select = (tab.order || 'vue,react,svelte,solid,preact,html').split(',')[0] || 'vue',
   } = tab;
   const attributes = parsePreviewAttributes(token.content);
   const {
@@ -103,6 +103,9 @@ export const transformPreview = (
     solid: attributes.solidPath
       ? path.join(dirPath, attributes.solidPath).replace(/\\/g, '/')
       : '',
+    preact: attributes.preactPath
+      ? path.join(dirPath, attributes.preactPath).replace(/\\/g, '/')
+      : '',
   };
 
   const getAbsPath = (demoPath?: string) =>
@@ -122,6 +125,9 @@ export const transformPreview = (
   const componentSolidPath = componentProps.solid
     ? getAbsPath(attributes.solidPath)
     : '';
+  const componentPreactPath = componentProps.preact
+    ? getAbsPath(attributes.preactPath)
+    : '';
 
   // 组件名
   // eslint-disable-next-line prefer-destructuring
@@ -132,6 +138,7 @@ export const transformPreview = (
         componentProps.react ||
         componentProps.svelte ||
         componentProps.solid ||
+        componentProps.preact ||
         componentProps.html ||
         '.',
     )
@@ -141,6 +148,7 @@ export const transformPreview = (
   const reactComponentName = `react${componentName}`;
   const svelteComponentName = `svelte${componentName}`;
   const solidComponentName = `solid${componentName}`;
+  const preactComponentName = `preact${componentName}`;
 
   // 注入 vitepress-demo-plugin 组件和样式
   injectComponentImportScript(
@@ -209,6 +217,19 @@ export const transformPreview = (
       'dynamicImport',
     );
   }
+  if (componentProps.preact) {
+    injectComponentImportScript(
+      mdFile,
+      'preact',
+      '{ render as preactRender, createElement as preactCreateElement }',
+    );
+    injectComponentImportScript(
+      mdFile,
+      componentPreactPath,
+      preactComponentName,
+      'dynamicImport',
+    );
+  }
 
   const placeholderVisibleKey = `__placeholder_visible_key__`;
 
@@ -232,6 +253,9 @@ export const transformPreview = (
     : `''`;
   const solidCodeTempVariable = componentProps.solid
     ? `TempCodeSolid${componentName}`
+    : `''`;
+  const preactCodeTempVariable = componentProps.preact
+    ? `TempCodePreact${componentName}`
     : `''`;
   const vueCodeTempVariable = componentProps.vue
     ? `TempCodeVue${componentName}`
@@ -264,6 +288,13 @@ export const transformPreview = (
       solidCodeTempVariable,
     );
   }
+  if (componentProps.preact) {
+    injectComponentImportScript(
+      mdFile,
+      `${componentPreactPath}?raw`,
+      preactCodeTempVariable,
+    );
+  }
   if (componentProps.vue) {
     injectComponentImportScript(
       mdFile,
@@ -277,6 +308,7 @@ export const transformPreview = (
     react: attributes.reactFiles,
     svelte: attributes.svelteFiles,
     solid: attributes.solidFiles,
+    preact: attributes.preactFiles,
     html: attributes.htmlFiles,
   };
   const componentPaths = {
@@ -284,6 +316,7 @@ export const transformPreview = (
     react: componentReactPath,
     svelte: componentSveltePath,
     solid: componentSolidPath,
+    preact: componentPreactPath,
     html: componentHtmlPath,
   };
   const files = readPreviewFiles(inputFiles, componentPaths, dirPath);
@@ -300,6 +333,7 @@ export const transformPreview = (
     react: reactPlayground,
     svelte: sveltePlayground,
     solid: solidPlayground,
+    preact: preactPlayground,
   } = createPlaygroundUrls({
     playground,
     playgroundName: attributes.playground,
@@ -340,6 +374,7 @@ export const transformPreview = (
       reactPlayground="${reactPlayground}"
       sveltePlayground="${sveltePlayground}"
       solidPlayground="${solidPlayground}"
+      preactPlayground="${preactPlayground}"
       :visible="!!${visible}"
       @mount="() => { ${placeholderVisibleKey} = false; }"
       ${
@@ -383,6 +418,16 @@ export const transformPreview = (
             :solidComponent="${solidComponentName}"
             :solidRender="solidRender"
             :solidCreateComponent="solidCreateComponent"
+            `
+          : ''
+      }
+      ${
+        componentProps.preact
+          ? `
+            :preactCode="${preactCodeTempVariable}"
+            :preactComponent="${preactComponentName}"
+            :preactRender="preactRender"
+            :preactCreateElement="preactCreateElement"
             `
           : ''
       }

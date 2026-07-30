@@ -31,6 +31,7 @@ export const readPreviewFiles = (
     react: {},
     svelte: {},
     solid: {},
+    preact: {},
     html: {},
   };
 

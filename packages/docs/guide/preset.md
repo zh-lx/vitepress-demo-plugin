@@ -236,6 +236,240 @@ export default defineConfig({
 
 :::
 
+::: details 展开查看 stackblitz 平台 Svelte 预设文件及代码
+::: code-group
+
+```svelte [src/App.svelte]
+<!-- 会动态替换为你的 demo 代码 -->
+```
+
+```js [src/main.js]
+import { mount } from "svelte";
+import App from "./App.svelte";
+
+const app = mount(App, { target: document.querySelector("#app") });
+
+export default app;
+```
+
+```json [.stackblitzrc]
+{
+  "installDependencies": false,
+  "startCommand": "npm install && npm run dev"
+}
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "svelte": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "@sveltejs/vite-plugin-svelte": "latest"
+  }
+}
+```
+
+```ts [vite.config.js]
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+export default defineConfig({
+  plugins: [svelte()],
+});
+```
+
+:::
+
+::: details 展开查看 stackblitz 平台 Preact 预设文件及代码
+::: code-group
+
+```tsx [src/App.tsx]
+// 会动态替换为你的 demo 代码
+```
+
+```tsx [src/main.tsx]
+import { render } from "preact";
+import App from "./App";
+
+render(<App />, document.getElementById("app")!);
+```
+
+```json [.stackblitzrc]
+{
+  "installDependencies": false,
+  "startCommand": "npm install && npm run dev"
+}
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "preact": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "@preact/preset-vite": "latest"
+  }
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import preact from '@preact/preset-vite';
+export default defineConfig({
+  plugins: [preact()],
+});
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "noEmit": true
+  },
+  "include": ["src"]
+}
+```
+
+:::
+
+::: details 展开查看 stackblitz 平台 Solid 预设文件及代码
+::: code-group
+
+```tsx [src/App.tsx]
+// 会动态替换为你的 demo 代码
+```
+
+```tsx [src/main.tsx]
+import { render } from "solid-js/web";
+import App from "./App";
+
+render(() => <App />, document.getElementById("app")!);
+```
+
+```json [.stackblitzrc]
+{
+  "installDependencies": false,
+  "startCommand": "npm install && npm run dev"
+}
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "solid-js": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-plugin-solid": "latest"
+  }
+}
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import solid from 'vite-plugin-solid';
+export default defineConfig({
+  plugins: [solid()],
+});
+```
+
+:::
+
 ::: details 展开查看 stackblitz 平台 Html 预设文件及代码
 ::: code-group
 
@@ -389,6 +623,205 @@ root.render(<App />);
 
 :::
 
+::: details 展开查看 codesandbox 平台 Svelte 预设文件及代码
+::: code-group
+
+```svelte [src/App.svelte]
+<!-- 会动态替换为你的 demo 代码 -->
+```
+
+```js [src/main.js]
+import { mount } from "svelte";
+import App from "./App.svelte";
+
+const app = mount(App, { target: document.querySelector("#app") });
+
+export default app;
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "svelte": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}
+```
+
+:::
+
+::: details 展开查看 codesandbox 平台 Preact 预设文件及代码
+::: code-group
+
+```tsx [src/App.tsx]
+// 会动态替换为你的 demo 代码
+```
+
+```tsx [src/main.tsx]
+import { render } from "preact";
+import App from "./App";
+
+render(<App />, document.getElementById("app")!);
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "vite --host 0.0.0.0",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "preact": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "@preact/preset-vite": "latest"
+  }
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import preact from '@preact/preset-vite';
+export default defineConfig({
+  plugins: [preact()],
+});
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "noEmit": true
+  },
+  "include": ["src"]
+}
+```
+
+:::
+
+::: details 展开查看 codesandbox 平台 Solid 预设文件及代码
+::: code-group
+
+```tsx [src/App.tsx]
+// 会动态替换为你的 demo 代码
+```
+
+```tsx [src/main.tsx]
+import { render } from "solid-js/web";
+import App from "./App";
+
+render(() => <App />, document.getElementById("app")!);
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "vite --host 0.0.0.0",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "solid-js": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-plugin-solid": "latest"
+  }
+}
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import solid from 'vite-plugin-solid';
+export default defineConfig({
+  plugins: [solid()],
+});
+```
+
+:::
+
 ::: details 展开查看 codesandbox 平台 Html 预设文件及代码
 ::: code-group
 
@@ -404,7 +837,7 @@ root.render(<App />);
 
 ```ts
 type Template = {
-  scope: 'global' | 'vue' | 'react' | 'svelte' | 'solid' | 'html' | string;
+  scope: 'global' | 'vue' | 'react' | 'svelte' | 'solid' | 'preact' | 'html' | string;
   files: {
     [filename: string]: string; // 代码内容
   };
@@ -448,7 +881,7 @@ export default defineConfig({
 
 ### 单类别生效
 
-当设置 `scope` 为 `vue/react/svelte/solid/html` 时，表示该模板仅对相应类型的 demo 组件生效。以下面的 demo 为例，仅对 Vue 类型的 demo 组件生效：
+当设置 `scope` 为 `vue/react/svelte/solid/preact/html` 时，表示该模板仅对相应类型的 demo 组件生效。以下面的 demo 为例，仅对 Vue 类型的 demo 组件生效：
 
 ```ts
 import { defineConfig } from 'vitepress';

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="title">This is a Vue counter</div>
+    <div class="title">This is a <span class="framework">Vue</span> Demo</div>
     <div class="btn-container">
       <button class="btn" @click="increment">+1</button>
       <button class="btn" @click="decrement">-1</button>
@@ -33,6 +33,9 @@ const decrement = () => {
   font-size: 24px;
   font-weight: 600;
   line-height: 32px;
+}
+.framework {
+  color: #41B883;
 }
 .btn-container {
   display: flex;

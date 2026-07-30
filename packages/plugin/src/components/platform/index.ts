@@ -10,6 +10,12 @@ export function getInitialFile(type: string) {
   if (type === 'svelte') {
     return '/src/App.svelte';
   }
+  if (type === 'solid') {
+    return '/src/App.tsx';
+  }
+  if (type === 'preact') {
+    return '/src/App.tsx';
+  }
   return 'index.html';
 }
 

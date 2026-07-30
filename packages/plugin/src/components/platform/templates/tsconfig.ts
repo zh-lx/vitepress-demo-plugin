@@ -4,6 +4,12 @@ export function genTsConfig(type?: ComponentType): string {
   const additions: Record<string, any> = {};
   if (type === ComponentType.REACT) {
     additions['jsx'] = 'react';
+  } else if (type === ComponentType.SOLID) {
+    additions['jsx'] = 'preserve';
+    additions['jsxImportSource'] = 'solid-js';
+  } else if (type === ComponentType.PREACT) {
+    additions['jsx'] = 'react-jsx';
+    additions['jsxImportSource'] = 'preact';
   }
   const content = JSON.stringify(
     {

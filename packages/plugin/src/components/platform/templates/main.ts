@@ -23,6 +23,18 @@ const app = mount(App, { target: document.querySelector("#app") });
 export default app;
 `;
 
+const mainSolid = `import { render } from "solid-js/web";
+import App from "./App";
+
+render(() => <App />, document.getElementById("app")!);
+`;
+
+const mainPreact = `import { render } from "preact";
+import App from "./App";
+
+render(<App />, document.getElementById("app")!);
+`;
+
 export function genMainTs(type: ComponentType): string {
   if (type === ComponentType.VUE) {
     return mainVue;
@@ -36,5 +48,11 @@ export function genMainTs(type: ComponentType): string {
     return mainSvelte;
   }
 
+  if (type === ComponentType.SOLID) {
+    return mainSolid;
+  }
+  if (type === ComponentType.PREACT) {
+    return mainPreact;
+  }
   return '';
 }

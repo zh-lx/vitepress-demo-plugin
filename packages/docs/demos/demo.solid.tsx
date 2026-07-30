@@ -5,30 +5,48 @@ export default function Demo() {
   const [count, setCount] = createSignal(0);
 
   return (
-    <div class="solid-demo">
-      <h2>This is a Solid Counter</h2>
-      <button onClick={() => setCount(count() + 1)}>+1</button>
-      <button onClick={() => setCount(count() - 1)}>-1</button>
-      <p>Current count: {count()}</p>
+    <div class="vp-demo-solid">
+      <div class="title">
+        This is a <span class="framework">Solid</span> Demo
+      </div>
+      <div class="btn-container">
+        <button class="btn" onClick={() => setCount(count() + 1)}>
+          +1
+        </button>
+        <button class="btn" onClick={() => setCount(count() - 1)}>
+          -1
+        </button>
+      </div>
+      <div>Current count: {count()}</div>
       <style>{`
-        .solid-demo {
-          font-family: sans-serif;
+        .vp-demo-solid {
+          font-family: 'PingFang SC', 'Microsoft YaHei', 'SimHei', 'SimSun', sans-serif;
+          font-size: 14px;
+          line-height: 20px;
         }
-        .solid-demo h2 {
+        .vp-demo-solid .title {
+          font-size: 24px;
+          font-weight: 600;
+          line-height: 32px;
+        }
+        .vp-demo-solid .framework {
           color: #446b9e;
         }
-        .solid-demo button {
-          margin-right: 8px;
-          padding: 6px 16px;
-          border: 1px solid #446b9e;
-          border-radius: 4px;
-          background: white;
-          color: #446b9e;
+        .vp-demo-solid .btn-container {
+          display: flex;
+          align-items: center;
+          column-gap: 24px;
+        }
+        .vp-demo-solid .btn {
           cursor: pointer;
-        }
-        .solid-demo button:hover {
-          background: #446b9e;
-          color: white;
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          font-size: 14px;
+          border-radius: 4px;
+          line-height: 20px;
+          padding: 4px 16px;
+          margin: 12px 0;
         }
       `}</style>
     </div>

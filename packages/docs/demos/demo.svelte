@@ -2,31 +2,46 @@
   let count = $state(0);
 </script>
 
-<div class="svelte-demo">
-  <h2>This is a Svelte Counter</h2>
-  <button onclick={() => count++}>+1</button>
-  <button onclick={() => count--}>-1</button>
-  <p>Current count: {count}</p>
+<div class="vp-demo-svelte">
+  <div class="title">
+    This is a <span class="framework">Svelte</span> Demo
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick={() => count++}>+1</button>
+    <button class="btn" onclick={() => count--}>-1</button>
+  </div>
+  <div>Current count: {count}</div>
 </div>
 
 <style>
-  .svelte-demo {
-    font-family: sans-serif;
+  .vp-demo-svelte {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'SimHei', 'SimSun',
+      'sans-serif';
+    font-size: 14px;
+    line-height: 20px;
   }
-  .svelte-demo h2 {
-    color: #ff3e00;
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
   }
-  .svelte-demo button {
-    margin-right: 8px;
-    padding: 6px 16px;
-    border: 1px solid #ff3e00;
-    border-radius: 4px;
-    background: white;
-    color: #ff3e00;
+  .framework {
+    color: #FF3E00;
+  }
+  .btn-container {
+    display: flex;
+    align-items: center;
+    column-gap: 24px;
+  }
+  .btn {
     cursor: pointer;
-  }
-  .svelte-demo button:hover {
-    background: #ff3e00;
-    color: white;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    border-radius: 4px;
+    line-height: 20px;
+    padding: 4px 16px;
+    margin: 12px 0;
   }
 </style>

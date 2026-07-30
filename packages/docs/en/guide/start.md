@@ -113,6 +113,45 @@ The corresponding rendering result is as follows:
 
 <demo svelte="../demos/demo.svelte" />
 
+## Preact Demo
+
+::: tip Tip
+To display a Preact Demo in your VitePress site, install the required dependencies:
+
+```bash
+npm install preact @preact/preset-vite -D
+```
+
+Then import the Preact plugin in `vite.plugins` of `.vitepress/config.ts`. Since Preact, React and Solid all use the `.jsx/.tsx` extensions, name Preact components `*.preact.tsx`, use `include` so the plugin only processes those files, and disable React compatibility aliases:
+
+```ts
+import preact from '@preact/preset-vite'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [ // [!code ++]
+      preact({ // [!code ++]
+        include: [/\.preact\.tsx$/], // [!code ++]
+        reactAliasesEnabled: false, // [!code ++]
+        babel: {}, // [!code ++]
+      }), // [!code ++]
+    ], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+Set the path of a `.jsx/.tsx` file with `<demo preact="xxx/path" />` to render the Preact component and display its source code:
+
+```html
+<demo preact="../demos/demo.preact.tsx" />
+```
+
+The corresponding rendering result is as follows:
+
+<demo preact="../demos/demo.preact.tsx" />
+
 ## Solid Demo
 
 ::: tip Tip
@@ -151,23 +190,25 @@ The corresponding rendering result is as follows:
 ## Mixed Demo
 
 ::: tip Tip
-Same as above, if you want to display React Demo, Svelte Demo or Solid Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
+Same as above, if you want to display React, Svelte, Preact or Solid Demo in your VitePress site, install the corresponding dependencies:
 
 ```bash
 npm install react react-dom -D
 npm install svelte @sveltejs/vite-plugin-svelte -D
+npm install preact @preact/preset-vite -D
 npm install solid-js vite-plugin-solid -D
 ```
 
 :::
 
-You can specify multiple `vue/react/svelte/solid/html` in `<demo />` at the same time to display demos with different syntaxes in one block.
+You can specify multiple `vue/react/svelte/solid/preact/html` in `<demo />` at the same time to display demos with different syntaxes in one block.
 
 ```html
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
   svelte="../demos/demo.svelte"
+  preact="../demos/demo.preact.tsx"
   solid="../demos/demo.solid.tsx"
   html="../demos/demo.html"
 />
@@ -179,6 +220,7 @@ The corresponding rendering result is as follows:
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
   svelte="../demos/demo.svelte"
+  preact="../demos/demo.preact.tsx"
   solid="../demos/demo.solid.tsx"
   html="../demos/demo.html"
 />
