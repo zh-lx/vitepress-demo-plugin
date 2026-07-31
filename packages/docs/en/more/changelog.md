@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 1.8.0
+
+- 🎉 feat: Support svelte, solid.js and preact [#114](https://github.com/zh-lx/vitepress-demo-plugin/pull/114)
+
 ## 1.7.0
 
 - 🐛 fix: Isolated browser entry from Node modules [#112](https://github.com/zh-lx/vitepress-demo-plugin/pull/112)

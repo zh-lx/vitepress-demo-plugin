@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.8.0
+
+- 🎉 feat: 支持 svelte, solid.js 和 preact [#114](https://github.com/zh-lx/vitepress-demo-plugin/pull/114)
+
 ## 1.7.0
 
 - 🐛 fix: 隔离浏览器入口与 Node 模块 [#112](https://github.com/zh-lx/vitepress-demo-plugin/pull/112)
