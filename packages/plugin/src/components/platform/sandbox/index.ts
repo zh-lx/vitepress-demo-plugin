@@ -1,6 +1,9 @@
 import { ComponentType, PlatformParams } from '@/constant/type';
 import { getVueCodeSandboxParams } from './vue';
 import { getReactCodeSandboxParams } from './react';
+import { getSvelteCodeSandboxParams } from './svelte';
+import { getSolidCodeSandboxParams } from './solid';
+import { getPreactCodeSandboxParams } from './preact';
 import { getHtmlCodeSandboxParams } from './html';
 import { getSourceFiles } from '..';
 
@@ -29,6 +32,15 @@ export function getCodeSandboxParams(params: PlatformParams) {
   }
   if (params.type === ComponentType.REACT) {
     return getReactCodeSandboxParams(platformParams);
+  }
+  if (params.type === ComponentType.SVELTE) {
+    return getSvelteCodeSandboxParams(platformParams);
+  }
+  if (params.type === ComponentType.SOLID) {
+    return getSolidCodeSandboxParams(platformParams);
+  }
+  if (params.type === ComponentType.PREACT) {
+    return getPreactCodeSandboxParams(platformParams);
   }
   if (params.type === ComponentType.HTML) {
     return getHtmlCodeSandboxParams(platformParams);

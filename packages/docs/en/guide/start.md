@@ -80,25 +80,136 @@ The corresponding rendering result is as follows:
 
 <demo react="../demos/demo.tsx" />
 
+## Svelte Demo
+
+::: tip Tip
+If you want to display Svelte Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
+
+```bash
+npm install svelte @sveltejs/vite-plugin-svelte -D
+```
+
+And import the svelte plugin in `vite.plugins` of `.vitepress/config.ts`:
+
+```ts
+import { svelte } from '@sveltejs/vite-plugin-svelte'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [svelte()], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+You can set path of `.svelte` file by `<demo svelte="xxx/path" />` in `.md` file, render this svelte component and display source code.
+
+```html
+<demo svelte="../demos/demo.svelte" />
+```
+
+The corresponding rendering result is as follows:
+
+<demo svelte="../demos/demo.svelte" />
+
+## Preact Demo
+
+::: tip Tip
+To display a Preact Demo in your VitePress site, install the required dependencies:
+
+```bash
+npm install preact @preact/preset-vite -D
+```
+
+Then import the Preact plugin in `vite.plugins` of `.vitepress/config.ts`. Since Preact, React and Solid all use the `.jsx/.tsx` extensions, name Preact components `*.preact.tsx`, use `include` so the plugin only processes those files, and disable React compatibility aliases:
+
+```ts
+import preact from '@preact/preset-vite'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [ // [!code ++]
+      preact({ // [!code ++]
+        include: [/\.preact\.tsx$/], // [!code ++]
+        reactAliasesEnabled: false, // [!code ++]
+        babel: {}, // [!code ++]
+      }), // [!code ++]
+    ], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+Set the path of a `.jsx/.tsx` file with `<demo preact="xxx/path" />` to render the Preact component and display its source code:
+
+```html
+<demo preact="../demos/demo.preact.tsx" />
+```
+
+The corresponding rendering result is as follows:
+
+<demo preact="../demos/demo.preact.tsx" />
+
+## Solid Demo
+
+::: tip Tip
+If you want to display Solid Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
+
+```bash
+npm install solid-js vite-plugin-solid -D
+```
+
+And import the solid plugin in `vite.plugins` of `.vitepress/config.ts`. Since both Solid and React use the `.jsx/.tsx` extension, it is recommended to name Solid components as `*.solid.tsx` and use `include` to restrict the solid plugin to these files only, so it won't affect the compilation of React components:
+
+```ts
+import solid from 'vite-plugin-solid'; // [!code ++]
+
+export default defineConfig({
+  // other configs...
+  vite: { // [!code ++]
+    plugins: [solid({ include: [/\.solid\.tsx$/] })], // [!code ++]
+  }, // [!code ++]
+});
+```
+:::
+
+You can set path of solid component file by `<demo solid="xxx/path" />` in `.md` file, render this solid component and display source code.
+
+```html
+<demo solid="../demos/demo.solid.tsx" />
+```
+
+The corresponding rendering result is as follows:
+
+<demo solid="../demos/demo.solid.tsx" />
+
 <hr />
 
 ## Mixed Demo
 
 ::: tip Tip
-Same as above, if you want to display React Demo in your vitepress site, you need to execute the following command to install the corresponding dependencies:
+Same as above, if you want to display React, Svelte, Preact or Solid Demo in your VitePress site, install the corresponding dependencies:
 
 ```bash
 npm install react react-dom -D
+npm install svelte @sveltejs/vite-plugin-svelte -D
+npm install preact @preact/preset-vite -D
+npm install solid-js vite-plugin-solid -D
 ```
 
 :::
 
-You can specify multiple `vue/react/html` in `<demo />` at the same time to display demos with different syntaxes in one block.
+You can specify multiple `vue/react/svelte/solid/preact/html` in `<demo />` at the same time to display demos with different syntaxes in one block.
 
 ```html
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
+  svelte="../demos/demo.svelte"
+  preact="../demos/demo.preact.tsx"
+  solid="../demos/demo.solid.tsx"
   html="../demos/demo.html"
 />
 ```
@@ -108,6 +219,9 @@ The corresponding rendering result is as follows:
 <demo
   vue="../demos/demo.vue"
   react="../demos/demo.tsx"
+  svelte="../demos/demo.svelte"
+  preact="../demos/demo.preact.tsx"
+  solid="../demos/demo.solid.tsx"
   html="../demos/demo.html"
 />
 

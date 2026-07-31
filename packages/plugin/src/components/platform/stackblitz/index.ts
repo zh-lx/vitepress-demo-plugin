@@ -1,6 +1,9 @@
 import { ComponentType, PlatformParams } from '@/constant/type';
 import { openHtmlStackblitz } from './html';
 import { openReactStackblitz } from './react';
+import { openSvelteStackblitz } from './svelte';
+import { openSolidStackblitz } from './solid';
+import { openPreactStackblitz } from './preact';
 import { openVueStackblitz } from './vue';
 import { getSourceFiles } from '..';
 
@@ -29,6 +32,15 @@ export function openStackblitz(params: PlatformParams) {
   }
   if (params.type === ComponentType.REACT) {
     return openReactStackblitz(platformParams);
+  }
+  if (params.type === ComponentType.SVELTE) {
+    return openSvelteStackblitz(platformParams);
+  }
+  if (params.type === ComponentType.SOLID) {
+    return openSolidStackblitz(platformParams);
+  }
+  if (params.type === ComponentType.PREACT) {
+    return openPreactStackblitz(platformParams);
   }
   if (params.type === ComponentType.HTML) {
     return openHtmlStackblitz(platformParams);

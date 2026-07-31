@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -8,8 +8,8 @@
   <body>
     <style>
       .container {
-        font-family: 'PingFang SC', 'Microsoft YaHei', 'SimHei', 'SimSun',
-          'sans-serif';
+        font-family:
+          'PingFang SC', 'Microsoft YaHei', 'SimHei', 'SimSun', 'sans-serif';
         font-size: 14px;
         line-height: 20px;
       }
@@ -17,6 +17,9 @@
         font-size: 24px;
         font-weight: 600;
         line-height: 32px;
+      }
+      .framework {
+        color: #000000;
       }
       .btn-container {
         display: flex;
@@ -36,7 +39,9 @@
       }
     </style>
     <div class="container">
-      <div class="title">This is a Html counter</div>
+      <div class="title">
+        This is a <span class="framework">HTML</span> Demo
+      </div>
       <div class="btn-container">
         <button class="btn" id="incrementBtn">+1</button>
         <button class="btn" id="decrementBtn">-1</button>
@@ -64,9 +69,8 @@
         .addEventListener('click', decrement);
 
       const updateCountDisplay = () => {
-        document.getElementById(
-          'countDisplay'
-        ).innerText = `Current count: ${count}`;
+        document.getElementById('countDisplay').innerText =
+          `Current count: ${count}`;
       };
     </script>
   </body>

@@ -236,6 +236,240 @@ export default defineConfig({
 
 :::
 
+::: details Expand to view the stackblitz platform Svelte preset files and codes
+::: code-group
+
+```svelte [src/App.svelte]
+<!-- Will be dynamically replaced with your demo code -->
+```
+
+```js [src/main.js]
+import { mount } from "svelte";
+import App from "./App.svelte";
+
+const app = mount(App, { target: document.querySelector("#app") });
+
+export default app;
+```
+
+```json [.stackblitzrc]
+{
+  "installDependencies": false,
+  "startCommand": "npm install && npm run dev"
+}
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "svelte": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "@sveltejs/vite-plugin-svelte": "latest"
+  }
+}
+```
+
+```ts [vite.config.js]
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+export default defineConfig({
+  plugins: [svelte()],
+});
+```
+
+:::
+
+::: details Expand to view the StackBlitz platform Preact preset files and code
+::: code-group
+
+```tsx [src/App.tsx]
+// Replaced dynamically with your demo code
+```
+
+```tsx [src/main.tsx]
+import { render } from "preact";
+import App from "./App";
+
+render(<App />, document.getElementById("app")!);
+```
+
+```json [.stackblitzrc]
+{
+  "installDependencies": false,
+  "startCommand": "npm install && npm run dev"
+}
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "preact": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "@preact/preset-vite": "latest"
+  }
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import preact from '@preact/preset-vite';
+export default defineConfig({
+  plugins: [preact()],
+});
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "noEmit": true
+  },
+  "include": ["src"]
+}
+```
+
+:::
+
+::: details Expand to view the stackblitz platform Solid preset files and codes
+::: code-group
+
+```tsx [src/App.tsx]
+// Will be dynamically replaced with your demo code
+```
+
+```tsx [src/main.tsx]
+import { render } from "solid-js/web";
+import App from "./App";
+
+render(() => <App />, document.getElementById("app")!);
+```
+
+```json [.stackblitzrc]
+{
+  "installDependencies": false,
+  "startCommand": "npm install && npm run dev"
+}
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "solid-js": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-plugin-solid": "latest"
+  }
+}
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import solid from 'vite-plugin-solid';
+export default defineConfig({
+  plugins: [solid()],
+});
+```
+
+:::
+
 ::: details Expand to view the stackblitz platform Html preset files and codes
 ::: code-group
 
@@ -389,6 +623,205 @@ root.render(<App />);
 
 :::
 
+::: details Expand to view the codesandbox platform Svelte preset files and codes
+::: code-group
+
+```svelte [src/App.svelte]
+<!-- Will be dynamically replaced with your demo code -->
+```
+
+```js [src/main.js]
+import { mount } from "svelte";
+import App from "./App.svelte";
+
+const app = mount(App, { target: document.querySelector("#app") });
+
+export default app;
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "svelte": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}
+```
+
+:::
+
+::: details Expand to view the CodeSandbox platform Preact preset files and code
+::: code-group
+
+```tsx [src/App.tsx]
+// Replaced dynamically with your demo code
+```
+
+```tsx [src/main.tsx]
+import { render } from "preact";
+import App from "./App";
+
+render(<App />, document.getElementById("app")!);
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "vite --host 0.0.0.0",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "preact": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "@preact/preset-vite": "latest"
+  }
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import preact from '@preact/preset-vite';
+export default defineConfig({
+  plugins: [preact()],
+});
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "noEmit": true
+  },
+  "include": ["src"]
+}
+```
+
+:::
+
+::: details Expand to view the codesandbox platform Solid preset files and codes
+::: code-group
+
+```tsx [src/App.tsx]
+// Will be dynamically replaced with your demo code
+```
+
+```tsx [src/main.tsx]
+import { render } from "solid-js/web";
+import App from "./App";
+
+render(() => <App />, document.getElementById("app")!);
+```
+
+```html [index.html]
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+```json [package.json]
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "vite --host 0.0.0.0",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "solid-js": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-plugin-solid": "latest"
+  }
+}
+```
+
+```json [tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+```ts [vite.config.ts]
+import { defineConfig } from 'vite';
+import solid from 'vite-plugin-solid';
+export default defineConfig({
+  plugins: [solid()],
+});
+```
+
+:::
+
 ::: details Expand to view codesandbox platform Html preset files and codes
 ::: code-group
 
@@ -404,7 +837,7 @@ root.render(<App />);
 
 ```ts
 type Template = {
-  scope: 'global' | 'vue' | 'react' | 'html' | string;
+  scope: 'global' | 'vue' | 'react' | 'svelte' | 'solid' | 'preact' | 'html' | string;
   files: {
     [filename: string]: string; // Code
   };
@@ -448,7 +881,7 @@ export default defineConfig({
 
 ### Single Kind
 
-When `scope` is set to `vue/react/html`, it means that the template is only valid for demo components of the corresponding type. Take the following demo as an example, it is only valid for demo components of the Vue type:
+When `scope` is set to `vue/react/svelte/solid/preact/html`, it means that the template is only valid for demo components of the corresponding type. Take the following demo as an example, it is only valid for demo components of the Vue type:
 
 ```ts
 import { defineConfig } from 'vitepress';

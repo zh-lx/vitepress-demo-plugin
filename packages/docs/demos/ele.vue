@@ -31,7 +31,7 @@
 import { ElButton } from 'element-plus';
 </script>
 
-<style>
+<style scoped>
 .mb-4 {
   margin-bottom: 16px;
 }
